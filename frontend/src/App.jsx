@@ -1,8 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
-import { fetchConstellation, fetchHospitals, fetchMedications, fetchPatients, resetDemo, reviewMatch } from "./api";
+import {
+  fetchConstellation,
+  fetchHospitals,
+  fetchMedications,
+  fetchPatients,
+  fetchStats,
+  resetDemo,
+  reviewMatch,
+} from "./api";
 import PatientList from "./components/PatientList";
 import Constellation from "./components/Constellation";
 import DetailPanel from "./components/DetailPanel";
+import StatsBar from "./components/StatsBar";
 
 const HOSPITAL_PALETTE = ["#7cc6fe", "#f4a7ff", "#9ef0c4", "#ffd29d", "#a5b4fc"];
 
@@ -12,6 +21,7 @@ export default function App() {
   const [selectedId, setSelectedId] = useState(null);
   const [graph, setGraph] = useState(null);
   const [medications, setMedications] = useState(null); // { list, preview }
+  const [stats, setStats] = useState(null); // { data, preview }
   const [selectedConflictId, setSelectedConflictId] = useState(null);
   const [selectedNodeId, setSelectedNodeId] = useState(null);
   const [error, setError] = useState(null);
@@ -52,6 +62,18 @@ export default function App() {
       cancelled = true;
     };
   }, [graph]);
+
+  // Re-count whenever the patient list changes (after a review or a reset).
+  useEffect(() => {
+    if (!hospitals.length) return;
+    let cancelled = false;
+    fetchStats(patients, hospitals)
+      .then((s) => !cancelled && setStats(s))
+      .catch((e) => setError(e.message));
+    return () => {
+      cancelled = true;
+    };
+  }, [patients, hospitals]);
 
   // A clinician decides whether two records are the same person; the constellation re-forms.
   const decideMatch = async (recordA, recordB, samePerson) => {
@@ -98,14 +120,19 @@ export default function App() {
   return (
     <div className="app">
       <header className="topbar">
-        <div className="brand">
-          <span className="brand-mark">✦</span> Constellation
+        <div className="brand-block">
+          <div className="brand">
+            <span className="brand-mark">✦</span> Constellation
+          </div>
+          <div className="tagline">Connecting a patient's scattered records, and the conflicts between them</div>
         </div>
-        <div className="tagline">Connecting the scattered records of one patient, and the conflicts between them</div>
-        <div className="disclaimer">Synthetic data only. Not for clinical use.</div>
-        <button className="reset" onClick={reset} title="Undo match reviews and start the demo over">
-          Reset demo
-        </button>
+        <StatsBar stats={stats} />
+        <div className="topbar-side">
+          <div className="disclaimer">Synthetic data only. Not for clinical use.</div>
+          <button className="reset" onClick={reset}>
+            Reset demo
+          </button>
+        </div>
       </header>
 
       {error && (

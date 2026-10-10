@@ -108,7 +108,8 @@ main.py (FastAPI)  ──/api──▶  React app: PatientList │ Constellation
 | `components/PatientList.jsx` | Search and patient list with severity badges |
 | `components/DetailPanel.jsx` | Patient header, selected-star details, and three tabs: Conflicts, Medications, Record links |
 | `components/MedicationList.jsx` | Medications tab: each drug, every hospital that prescribed it, and its issues |
-| `medications.js` | Builds the medication list in the browser until the backend's `/medications` endpoint exists |
+| `components/StatsBar.jsx` | Header totals: patients, records, conflicts caught, matches to review |
+| `medications.js`, `stats.js` | Build the medication list and the header totals in the browser until the backend's `/medications` and `/api/stats` endpoints exist |
 | `labels.js` | Shared display labels and severity order |
 | `api.js` | Fetch helpers |
 | `styles.css` | Dark space theme |

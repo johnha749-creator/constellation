@@ -61,8 +61,12 @@ from it automatically.
    when the endpoint lands:** the tab switches to it automatically as soon as
    `/medications` stops answering 404 "Not Found". The preview note disappears then too, which
    is how you can tell it worked.
-2. **Stats line** in the header, for example "23 patients · 41 records · 11 conflicts caught
-   across hospitals".
+2. ✅ **Stats line** (done). The header shows patients, records, conflicts caught (with the
+   high count) and matches to review, and it updates after a review or a reset. Like the
+   Medications tab, it computes the totals in the browser (`frontend/src/stats.js`) and shows a
+   "preview" tag until `/api/stats` exists, then switches automatically. With the real endpoint
+   the label becomes "conflicts caught **across hospitals**", using `cross_hospital_conflicts`,
+   which only the backend can compute.
 3. **README.md** for the judges: the problem, screenshots, how to run it, and how it works.
 
 ## The API contract (agreed now, so nobody waits)
