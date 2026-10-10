@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import {
   fetchConstellation,
   fetchHospitals,
@@ -12,6 +12,8 @@ import {
 import PatientList from "./components/PatientList";
 import Constellation from "./components/Constellation";
 import DetailPanel from "./components/DetailPanel";
+// three.js is large, so the 3D view is only downloaded when someone opens it.
+const Galaxy3D = lazy(() => import("./components/Galaxy3D"));
 import StatsBar from "./components/StatsBar";
 
 const HOSPITAL_PALETTE = ["#7cc6fe", "#f4a7ff", "#9ef0c4", "#ffd29d", "#a5b4fc"];
@@ -43,6 +45,7 @@ export default function App() {
   const [stats, setStats] = useState(null); // { data, preview }
   const [audit, setAudit] = useState(null); // this patient's review history
   const [reviewer, setReviewer] = useState(loadReviewer);
+  const [view, setView] = useState("patient"); // "patient" (2D constellation) | "galaxy" (all patients, 3D)
   const [selectedConflictId, setSelectedConflictId] = useState(null);
   const [selectedNodeId, setSelectedNodeId] = useState(null);
   const [error, setError] = useState(null);
@@ -147,6 +150,12 @@ export default function App() {
     [hospitals],
   );
 
+  // Clicking a star in the 3D view zooms into that patient's constellation.
+  const openPatient = (id) => {
+    setSelectedId(id);
+    setView("patient");
+  };
+
   const selectConflict = (id) => {
     setSelectedConflictId(id);
     setSelectedNodeId(null);
@@ -188,7 +197,11 @@ export default function App() {
           onSelect={setSelectedId}
         />
         <section className="sky">
-          {graph ? (
+          {view === "galaxy" ? (
+            <Suspense fallback={<div className="loading">Lighting up the galaxy…</div>}>
+              <Galaxy3D patients={patients} hospitals={hospitalInfo} selectedId={selectedId} onSelect={openPatient} />
+            </Suspense>
+          ) : graph ? (
             <Constellation
               graph={graph}
               hospitals={hospitalInfo}
@@ -200,6 +213,14 @@ export default function App() {
           ) : (
             <div className="loading">Charting the sky…</div>
           )}
+          <div className="view-toggle" role="tablist" aria-label="View">
+            <button role="tab" aria-selected={view === "patient"} className={view === "patient" ? "active" : ""} onClick={() => setView("patient")}>
+              Patient constellation
+            </button>
+            <button role="tab" aria-selected={view === "galaxy"} className={view === "galaxy" ? "active" : ""} onClick={() => setView("galaxy")}>
+              All patients · 3D
+            </button>
+          </div>
         </section>
         <DetailPanel
           graph={graph}

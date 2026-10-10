@@ -492,6 +492,94 @@ button {
   font-size: 12px;
 }
 
+/* --- view toggle and the 3D galaxy */
+.view-toggle {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: flex;
+  padding: 3px;
+  gap: 2px;
+  border-radius: 8px;
+  background: rgba(11, 16, 36, 0.85);
+  border: 1px solid var(--border);
+  z-index: 2;
+}
+
+.view-toggle button {
+  background: none;
+  border: none;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.view-toggle button:hover {
+  color: var(--text);
+}
+
+.view-toggle button.active {
+  background: var(--bg-card);
+  color: var(--accent);
+}
+
+.galaxy {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.galaxy canvas {
+  display: block;
+  cursor: grab;
+}
+
+.galaxy-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.galaxy-hospital,
+.galaxy-patient {
+  pointer-events: none;
+  white-space: nowrap;
+  text-shadow: 0 0 6px var(--bg);
+}
+
+.galaxy-hospital {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.galaxy-patient {
+  font-size: 11px;
+  color: var(--text);
+  opacity: 0.85;
+}
+
+.galaxy-legend {
+  max-width: 230px;
+}
+
+.legend-ring {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 2px solid var(--review);
+  box-sizing: border-box;
+}
+
+.legend-note {
+  margin-top: 4px;
+  line-height: 1.35;
+}
+
 /* --- detail panel tabs */
 .tabs {
   display: flex;

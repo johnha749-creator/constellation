@@ -112,6 +112,7 @@ main.py (FastAPI)  ──/api──▶  React app: PatientList │ Constellation
 |---|---|
 | `App.jsx` | Layout and state: selected patient, conflict and star |
 | `components/Constellation.jsx` | The D3 force graph: starfield, glow, the "forming" animation, zoom and drag, click to select |
+| `components/Galaxy3D.jsx` | The "All patients · 3D" view (three.js): hospital suns, a star per patient colored by its worst conflict, orbit and zoom, click a star to open it. Loaded only when opened. |
 | `components/PatientList.jsx` | Search and patient list with severity badges |
 | `components/DetailPanel.jsx` | Patient header, selected-star details, and three tabs: Conflicts, Medications, Record links |
 | `components/MedicationList.jsx` | Medications tab: each drug, every hospital that prescribed it, and its issues |
@@ -236,18 +237,20 @@ The other 18 patients are filler, and a test checks that they produce **zero** c
 
 1. **Problem (20 s):** "Hospitals can share records now, but a clinician gets a pile of
    documents from 3 systems. The same patient is spelled 3 ways, and nobody reads the pile."
-2. **Click Maria Gonzalez (1958).** Watch the constellation form: three hospitals, then gold
-   "same person" lines, then a pulsing red line.
-3. **Click the red line:** "Penicillin allergy at Orion, amoxicillin ordered at Lyra." This is
+2. **Open "All patients · 3D"** (top right of the sky): "Here's the whole network: three
+   hospitals, every patient between them. The red ones have something dangerous."
+3. **Click Maria Gonzalez's red star** (or pick her in the list). The view flies into her
+   constellation: three hospitals, then gold "same person" lines, then a pulsing red line.
+4. **Click the red line:** "Penicillin allergy at Orion, amoxicillin ordered at Lyra." This is
    the moment to land.
-4. **Show the record links:** "M." vs "Maria", Gonzales vs Gonzalez, and why we're 96–100% sure.
-5. **Click the other Maria Gonzalez:** "Same name, different person. We didn't merge them."
+5. **Show the record links:** "M." vs "Maria", Gonzales vs Gonzalez, and why we're 96–100% sure.
+6. **Click the other Maria Gonzalez:** "Same name, different person. We didn't merge them."
    Naive name matching would have.
-6. **Aisha:** "When we're not sure, we say so." Point to the "needs review" link and the
+7. **Aisha:** "When we're not sure, we say so." Point to the "needs review" link and the
    unconfirmed conflicts. Then open the **Record links** tab (it has an amber dot) and click
    **Same person**: the link turns gold and the conflicts become confirmed. "A human stays in
    control."
-7. **Close:** "Built on FHIR, the real standard hospitals use, so it could sit on top of TEFCA
+8. **Close:** "Built on FHIR, the real standard hospitals use, so it could sit on top of TEFCA
    or Epic's network."
 
 ## Likely judge questions

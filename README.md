@@ -44,6 +44,11 @@ two problems remain:
    Each conflict says how serious it is and which hospital each side came from.
 5. **Lists what the patient is actually taking:** every drug, every hospital that prescribed it,
    and its problems.
+6. **Shows the whole network in 3D** (three.js). Hospitals are suns, and every patient is a
+   star placed between the hospitals that hold their records, glowing red if something is
+   wrong. Click a star to fly into that patient's constellation.
+
+![The 3D view: three hospital suns with every patient floating between them; red stars have high-severity conflicts.](docs/galaxy.jpg)
 
 ### Why "Constellation"?
 
@@ -162,7 +167,7 @@ benchmark with `python -m app.benchmark --records 20000`.
 
 - **Backend:** Python, FastAPI, FHIR R4 (synthetic data), our own record-matching and conflict
   engine with no ML black box, and a hash-chained audit log
-- **Frontend:** React, Vite, D3 force layout
+- **Frontend:** React, Vite, D3 force layout (each patient), three.js (the whole network in 3D)
 - **Tests:** pytest
 
 ## Limitations and next steps
