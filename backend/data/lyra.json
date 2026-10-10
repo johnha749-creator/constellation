@@ -431,6 +431,88 @@
         ],
         "name": [
           {
+            "family": "Whitaker",
+            "given": [
+              "Eleanor"
+            ]
+          }
+        ],
+        "gender": "female",
+        "birthDate": "1953-10-21",
+        "address": [
+          {
+            "line": [
+              "915 Cole Street"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94117"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "415-555-0136"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/lyra-cd-018",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "lyra-cd-018",
+        "subject": {
+          "reference": "Patient/lyra-pt-017"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Acute bacterial sinusitis"
+        },
+        "onsetDateTime": "2026-10-04"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/lyra-rx-019",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "lyra-rx-019",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/lyra-pt-017"
+        },
+        "medicationCodeableConcept": {
+          "text": "Clarithromycin"
+        },
+        "dosageInstruction": [
+          {
+            "text": "500 mg twice daily"
+          }
+        ],
+        "authoredOn": "2026-10-04"
+      }
+    },
+    {
+      "fullUrl": "Patient/lyra-pt-020",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "lyra-pt-020",
+        "identifier": [
+          {
+            "system": "urn:hospital:lyra:mrn",
+            "value": "LY-819809"
+          }
+        ],
+        "name": [
+          {
             "family": "Johnson",
             "given": [
               "Grace"
@@ -458,12 +540,12 @@
       }
     },
     {
-      "fullUrl": "Condition/lyra-cd-018",
+      "fullUrl": "Condition/lyra-cd-021",
       "resource": {
         "resourceType": "Condition",
-        "id": "lyra-cd-018",
+        "id": "lyra-cd-021",
         "subject": {
-          "reference": "Patient/lyra-pt-017"
+          "reference": "Patient/lyra-pt-020"
         },
         "clinicalStatus": {
           "coding": [
@@ -480,14 +562,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/lyra-rx-019",
+      "fullUrl": "MedicationRequest/lyra-rx-022",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "lyra-rx-019",
+        "id": "lyra-rx-022",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/lyra-pt-017"
+          "reference": "Patient/lyra-pt-020"
         },
         "medicationCodeableConcept": {
           "text": "Levothyroxine"
@@ -501,14 +583,14 @@
       }
     },
     {
-      "fullUrl": "Patient/lyra-pt-020",
+      "fullUrl": "Patient/lyra-pt-023",
       "resource": {
         "resourceType": "Patient",
-        "id": "lyra-pt-020",
+        "id": "lyra-pt-023",
         "identifier": [
           {
             "system": "urn:hospital:lyra:mrn",
-            "value": "LY-225242"
+            "value": "LY-814503"
           }
         ],
         "name": [
@@ -540,12 +622,12 @@
       }
     },
     {
-      "fullUrl": "Condition/lyra-cd-021",
+      "fullUrl": "Condition/lyra-cd-024",
       "resource": {
         "resourceType": "Condition",
-        "id": "lyra-cd-021",
+        "id": "lyra-cd-024",
         "subject": {
-          "reference": "Patient/lyra-pt-020"
+          "reference": "Patient/lyra-pt-023"
         },
         "clinicalStatus": {
           "coding": [
@@ -562,12 +644,12 @@
       }
     },
     {
-      "fullUrl": "Condition/lyra-cd-022",
+      "fullUrl": "Condition/lyra-cd-025",
       "resource": {
         "resourceType": "Condition",
-        "id": "lyra-cd-022",
+        "id": "lyra-cd-025",
         "subject": {
-          "reference": "Patient/lyra-pt-020"
+          "reference": "Patient/lyra-pt-023"
         },
         "clinicalStatus": {
           "coding": [
@@ -584,14 +666,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/lyra-rx-023",
+      "fullUrl": "MedicationRequest/lyra-rx-026",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "lyra-rx-023",
+        "id": "lyra-rx-026",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/lyra-pt-020"
+          "reference": "Patient/lyra-pt-023"
         },
         "medicationCodeableConcept": {
           "text": "Albuterol"
@@ -605,14 +687,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/lyra-rx-024",
+      "fullUrl": "MedicationRequest/lyra-rx-027",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "lyra-rx-024",
+        "id": "lyra-rx-027",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/lyra-pt-020"
+          "reference": "Patient/lyra-pt-023"
         },
         "medicationCodeableConcept": {
           "text": "Loratadine"
@@ -626,14 +708,14 @@
       }
     },
     {
-      "fullUrl": "Patient/lyra-pt-025",
+      "fullUrl": "Patient/lyra-pt-028",
       "resource": {
         "resourceType": "Patient",
-        "id": "lyra-pt-025",
+        "id": "lyra-pt-028",
         "identifier": [
           {
             "system": "urn:hospital:lyra:mrn",
-            "value": "LY-814503"
+            "value": "LY-956493"
           }
         ],
         "name": [
@@ -665,12 +747,12 @@
       }
     },
     {
-      "fullUrl": "Condition/lyra-cd-026",
+      "fullUrl": "Condition/lyra-cd-029",
       "resource": {
         "resourceType": "Condition",
-        "id": "lyra-cd-026",
+        "id": "lyra-cd-029",
         "subject": {
-          "reference": "Patient/lyra-pt-025"
+          "reference": "Patient/lyra-pt-028"
         },
         "clinicalStatus": {
           "coding": [
@@ -687,12 +769,12 @@
       }
     },
     {
-      "fullUrl": "Condition/lyra-cd-027",
+      "fullUrl": "Condition/lyra-cd-030",
       "resource": {
         "resourceType": "Condition",
-        "id": "lyra-cd-027",
+        "id": "lyra-cd-030",
         "subject": {
-          "reference": "Patient/lyra-pt-025"
+          "reference": "Patient/lyra-pt-028"
         },
         "clinicalStatus": {
           "coding": [
@@ -709,14 +791,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/lyra-rx-028",
+      "fullUrl": "MedicationRequest/lyra-rx-031",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "lyra-rx-028",
+        "id": "lyra-rx-031",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/lyra-pt-025"
+          "reference": "Patient/lyra-pt-028"
         },
         "medicationCodeableConcept": {
           "text": "Omeprazole"
@@ -730,14 +812,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/lyra-rx-029",
+      "fullUrl": "MedicationRequest/lyra-rx-032",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "lyra-rx-029",
+        "id": "lyra-rx-032",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/lyra-pt-025"
+          "reference": "Patient/lyra-pt-028"
         },
         "medicationCodeableConcept": {
           "text": "Albuterol"
@@ -751,14 +833,14 @@
       }
     },
     {
-      "fullUrl": "Patient/lyra-pt-030",
+      "fullUrl": "Patient/lyra-pt-033",
       "resource": {
         "resourceType": "Patient",
-        "id": "lyra-pt-030",
+        "id": "lyra-pt-033",
         "identifier": [
           {
             "system": "urn:hospital:lyra:mrn",
-            "value": "LY-406059"
+            "value": "LY-871109"
           }
         ],
         "name": [
@@ -790,12 +872,12 @@
       }
     },
     {
-      "fullUrl": "Condition/lyra-cd-031",
+      "fullUrl": "Condition/lyra-cd-034",
       "resource": {
         "resourceType": "Condition",
-        "id": "lyra-cd-031",
+        "id": "lyra-cd-034",
         "subject": {
-          "reference": "Patient/lyra-pt-030"
+          "reference": "Patient/lyra-pt-033"
         },
         "clinicalStatus": {
           "coding": [
@@ -812,14 +894,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/lyra-rx-032",
+      "fullUrl": "MedicationRequest/lyra-rx-035",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "lyra-rx-032",
+        "id": "lyra-rx-035",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/lyra-pt-030"
+          "reference": "Patient/lyra-pt-033"
         },
         "medicationCodeableConcept": {
           "text": "Atorvastatin"
@@ -833,14 +915,14 @@
       }
     },
     {
-      "fullUrl": "Patient/lyra-pt-033",
+      "fullUrl": "Patient/lyra-pt-036",
       "resource": {
         "resourceType": "Patient",
-        "id": "lyra-pt-033",
+        "id": "lyra-pt-036",
         "identifier": [
           {
             "system": "urn:hospital:lyra:mrn",
-            "value": "LY-871109"
+            "value": "LY-395101"
           }
         ],
         "name": [
@@ -872,12 +954,12 @@
       }
     },
     {
-      "fullUrl": "Condition/lyra-cd-034",
+      "fullUrl": "Condition/lyra-cd-037",
       "resource": {
         "resourceType": "Condition",
-        "id": "lyra-cd-034",
+        "id": "lyra-cd-037",
         "subject": {
-          "reference": "Patient/lyra-pt-033"
+          "reference": "Patient/lyra-pt-036"
         },
         "clinicalStatus": {
           "coding": [
@@ -894,14 +976,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/lyra-rx-035",
+      "fullUrl": "MedicationRequest/lyra-rx-038",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "lyra-rx-035",
+        "id": "lyra-rx-038",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/lyra-pt-033"
+          "reference": "Patient/lyra-pt-036"
         },
         "medicationCodeableConcept": {
           "text": "Amlodipine"
@@ -915,14 +997,14 @@
       }
     },
     {
-      "fullUrl": "Patient/lyra-pt-036",
+      "fullUrl": "Patient/lyra-pt-039",
       "resource": {
         "resourceType": "Patient",
-        "id": "lyra-pt-036",
+        "id": "lyra-pt-039",
         "identifier": [
           {
             "system": "urn:hospital:lyra:mrn",
-            "value": "LY-849912"
+            "value": "LY-829075"
           }
         ],
         "name": [
@@ -954,12 +1036,12 @@
       }
     },
     {
-      "fullUrl": "Condition/lyra-cd-037",
+      "fullUrl": "Condition/lyra-cd-040",
       "resource": {
         "resourceType": "Condition",
-        "id": "lyra-cd-037",
+        "id": "lyra-cd-040",
         "subject": {
-          "reference": "Patient/lyra-pt-036"
+          "reference": "Patient/lyra-pt-039"
         },
         "clinicalStatus": {
           "coding": [
@@ -976,14 +1058,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/lyra-rx-038",
+      "fullUrl": "MedicationRequest/lyra-rx-041",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "lyra-rx-038",
+        "id": "lyra-rx-041",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/lyra-pt-036"
+          "reference": "Patient/lyra-pt-039"
         },
         "medicationCodeableConcept": {
           "text": "Albuterol"
@@ -997,14 +1079,14 @@
       }
     },
     {
-      "fullUrl": "Patient/lyra-pt-039",
+      "fullUrl": "Patient/lyra-pt-042",
       "resource": {
         "resourceType": "Patient",
-        "id": "lyra-pt-039",
+        "id": "lyra-pt-042",
         "identifier": [
           {
             "system": "urn:hospital:lyra:mrn",
-            "value": "LY-124812"
+            "value": "LY-403621"
           }
         ],
         "name": [
@@ -1030,12 +1112,12 @@
       }
     },
     {
-      "fullUrl": "Condition/lyra-cd-040",
+      "fullUrl": "Condition/lyra-cd-043",
       "resource": {
         "resourceType": "Condition",
-        "id": "lyra-cd-040",
+        "id": "lyra-cd-043",
         "subject": {
-          "reference": "Patient/lyra-pt-039"
+          "reference": "Patient/lyra-pt-042"
         },
         "clinicalStatus": {
           "coding": [
@@ -1052,14 +1134,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/lyra-rx-041",
+      "fullUrl": "MedicationRequest/lyra-rx-044",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "lyra-rx-041",
+        "id": "lyra-rx-044",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/lyra-pt-039"
+          "reference": "Patient/lyra-pt-042"
         },
         "medicationCodeableConcept": {
           "text": "Amlodipine"
@@ -1073,14 +1155,14 @@
       }
     },
     {
-      "fullUrl": "Patient/lyra-pt-042",
+      "fullUrl": "Patient/lyra-pt-045",
       "resource": {
         "resourceType": "Patient",
-        "id": "lyra-pt-042",
+        "id": "lyra-pt-045",
         "identifier": [
           {
             "system": "urn:hospital:lyra:mrn",
-            "value": "LY-862447"
+            "value": "LY-411366"
           }
         ],
         "name": [
@@ -1112,12 +1194,12 @@
       }
     },
     {
-      "fullUrl": "Condition/lyra-cd-043",
+      "fullUrl": "Condition/lyra-cd-046",
       "resource": {
         "resourceType": "Condition",
-        "id": "lyra-cd-043",
+        "id": "lyra-cd-046",
         "subject": {
-          "reference": "Patient/lyra-pt-042"
+          "reference": "Patient/lyra-pt-045"
         },
         "clinicalStatus": {
           "coding": [
@@ -1134,14 +1216,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/lyra-rx-044",
+      "fullUrl": "MedicationRequest/lyra-rx-047",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "lyra-rx-044",
+        "id": "lyra-rx-047",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/lyra-pt-042"
+          "reference": "Patient/lyra-pt-045"
         },
         "medicationCodeableConcept": {
           "text": "Albuterol"
@@ -1155,14 +1237,14 @@
       }
     },
     {
-      "fullUrl": "Patient/lyra-pt-045",
+      "fullUrl": "Patient/lyra-pt-048",
       "resource": {
         "resourceType": "Patient",
-        "id": "lyra-pt-045",
+        "id": "lyra-pt-048",
         "identifier": [
           {
             "system": "urn:hospital:lyra:mrn",
-            "value": "LY-938696"
+            "value": "LY-536875"
           }
         ],
         "name": [
@@ -1188,12 +1270,12 @@
       }
     },
     {
-      "fullUrl": "Condition/lyra-cd-046",
+      "fullUrl": "Condition/lyra-cd-049",
       "resource": {
         "resourceType": "Condition",
-        "id": "lyra-cd-046",
+        "id": "lyra-cd-049",
         "subject": {
-          "reference": "Patient/lyra-pt-045"
+          "reference": "Patient/lyra-pt-048"
         },
         "clinicalStatus": {
           "coding": [
@@ -1210,14 +1292,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/lyra-rx-047",
+      "fullUrl": "MedicationRequest/lyra-rx-050",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "lyra-rx-047",
+        "id": "lyra-rx-050",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/lyra-pt-045"
+          "reference": "Patient/lyra-pt-048"
         },
         "medicationCodeableConcept": {
           "text": "Albuterol"
@@ -1231,14 +1313,14 @@
       }
     },
     {
-      "fullUrl": "Patient/lyra-pt-048",
+      "fullUrl": "Patient/lyra-pt-051",
       "resource": {
         "resourceType": "Patient",
-        "id": "lyra-pt-048",
+        "id": "lyra-pt-051",
         "identifier": [
           {
             "system": "urn:hospital:lyra:mrn",
-            "value": "LY-228256"
+            "value": "LY-434372"
           }
         ],
         "name": [
@@ -1270,12 +1352,12 @@
       }
     },
     {
-      "fullUrl": "AllergyIntolerance/lyra-al-049",
+      "fullUrl": "AllergyIntolerance/lyra-al-052",
       "resource": {
         "resourceType": "AllergyIntolerance",
-        "id": "lyra-al-049",
+        "id": "lyra-al-052",
         "patient": {
-          "reference": "Patient/lyra-pt-048"
+          "reference": "Patient/lyra-pt-051"
         },
         "code": {
           "text": "Latex"
@@ -1294,12 +1376,12 @@
       }
     },
     {
-      "fullUrl": "Condition/lyra-cd-050",
+      "fullUrl": "Condition/lyra-cd-053",
       "resource": {
         "resourceType": "Condition",
-        "id": "lyra-cd-050",
+        "id": "lyra-cd-053",
         "subject": {
-          "reference": "Patient/lyra-pt-048"
+          "reference": "Patient/lyra-pt-051"
         },
         "clinicalStatus": {
           "coding": [
@@ -1316,12 +1398,12 @@
       }
     },
     {
-      "fullUrl": "Condition/lyra-cd-051",
+      "fullUrl": "Condition/lyra-cd-054",
       "resource": {
         "resourceType": "Condition",
-        "id": "lyra-cd-051",
+        "id": "lyra-cd-054",
         "subject": {
-          "reference": "Patient/lyra-pt-048"
+          "reference": "Patient/lyra-pt-051"
         },
         "clinicalStatus": {
           "coding": [
@@ -1338,14 +1420,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/lyra-rx-052",
+      "fullUrl": "MedicationRequest/lyra-rx-055",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "lyra-rx-052",
+        "id": "lyra-rx-055",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/lyra-pt-048"
+          "reference": "Patient/lyra-pt-051"
         },
         "medicationCodeableConcept": {
           "text": "Albuterol"
@@ -1359,14 +1441,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/lyra-rx-053",
+      "fullUrl": "MedicationRequest/lyra-rx-056",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "lyra-rx-053",
+        "id": "lyra-rx-056",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/lyra-pt-048"
+          "reference": "Patient/lyra-pt-051"
         },
         "medicationCodeableConcept": {
           "text": "Loratadine"

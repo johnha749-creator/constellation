@@ -106,6 +106,32 @@ DEMO_PATIENTS: list[list[dict]] = [
          "medications": [med("Atorvastatin", "40 mg once daily", "2025-06-03"),
                          med("Amlodipine", "5 mg once daily", "2025-06-03")]},
     ],
+    # Nickname at urgent care, and he has moved since his cardiology visits. Orion's heart
+    # clinic prescribes nitroglycerin; Vega's urgent care adds sildenafil without seeing it.
+    [
+        {"hospital": "orion", "given": "Anthony", "family": "Russo", "gender": "male",
+         "birthDate": "1961-04-18", "phone": "415-555-0184", "line": "2315 Lombard St", "postalCode": "94123",
+         "conditions": [condition("Coronary artery disease", "2022-03-08")],
+         "medications": [med("Nitroglycerin", "0.4 mg under the tongue as needed for chest pain", "2022-03-08"),
+                         med("Metoprolol", "25 mg twice daily", "2022-03-08")]},
+        {"hospital": "vega", "given": "Tony", "family": "Russo", "gender": "male",
+         "birthDate": "1961-04-18", "phone": "415.555.0184", "line": "41 Cortland Ave", "postalCode": "94110",
+         "conditions": [condition("Erectile dysfunction", "2026-09-19")],
+         "medications": [med("Sildenafil", "50 mg as needed", "2026-09-19")]},
+    ],
+    # Typos at the ER front desk: a dropped letter in the last name and two birth-date digits
+    # transposed. Vega's simvastatin plus Lyra's clarithromycin risks muscle damage.
+    [
+        {"hospital": "vega", "given": "Eleanor", "family": "Whittaker", "gender": "female",
+         "birthDate": "1953-10-12", "phone": "415-555-0136", "line": "915 Cole St", "postalCode": "94117",
+         "conditions": [condition("Hyperlipidemia", "2017-05-23"), condition("Hypothyroidism", "2014-02-06")],
+         "medications": [med("Simvastatin", "40 mg once daily at bedtime", "2017-05-23"),
+                         med("Levothyroxine", "88 mcg once daily", "2014-02-06")]},
+        {"hospital": "lyra", "given": "Eleanor", "family": "Whitaker", "gender": "female",
+         "birthDate": "1953-10-21", "phone": "415-555-0136", "line": "915 Cole Street", "postalCode": "94117",
+         "conditions": [condition("Acute bacterial sinusitis", "2026-10-04")],
+         "medications": [med("Clarithromycin", "500 mg twice daily", "2026-10-04")]},
+    ],
 ]
 
 FILLER_FIRST_NAMES = [

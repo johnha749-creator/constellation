@@ -443,6 +443,109 @@
         ],
         "name": [
           {
+            "family": "Russo",
+            "given": [
+              "Anthony"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1961-04-18",
+        "address": [
+          {
+            "line": [
+              "2315 Lombard St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94123"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "415-555-0184"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/orion-cd-018",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "orion-cd-018",
+        "subject": {
+          "reference": "Patient/orion-pt-017"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Coronary artery disease"
+        },
+        "onsetDateTime": "2022-03-08"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/orion-rx-019",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "orion-rx-019",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/orion-pt-017"
+        },
+        "medicationCodeableConcept": {
+          "text": "Nitroglycerin"
+        },
+        "dosageInstruction": [
+          {
+            "text": "0.4 mg under the tongue as needed for chest pain"
+          }
+        ],
+        "authoredOn": "2022-03-08"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/orion-rx-020",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "orion-rx-020",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/orion-pt-017"
+        },
+        "medicationCodeableConcept": {
+          "text": "Metoprolol"
+        },
+        "dosageInstruction": [
+          {
+            "text": "25 mg twice daily"
+          }
+        ],
+        "authoredOn": "2022-03-08"
+      }
+    },
+    {
+      "fullUrl": "Patient/orion-pt-021",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "orion-pt-021",
+        "identifier": [
+          {
+            "system": "urn:hospital:orion:mrn",
+            "value": "OR-546823"
+          }
+        ],
+        "name": [
+          {
             "family": "Walsh",
             "given": [
               "Noah"
@@ -470,12 +573,12 @@
       }
     },
     {
-      "fullUrl": "Condition/orion-cd-018",
+      "fullUrl": "Condition/orion-cd-022",
       "resource": {
         "resourceType": "Condition",
-        "id": "orion-cd-018",
+        "id": "orion-cd-022",
         "subject": {
-          "reference": "Patient/orion-pt-017"
+          "reference": "Patient/orion-pt-021"
         },
         "clinicalStatus": {
           "coding": [
@@ -492,12 +595,12 @@
       }
     },
     {
-      "fullUrl": "Condition/orion-cd-019",
+      "fullUrl": "Condition/orion-cd-023",
       "resource": {
         "resourceType": "Condition",
-        "id": "orion-cd-019",
+        "id": "orion-cd-023",
         "subject": {
-          "reference": "Patient/orion-pt-017"
+          "reference": "Patient/orion-pt-021"
         },
         "clinicalStatus": {
           "coding": [
@@ -514,14 +617,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/orion-rx-020",
+      "fullUrl": "MedicationRequest/orion-rx-024",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "orion-rx-020",
+        "id": "orion-rx-024",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/orion-pt-017"
+          "reference": "Patient/orion-pt-021"
         },
         "medicationCodeableConcept": {
           "text": "Atorvastatin"
@@ -535,14 +638,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/orion-rx-021",
+      "fullUrl": "MedicationRequest/orion-rx-025",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "orion-rx-021",
+        "id": "orion-rx-025",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/orion-pt-017"
+          "reference": "Patient/orion-pt-021"
         },
         "medicationCodeableConcept": {
           "text": "Albuterol"
@@ -556,14 +659,14 @@
       }
     },
     {
-      "fullUrl": "Patient/orion-pt-022",
+      "fullUrl": "Patient/orion-pt-026",
       "resource": {
         "resourceType": "Patient",
-        "id": "orion-pt-022",
+        "id": "orion-pt-026",
         "identifier": [
           {
             "system": "urn:hospital:orion:mrn",
-            "value": "OR-722914"
+            "value": "OR-225242"
           }
         ],
         "name": [
@@ -595,12 +698,12 @@
       }
     },
     {
-      "fullUrl": "Condition/orion-cd-023",
+      "fullUrl": "Condition/orion-cd-027",
       "resource": {
         "resourceType": "Condition",
-        "id": "orion-cd-023",
+        "id": "orion-cd-027",
         "subject": {
-          "reference": "Patient/orion-pt-022"
+          "reference": "Patient/orion-pt-026"
         },
         "clinicalStatus": {
           "coding": [
@@ -617,14 +720,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/orion-rx-024",
+      "fullUrl": "MedicationRequest/orion-rx-028",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "orion-rx-024",
+        "id": "orion-rx-028",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/orion-pt-022"
+          "reference": "Patient/orion-pt-026"
         },
         "medicationCodeableConcept": {
           "text": "Levothyroxine"
@@ -638,14 +741,14 @@
       }
     },
     {
-      "fullUrl": "Patient/orion-pt-025",
+      "fullUrl": "Patient/orion-pt-029",
       "resource": {
         "resourceType": "Patient",
-        "id": "orion-pt-025",
+        "id": "orion-pt-029",
         "identifier": [
           {
             "system": "urn:hospital:orion:mrn",
-            "value": "OR-808752"
+            "value": "OR-625611"
           }
         ],
         "name": [
@@ -677,12 +780,12 @@
       }
     },
     {
-      "fullUrl": "Condition/orion-cd-026",
+      "fullUrl": "Condition/orion-cd-030",
       "resource": {
         "resourceType": "Condition",
-        "id": "orion-cd-026",
+        "id": "orion-cd-030",
         "subject": {
-          "reference": "Patient/orion-pt-025"
+          "reference": "Patient/orion-pt-029"
         },
         "clinicalStatus": {
           "coding": [
@@ -699,12 +802,12 @@
       }
     },
     {
-      "fullUrl": "Condition/orion-cd-027",
+      "fullUrl": "Condition/orion-cd-031",
       "resource": {
         "resourceType": "Condition",
-        "id": "orion-cd-027",
+        "id": "orion-cd-031",
         "subject": {
-          "reference": "Patient/orion-pt-025"
+          "reference": "Patient/orion-pt-029"
         },
         "clinicalStatus": {
           "coding": [
@@ -721,14 +824,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/orion-rx-028",
+      "fullUrl": "MedicationRequest/orion-rx-032",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "orion-rx-028",
+        "id": "orion-rx-032",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/orion-pt-025"
+          "reference": "Patient/orion-pt-029"
         },
         "medicationCodeableConcept": {
           "text": "Acetaminophen"
@@ -742,14 +845,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/orion-rx-029",
+      "fullUrl": "MedicationRequest/orion-rx-033",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "orion-rx-029",
+        "id": "orion-rx-033",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/orion-pt-025"
+          "reference": "Patient/orion-pt-029"
         },
         "medicationCodeableConcept": {
           "text": "Atorvastatin"
@@ -763,14 +866,14 @@
       }
     },
     {
-      "fullUrl": "Patient/orion-pt-030",
+      "fullUrl": "Patient/orion-pt-034",
       "resource": {
         "resourceType": "Patient",
-        "id": "orion-pt-030",
+        "id": "orion-pt-034",
         "identifier": [
           {
             "system": "urn:hospital:orion:mrn",
-            "value": "OR-819809"
+            "value": "OR-363798"
           }
         ],
         "name": [
@@ -802,12 +905,12 @@
       }
     },
     {
-      "fullUrl": "Condition/orion-cd-031",
+      "fullUrl": "Condition/orion-cd-035",
       "resource": {
         "resourceType": "Condition",
-        "id": "orion-cd-031",
+        "id": "orion-cd-035",
         "subject": {
-          "reference": "Patient/orion-pt-030"
+          "reference": "Patient/orion-pt-034"
         },
         "clinicalStatus": {
           "coding": [
@@ -824,12 +927,12 @@
       }
     },
     {
-      "fullUrl": "Condition/orion-cd-032",
+      "fullUrl": "Condition/orion-cd-036",
       "resource": {
         "resourceType": "Condition",
-        "id": "orion-cd-032",
+        "id": "orion-cd-036",
         "subject": {
-          "reference": "Patient/orion-pt-030"
+          "reference": "Patient/orion-pt-034"
         },
         "clinicalStatus": {
           "coding": [
@@ -846,14 +949,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/orion-rx-033",
+      "fullUrl": "MedicationRequest/orion-rx-037",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "orion-rx-033",
+        "id": "orion-rx-037",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/orion-pt-030"
+          "reference": "Patient/orion-pt-034"
         },
         "medicationCodeableConcept": {
           "text": "Albuterol"
@@ -867,14 +970,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/orion-rx-034",
+      "fullUrl": "MedicationRequest/orion-rx-038",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "orion-rx-034",
+        "id": "orion-rx-038",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/orion-pt-030"
+          "reference": "Patient/orion-pt-034"
         },
         "medicationCodeableConcept": {
           "text": "Loratadine"
@@ -888,14 +991,14 @@
       }
     },
     {
-      "fullUrl": "Patient/orion-pt-035",
+      "fullUrl": "Patient/orion-pt-039",
       "resource": {
         "resourceType": "Patient",
-        "id": "orion-pt-035",
+        "id": "orion-pt-039",
         "identifier": [
           {
             "system": "urn:hospital:orion:mrn",
-            "value": "OR-492321"
+            "value": "OR-507945"
           }
         ],
         "name": [
@@ -927,12 +1030,12 @@
       }
     },
     {
-      "fullUrl": "Condition/orion-cd-036",
+      "fullUrl": "Condition/orion-cd-040",
       "resource": {
         "resourceType": "Condition",
-        "id": "orion-cd-036",
+        "id": "orion-cd-040",
         "subject": {
-          "reference": "Patient/orion-pt-035"
+          "reference": "Patient/orion-pt-039"
         },
         "clinicalStatus": {
           "coding": [
@@ -949,12 +1052,12 @@
       }
     },
     {
-      "fullUrl": "Condition/orion-cd-037",
+      "fullUrl": "Condition/orion-cd-041",
       "resource": {
         "resourceType": "Condition",
-        "id": "orion-cd-037",
+        "id": "orion-cd-041",
         "subject": {
-          "reference": "Patient/orion-pt-035"
+          "reference": "Patient/orion-pt-039"
         },
         "clinicalStatus": {
           "coding": [
@@ -971,14 +1074,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/orion-rx-038",
+      "fullUrl": "MedicationRequest/orion-rx-042",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "orion-rx-038",
+        "id": "orion-rx-042",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/orion-pt-035"
+          "reference": "Patient/orion-pt-039"
         },
         "medicationCodeableConcept": {
           "text": "Loratadine"
@@ -992,14 +1095,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/orion-rx-039",
+      "fullUrl": "MedicationRequest/orion-rx-043",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "orion-rx-039",
+        "id": "orion-rx-043",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/orion-pt-035"
+          "reference": "Patient/orion-pt-039"
         },
         "medicationCodeableConcept": {
           "text": "Atorvastatin"
@@ -1013,14 +1116,14 @@
       }
     },
     {
-      "fullUrl": "Patient/orion-pt-040",
+      "fullUrl": "Patient/orion-pt-044",
       "resource": {
         "resourceType": "Patient",
-        "id": "orion-pt-040",
+        "id": "orion-pt-044",
         "identifier": [
           {
             "system": "urn:hospital:orion:mrn",
-            "value": "OR-507945"
+            "value": "OR-160430"
           }
         ],
         "name": [
@@ -1052,12 +1155,12 @@
       }
     },
     {
-      "fullUrl": "Condition/orion-cd-041",
+      "fullUrl": "Condition/orion-cd-045",
       "resource": {
         "resourceType": "Condition",
-        "id": "orion-cd-041",
+        "id": "orion-cd-045",
         "subject": {
-          "reference": "Patient/orion-pt-040"
+          "reference": "Patient/orion-pt-044"
         },
         "clinicalStatus": {
           "coding": [
@@ -1074,14 +1177,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/orion-rx-042",
+      "fullUrl": "MedicationRequest/orion-rx-046",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "orion-rx-042",
+        "id": "orion-rx-046",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/orion-pt-040"
+          "reference": "Patient/orion-pt-044"
         },
         "medicationCodeableConcept": {
           "text": "Levothyroxine"
@@ -1095,14 +1198,14 @@
       }
     },
     {
-      "fullUrl": "Patient/orion-pt-043",
+      "fullUrl": "Patient/orion-pt-047",
       "resource": {
         "resourceType": "Patient",
-        "id": "orion-pt-043",
+        "id": "orion-pt-047",
         "identifier": [
           {
             "system": "urn:hospital:orion:mrn",
-            "value": "OR-956493"
+            "value": "OR-849912"
           }
         ],
         "name": [
@@ -1134,12 +1237,12 @@
       }
     },
     {
-      "fullUrl": "Condition/orion-cd-044",
+      "fullUrl": "Condition/orion-cd-048",
       "resource": {
         "resourceType": "Condition",
-        "id": "orion-cd-044",
+        "id": "orion-cd-048",
         "subject": {
-          "reference": "Patient/orion-pt-043"
+          "reference": "Patient/orion-pt-047"
         },
         "clinicalStatus": {
           "coding": [
@@ -1156,12 +1259,12 @@
       }
     },
     {
-      "fullUrl": "Condition/orion-cd-045",
+      "fullUrl": "Condition/orion-cd-049",
       "resource": {
         "resourceType": "Condition",
-        "id": "orion-cd-045",
+        "id": "orion-cd-049",
         "subject": {
-          "reference": "Patient/orion-pt-043"
+          "reference": "Patient/orion-pt-047"
         },
         "clinicalStatus": {
           "coding": [
@@ -1178,14 +1281,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/orion-rx-046",
+      "fullUrl": "MedicationRequest/orion-rx-050",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "orion-rx-046",
+        "id": "orion-rx-050",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/orion-pt-043"
+          "reference": "Patient/orion-pt-047"
         },
         "medicationCodeableConcept": {
           "text": "Atorvastatin"
@@ -1199,14 +1302,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/orion-rx-047",
+      "fullUrl": "MedicationRequest/orion-rx-051",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "orion-rx-047",
+        "id": "orion-rx-051",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/orion-pt-043"
+          "reference": "Patient/orion-pt-047"
         },
         "medicationCodeableConcept": {
           "text": "Amlodipine"
@@ -1220,14 +1323,14 @@
       }
     },
     {
-      "fullUrl": "Patient/orion-pt-048",
+      "fullUrl": "Patient/orion-pt-052",
       "resource": {
         "resourceType": "Patient",
-        "id": "orion-pt-048",
+        "id": "orion-pt-052",
         "identifier": [
           {
             "system": "urn:hospital:orion:mrn",
-            "value": "OR-473626"
+            "value": "OR-557956"
           }
         ],
         "name": [
@@ -1259,12 +1362,12 @@
       }
     },
     {
-      "fullUrl": "Condition/orion-cd-049",
+      "fullUrl": "Condition/orion-cd-053",
       "resource": {
         "resourceType": "Condition",
-        "id": "orion-cd-049",
+        "id": "orion-cd-053",
         "subject": {
-          "reference": "Patient/orion-pt-048"
+          "reference": "Patient/orion-pt-052"
         },
         "clinicalStatus": {
           "coding": [
@@ -1281,14 +1384,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/orion-rx-050",
+      "fullUrl": "MedicationRequest/orion-rx-054",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "orion-rx-050",
+        "id": "orion-rx-054",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/orion-pt-048"
+          "reference": "Patient/orion-pt-052"
         },
         "medicationCodeableConcept": {
           "text": "Albuterol"
@@ -1302,14 +1405,14 @@
       }
     },
     {
-      "fullUrl": "Patient/orion-pt-051",
+      "fullUrl": "Patient/orion-pt-055",
       "resource": {
         "resourceType": "Patient",
-        "id": "orion-pt-051",
+        "id": "orion-pt-055",
         "identifier": [
           {
             "system": "urn:hospital:orion:mrn",
-            "value": "OR-557956"
+            "value": "OR-446604"
           }
         ],
         "name": [
@@ -1341,12 +1444,12 @@
       }
     },
     {
-      "fullUrl": "Condition/orion-cd-052",
+      "fullUrl": "Condition/orion-cd-056",
       "resource": {
         "resourceType": "Condition",
-        "id": "orion-cd-052",
+        "id": "orion-cd-056",
         "subject": {
-          "reference": "Patient/orion-pt-051"
+          "reference": "Patient/orion-pt-055"
         },
         "clinicalStatus": {
           "coding": [
@@ -1363,14 +1466,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/orion-rx-053",
+      "fullUrl": "MedicationRequest/orion-rx-057",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "orion-rx-053",
+        "id": "orion-rx-057",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/orion-pt-051"
+          "reference": "Patient/orion-pt-055"
         },
         "medicationCodeableConcept": {
           "text": "Amlodipine"
@@ -1384,14 +1487,14 @@
       }
     },
     {
-      "fullUrl": "Patient/orion-pt-054",
+      "fullUrl": "Patient/orion-pt-058",
       "resource": {
         "resourceType": "Patient",
-        "id": "orion-pt-054",
+        "id": "orion-pt-058",
         "identifier": [
           {
             "system": "urn:hospital:orion:mrn",
-            "value": "OR-829075"
+            "value": "OR-906512"
           }
         ],
         "name": [
@@ -1423,12 +1526,12 @@
       }
     },
     {
-      "fullUrl": "Condition/orion-cd-055",
+      "fullUrl": "Condition/orion-cd-059",
       "resource": {
         "resourceType": "Condition",
-        "id": "orion-cd-055",
+        "id": "orion-cd-059",
         "subject": {
-          "reference": "Patient/orion-pt-054"
+          "reference": "Patient/orion-pt-058"
         },
         "clinicalStatus": {
           "coding": [
@@ -1445,12 +1548,12 @@
       }
     },
     {
-      "fullUrl": "Condition/orion-cd-056",
+      "fullUrl": "Condition/orion-cd-060",
       "resource": {
         "resourceType": "Condition",
-        "id": "orion-cd-056",
+        "id": "orion-cd-060",
         "subject": {
-          "reference": "Patient/orion-pt-054"
+          "reference": "Patient/orion-pt-058"
         },
         "clinicalStatus": {
           "coding": [
@@ -1467,14 +1570,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/orion-rx-057",
+      "fullUrl": "MedicationRequest/orion-rx-061",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "orion-rx-057",
+        "id": "orion-rx-061",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/orion-pt-054"
+          "reference": "Patient/orion-pt-058"
         },
         "medicationCodeableConcept": {
           "text": "Loratadine"
@@ -1488,14 +1591,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/orion-rx-058",
+      "fullUrl": "MedicationRequest/orion-rx-062",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "orion-rx-058",
+        "id": "orion-rx-062",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/orion-pt-054"
+          "reference": "Patient/orion-pt-058"
         },
         "medicationCodeableConcept": {
           "text": "Atorvastatin"
@@ -1509,14 +1612,14 @@
       }
     },
     {
-      "fullUrl": "Patient/orion-pt-059",
+      "fullUrl": "Patient/orion-pt-063",
       "resource": {
         "resourceType": "Patient",
-        "id": "orion-pt-059",
+        "id": "orion-pt-063",
         "identifier": [
           {
             "system": "urn:hospital:orion:mrn",
-            "value": "OR-446604"
+            "value": "OR-938696"
           }
         ],
         "name": [
@@ -1548,12 +1651,12 @@
       }
     },
     {
-      "fullUrl": "Condition/orion-cd-060",
+      "fullUrl": "Condition/orion-cd-064",
       "resource": {
         "resourceType": "Condition",
-        "id": "orion-cd-060",
+        "id": "orion-cd-064",
         "subject": {
-          "reference": "Patient/orion-pt-059"
+          "reference": "Patient/orion-pt-063"
         },
         "clinicalStatus": {
           "coding": [
@@ -1570,14 +1673,14 @@
       }
     },
     {
-      "fullUrl": "MedicationRequest/orion-rx-061",
+      "fullUrl": "MedicationRequest/orion-rx-065",
       "resource": {
         "resourceType": "MedicationRequest",
-        "id": "orion-rx-061",
+        "id": "orion-rx-065",
         "status": "active",
         "intent": "order",
         "subject": {
-          "reference": "Patient/orion-pt-059"
+          "reference": "Patient/orion-pt-063"
         },
         "medicationCodeableConcept": {
           "text": "Atorvastatin"

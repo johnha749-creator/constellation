@@ -55,6 +55,22 @@ def test_dose_mismatch_is_low_severity(index):
     assert [(c.type, c.severity) for c in conflicts] == [("dose_mismatch", "low")]
 
 
+def test_nitrate_with_sildenafil_across_hospitals(index):
+    cluster, conflicts = conflicts_for(index, "Anthony Russo", "1961-04-18")
+    assert len(cluster.record_ids) == 2 and not cluster.needs_review  # "Tony", new address
+    assert [(c.type, c.severity, c.cross_hospital, c.unconfirmed) for c in conflicts] == [
+        ("interaction", "high", True, False)]
+    assert conflicts[0].title == "Nitroglycerin + Sildenafil"
+
+
+def test_statin_with_clarithromycin_across_hospitals(index):
+    cluster, conflicts = conflicts_for(index, "Eleanor Whittaker", "1953-10-12")
+    assert len(cluster.record_ids) == 2 and not cluster.needs_review  # surname and birth-date typos
+    assert [(c.type, c.severity, c.cross_hospital, c.unconfirmed) for c in conflicts] == [
+        ("interaction", "high", True, False)]
+    assert "rhabdomyolysis" in conflicts[0].explanation
+
+
 def test_filler_patients_have_no_conflicts(index):
     demo_ids = {f"{rec['given']} {rec['family']}" for person in DEMO_PATIENTS for rec in person}
     for summary in index.summaries():
