@@ -1,8 +1,6 @@
 import pytest
-from fastapi.testclient import TestClient
 
 from app.constellation import PatientIndex
-from app.main import app
 from app.reconcile import medication_list
 from app.records import ClinicalItem
 from app.seed import write_seed
@@ -66,8 +64,7 @@ def test_unknown_drugs_are_grouped_by_their_text():
     assert [s["item_id"] for s in rows[0]["sources"]] == ["a", "b"]
 
 
-def test_api_serves_medications():
-    client = TestClient(app)
+def test_api_serves_medications(client):
     bob = next(p for p in client.get("/api/patients", params={"q": "chen"}).json())
     rows = client.get(f"/api/patients/{bob['id']}/medications").json()
     assert [row["drug"] for row in rows] == ["atorvastatin", "amlodipine"]

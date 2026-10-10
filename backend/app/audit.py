@@ -28,10 +28,12 @@ class AuditLog:
             self.events = [json.loads(line) for line in lines if line.strip()]
 
     def record_review(self, record_a: str, record_b: str, same_person: bool, *, reviewer: str,
-                      score: float, previous: bool | None, note: str | None = None) -> dict:
+                      score: float, previous: bool | None, note: str | None = None,
+                      username: str | None = None) -> dict:
         return self._append({
             "action": "review",
             "reviewer": reviewer,
+            "username": username,
             "record_a": record_a,
             "record_b": record_b,
             "decision": _decision(same_person),
@@ -40,9 +42,15 @@ class AuditLog:
             "note": note,
         })
 
-    def record_reset(self, reviewer: str) -> dict:
+    def record_reset(self, reviewer: str, username: str | None = None) -> dict:
         """Clears every decision before this point, without deleting them from the log."""
-        return self._append({"action": "reset", "reviewer": reviewer})
+        return self._append({"action": "reset", "reviewer": reviewer, "username": username})
+
+    def record_access(self, action: str, record_ids: list[str], *, reviewer: str,
+                      username: str | None = None, reason: str | None = None) -> dict:
+        """Someone opened a patient ("view") or unmasked their contact details ("reveal")."""
+        return self._append({"action": action, "reviewer": reviewer, "username": username,
+                             "records": list(record_ids), "reason": reason})
 
     def current_reviews(self) -> dict[frozenset[str], bool]:
         """Replay the log: the latest decision for each pair since the last reset (True = same).

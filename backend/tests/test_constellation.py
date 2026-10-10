@@ -1,9 +1,9 @@
 import pytest
-from fastapi.testclient import TestClient
 
 from app.constellation import PatientIndex
-from app.main import app
 from app.seed import DEMO_PATIENTS, write_seed
+
+from conftest import demo_account
 
 
 @pytest.fixture(scope="module")
@@ -113,8 +113,7 @@ def test_rejecting_a_possible_match_splits_the_patient(fresh_index):
         assert fresh_index.conflicts[cluster.id] == []
 
 
-def test_api_serves_a_constellation():
-    client = TestClient(app)
+def test_api_serves_a_constellation(client):
     patients = client.get("/api/patients").json()
     assert patients[0]["conflicts"]["high"] > 0
     graph = client.get(f"/api/patients/{patients[0]['id']}/constellation").json()
@@ -123,8 +122,7 @@ def test_api_serves_a_constellation():
     assert client.get("/api/patients/nope/constellation").status_code == 404
 
 
-def test_api_serves_stats():
-    client = TestClient(app)
+def test_api_serves_stats(client):
     stats = client.get("/api/stats").json()
     assert set(stats) == {"hospitals", "records", "patients", "needs_review", "conflicts",
                           "cross_hospital_conflicts"}
@@ -132,25 +130,26 @@ def test_api_serves_stats():
     assert stats["patients"] == len(client.get("/api/patients").json())
 
 
-def test_api_match_review_round_trip():
-    client = TestClient(app)
+def test_api_match_review_round_trip(client):
     aisha = next(p for p in client.get("/api/patients").json() if p["needs_review"])
     graph = client.get(f"/api/patients/{aisha['id']}/constellation").json()
     link = next(l for l in graph["links"] if l["kind"] == "match" and l["tier"] == "review")
     try:
         res = client.post("/api/matches/review", json={
-            "record_a": link["source"], "record_b": link["target"], "same_person": True, "reviewer": "Dr. Lee"})
+            "record_a": link["source"], "record_b": link["target"], "same_person": True})
         patient_id = res.json()["patient_id"]
         graph = client.get(f"/api/patients/{patient_id}/constellation").json()
         confirmed = next(l for l in graph["links"] if l["kind"] == "match")
         assert (confirmed["tier"], confirmed["reviewed"]) == ("match", "same")
         history = client.get(f"/api/patients/{patient_id}/audit").json()
         assert history["verified"]
-        assert (history["events"][0]["reviewer"], history["events"][0]["decision"]) == ("Dr. Lee", "same")
+        decision = next(e for e in history["events"] if e["action"] == "review")
+        # The reviewer is whoever is signed in, not something the request can claim.
+        assert (decision["username"], decision["decision"]) == (demo_account()["username"], "same")
         bad = {"record_a": "nope", "record_b": link["target"], "same_person": True}
         assert client.post("/api/matches/review", json=bad).status_code == 404
         assert client.get("/api/patients/nope/audit").status_code == 404
     finally:
-        client.post("/api/demo/reset", json={"reviewer": "test"})  # don't leak the review into other tests
+        client.post("/api/demo/reset")  # don't leak the review into other tests
     assert client.get("/api/audit").json()["events"][0]["action"] == "reset"
     assert any(p["needs_review"] for p in client.get("/api/patients").json())

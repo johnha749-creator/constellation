@@ -1,0 +1,23 @@
+{
+  "note": "Demo accounts for the hackathon only. Real passwords must never be stored in plain text or committed to a repository; a real deployment would use the hospital's single sign-on.",
+  "accounts": [
+    {
+      "username": "dr.lee",
+      "name": "Dr. Lee",
+      "role": "Physician",
+      "password": "nebula-nebula-902"
+    },
+    {
+      "username": "nurse.ruiz",
+      "name": "Nurse Ruiz",
+      "role": "Registered nurse",
+      "password": "nova-orion-907"
+    },
+    {
+      "username": "demo",
+      "name": "Demo Clinician",
+      "role": "Physician",
+      "password": "vega-sirius-177"
+    }
+  ]
+}

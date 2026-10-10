@@ -5,6 +5,76 @@ import ReviewHistory from "./ReviewHistory";
 
 const KIND_LABELS = { record: "Patient record", allergy: "Allergy", medication: "Medication", condition: "Condition" };
 
+const REVEAL_REASONS = [
+  "Treatment: confirming the patient's identity",
+  "Treatment: contacting the patient",
+  "Care coordination with another hospital",
+];
+
+/** Minimum necessary: contact details stay hidden until the clinician says why they need them. */
+function ContactAccess({ visible, onReveal }) {
+  const [open, setOpen] = useState(false);
+  const [reason, setReason] = useState(REVEAL_REASONS[0]);
+  const [other, setOther] = useState("");
+
+  if (visible) {
+    return (
+      <div className="privacy-bar visible">
+        Contact details are visible to you for 15 minutes. This access was logged.
+      </div>
+    );
+  }
+  const submit = (e) => {
+    e.preventDefault();
+    onReveal(reason === "other" ? other.trim() : reason);
+  };
+  return (
+    <div className="privacy-bar">
+      <div className="privacy-row">
+        <span>Phone, address, ZIP and record numbers are hidden.</span>
+        {!open && (
+          <button className="btn small-btn" onClick={() => setOpen(true)}>
+            Show…
+          </button>
+        )}
+      </div>
+      {open && (
+        <form className="reveal-form" onSubmit={submit}>
+          <label>
+            Why do you need them? Your answer is logged.
+            <select value={reason} onChange={(e) => setReason(e.target.value)}>
+              {REVEAL_REASONS.map((r) => (
+                <option key={r} value={r}>
+                  {r}
+                </option>
+              ))}
+              <option value="other">Other…</option>
+            </select>
+          </label>
+          {reason === "other" && (
+            <input
+              value={other}
+              onChange={(e) => setOther(e.target.value)}
+              placeholder="Describe the reason"
+              minLength={3}
+              maxLength={200}
+              required
+            />
+          )}
+          <div className="review-actions">
+            <button type="submit" className="btn confirm">
+              Show contact details
+            </button>
+            <button type="button" className="btn reject" onClick={() => setOpen(false)}>
+              Cancel
+            </button>
+          </div>
+        </form>
+      )}
+    </div>
+  );
+}
+
 const MATCH_HEADINGS = {
   same: "Confirmed same person by a clinician",
   match: "Same person",
@@ -15,14 +85,13 @@ export default function DetailPanel({
   graph,
   medications,
   audit,
-  reviewer,
-  onReviewerChange,
   hospitals,
   selectedConflictId,
   selectedNodeId,
   onSelectConflict,
   onSelectNode,
   onDecideMatch,
+  onRevealContacts,
 }) {
   const [tab, setTab] = useState("conflicts");
   const panelRef = useRef(null);
@@ -56,6 +125,8 @@ export default function DetailPanel({
           {patient.hospitals.length} {patient.hospitals.length === 1 ? "hospital" : "hospitals"}
         </div>
       </div>
+
+      <ContactAccess key={patient.id} visible={graph.contact_details_visible} onReveal={onRevealContacts} />
 
       {node && (
         <section className="card node-card" style={{ borderColor: hospitals[node.hospital]?.color }}>
@@ -124,15 +195,6 @@ export default function DetailPanel({
 
       {tab === "links" && (
         <>
-          <label className="reviewer">
-            <span className="muted small">Reviewing as</span>
-            <input
-              value={reviewer}
-              onChange={(e) => onReviewerChange(e.target.value)}
-              placeholder="Your name, e.g. Dr. Lee"
-              maxLength={80}
-            />
-          </label>
           {matches.length === 0 && <p className="muted">Only one record found for this patient.</p>}
           {matches.map((m) => (
             <div key={`${m.source}-${m.target}`} className={`card match-card ${m.tier}`}>

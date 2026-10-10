@@ -860,23 +860,105 @@ button {
 }
 
 /* --- reviewer name and review history */
-.reviewer {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
+/* --- privacy: masked contact details */
+.privacy-bar {
+  margin-top: 12px;
+  padding: 9px 11px;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  font-size: 12.5px;
+  color: var(--muted);
 }
 
-.reviewer input {
-  flex: 1;
-  min-width: 0;
-  padding: 6px 9px;
+.privacy-bar.visible {
+  border-style: solid;
+  border-color: var(--review);
+  color: var(--review);
+}
+
+.privacy-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.small-btn {
+  flex: none;
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+.reveal-form {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.reveal-form label {
+  display: grid;
+  gap: 5px;
+  color: var(--text);
+}
+
+.reveal-form select,
+.reveal-form input,
+.login-card input {
+  padding: 7px 9px;
   border-radius: 6px;
   border: 1px solid var(--border);
   background: var(--bg-card);
   color: var(--text);
   font: inherit;
-  font-size: 12.5px;
+}
+
+/* --- sign-in */
+.login-page {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  padding: 16px;
+  background: radial-gradient(ellipse at center, #0d1433 0%, var(--bg) 70%);
+}
+
+.login-card {
+  display: grid;
+  gap: 14px;
+  width: min(380px, 100%);
+  padding: 28px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg-panel);
+}
+
+.login-card label {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.login-card p {
+  margin: 0;
+}
+
+.login-message {
+  color: var(--review);
+}
+
+.login-error {
+  color: var(--high);
+}
+
+.session {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.session-user {
+  font-size: 12px;
+  color: var(--text);
+  white-space: nowrap;
 }
 
 .history {
@@ -930,8 +1012,13 @@ button {
   background: var(--match);
 }
 
-.history-item.reset::before {
+.history-item.reset::before,
+.history-item.view::before {
   background: var(--muted);
+}
+
+.history-item.reveal::before {
+  background: var(--review);
 }
 
 .history-meta {

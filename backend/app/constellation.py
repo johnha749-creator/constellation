@@ -8,6 +8,7 @@ from pathlib import Path
 from .audit import AuditLog
 from .conflicts import Conflict, find_conflicts
 from .matching import Cluster, candidate_pairs, cluster_records, compare_records, score_pairs
+from .privacy import masker
 from .records import ClinicalItem, load_dataset
 
 KIND_LABELS = {"allergy": "Allergy", "medication": "Medication", "condition": "Condition"}
@@ -54,24 +55,34 @@ class PatientIndex:
         return [item for rid in cluster.record_ids for item in self.items_by_record[rid]]
 
     def review_match(self, record_a: str, record_b: str, same_person: bool,
-                     reviewer: str = "Unknown reviewer", note: str | None = None) -> str | None:
+                     reviewer: str = "Unknown reviewer", note: str | None = None,
+                     username: str | None = None) -> str | None:
         """Apply and log a clinician's decision about two records. Returns record_a's patient id."""
         records = self.dataset.records
         if record_a not in records or record_b not in records:
             return None
         pair = frozenset((record_a, record_b))
         result = self.scored.get(tuple(sorted(pair))) or compare_records(records[record_a], records[record_b])
-        self.audit.record_review(record_a, record_b, same_person, reviewer=reviewer,
+        self.audit.record_review(record_a, record_b, same_person, reviewer=reviewer, username=username,
                                  score=round(result.probability, 4), previous=self.reviews.get(pair), note=note)
         self.reviews[pair] = same_person
         self._link()
         return self.cluster_of(record_a).id
 
-    def reset_reviews(self, reviewer: str = "Unknown reviewer") -> None:
+    def reset_reviews(self, reviewer: str = "Unknown reviewer", username: str | None = None) -> None:
         """Undo every decision (for re-running the demo). The log keeps them, plus a reset entry."""
-        self.audit.record_reset(reviewer)
+        self.audit.record_reset(reviewer, username)
         self.reviews = {}
         self._link()
+
+    def log_access(self, cluster_id: str, action: str, reviewer: str, username: str | None = None,
+                   reason: str | None = None) -> bool:
+        """Record that someone opened this patient ("view") or unmasked their details ("reveal")."""
+        cluster = self.clusters.get(cluster_id)
+        if cluster is None:
+            return False
+        self.audit.record_access(action, cluster.record_ids, reviewer=reviewer, username=username, reason=reason)
+        return True
 
     def cluster_of(self, record_id: str) -> Cluster:
         return self.clusters[self._cluster_of[record_id]]
@@ -86,24 +97,26 @@ class PatientIndex:
         return {"events": events, **self.audit_status()}
 
     def audit_for(self, cluster_id: str) -> dict | None:
-        """Decisions about this patient's records, newest first, plus any resets after them."""
+        """Everything logged about this patient's records, newest first: who opened them, who
+        unmasked contact details and why, match decisions, and any resets after those."""
         cluster = self.clusters.get(cluster_id)
         if cluster is None:
             return None
         mine = set(cluster.record_ids)
         events, involved = [], False
         for event in self.audit.events:
-            if event["action"] == "review" and {event["record_a"], event["record_b"]} & mine:
+            if event["action"] == "reset":
+                if involved:
+                    events.append(self._describe(event))
+            elif _records_of(event) & mine:
                 involved = True
-                events.append(self._describe(event))
-            elif event["action"] == "reset" and involved:
                 events.append(self._describe(event))
         return {"events": events[::-1], **self.audit_status()}
 
     def _describe(self, event: dict) -> dict:
         """An audit entry, with readable names for the records it mentions."""
-        described = {k: event.get(k) for k in
-                     ("seq", "at", "action", "reviewer", "decision", "previous", "score", "note", "hash")}
+        described = {k: event.get(k) for k in ("seq", "at", "action", "reviewer", "username", "decision",
+                                               "previous", "score", "note", "reason", "hash")}
         if event["action"] == "review":
             described["records"] = [self._record_label(event[k]) for k in ("record_a", "record_b")]
         return described
@@ -147,22 +160,25 @@ class PatientIndex:
                 return cluster
         return None
 
-    def constellation(self, cluster_id: str) -> dict | None:
+    def constellation(self, cluster_id: str, reveal: bool = False) -> dict | None:
+        """The patient's graph. Contact details (phone, address, ZIP, MRN) are masked everywhere,
+        including inside match explanations, unless `reveal` is set (see privacy.py)."""
         cluster = self.clusters.get(cluster_id)
         if cluster is None:
             return None
         hospitals, records = self.dataset.hospitals, self.dataset.records
+        mask = (lambda text: text) if reveal else masker(records[rid] for rid in cluster.record_ids)
         nodes, links = [], []
         for rid in cluster.record_ids:
             record = records[rid]
             hospital = hospitals[record.hospital_id]
             nodes.append({
                 "id": record.id, "kind": "record", "hospital": record.hospital_id,
-                "label": record.display_name, "sublabel": f"{hospital.name} · MRN {record.mrn}",
-                "details": _details(("Hospital", hospital.name), ("MRN", record.mrn),
-                                    ("Date of birth", record.birth_date), ("Sex", record.gender),
-                                    ("Phone", record.phone), ("Address", record.address),
-                                    ("ZIP", record.postal_code)),
+                "label": record.display_name, "sublabel": mask(f"{hospital.name} · MRN {record.mrn}"),
+                "details": [[label, mask(value)] for label, value in _details(
+                    ("Hospital", hospital.name), ("MRN", record.mrn),
+                    ("Date of birth", record.birth_date), ("Sex", record.gender),
+                    ("Phone", record.phone), ("Address", record.address), ("ZIP", record.postal_code))],
             })
             for item in self.items_by_record[rid]:
                 nodes.append({
@@ -177,7 +193,8 @@ class PatientIndex:
             links.append({
                 "source": edge.a, "target": edge.b, "kind": "match",
                 "probability": round(edge.result.probability, 4), "tier": edge.result.tier,
-                "reviewed": edge.result.reviewed, "agrees_on": edge.result.agrees_on, "reasons": edge.result.reasons,
+                "reviewed": edge.result.reviewed, "agrees_on": edge.result.agrees_on,
+                "reasons": [mask(reason) for reason in edge.result.reasons],
             })
         conflicts = self.conflicts[cluster.id]
         for conflict in conflicts:
@@ -187,6 +204,7 @@ class PatientIndex:
         present = {records[rid].hospital_id for rid in cluster.record_ids}
         return {
             "patient": self._summary(cluster),
+            "contact_details_visible": reveal,
             "hospitals": [{"id": h.id, "name": h.name} for h in hospitals.values() if h.id in present],
             "nodes": nodes,
             "links": links,
@@ -218,6 +236,12 @@ class PatientIndex:
             "conflicts": {s: counts.get(s, 0) for s in ("high", "moderate", "low")},
             "needs_review": cluster.needs_review,
         }
+
+
+def _records_of(event: dict) -> set[str]:
+    if event["action"] == "review":
+        return {event["record_a"], event["record_b"]}
+    return set(event.get("records") or ())
 
 
 def _confirmed_partition(cluster: Cluster) -> frozenset:
