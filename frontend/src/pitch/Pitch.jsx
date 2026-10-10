@@ -235,7 +235,7 @@ function Demo() {
       <h2 className="huge">Let's look at the sky.</h2>
       <ol className="demo-steps">
         <li>The whole network in 3D: red stars are in danger</li>
-        <li>Maria: three spellings, one person, one penicillin allergy</li>
+        <li>Maria: three spellings, one chart, and an allergy only one hospital knew</li>
         <li>The <em>other</em> Maria Gonzalez: same name, kept separate</li>
         <li>Aisha: an uncertain match, and a clinician decides</li>
       </ol>
@@ -438,7 +438,7 @@ const SLIDES = [
   },
   {
     id: "demo", Body: Demo,
-    notes: "Switch to the app now (localhost:5173). Open 'All patients · 3D', click Maria's red star, click the red line. Then the other Maria Gonzalez, then Aisha: open Record links and click Same person. Press Reset demo beforehand.",
+    notes: "Switch to the app now (localhost:5173). Open 'All patients · 3D', click Maria's red star, point at 'Penicillin, only at Orion' in the Summary tab, then click the red line. Then the other Maria Gonzalez, then Aisha: open Record links and click Same person. Press Reset demo beforehand.",
   },
   {
     id: "matching", Body: Matching,

@@ -32,12 +32,12 @@ still unsolved:
 
 | Part | State |
 |---|---|
-| Backend (Python, FastAPI) | Done, including the partner's `/medications` and `/api/stats` endpoints and two extra demo stories, blocking for scale, the audit trail, clinician sign-in, masked contact details with access logging, and encrypted (privacy-preserving) matching. **48/48 tests pass.** |
+| Backend (Python, FastAPI) | Done, including the partner's `/medications` and `/api/stats` endpoints and two extra demo stories, blocking for scale, the audit trail, clinician sign-in with roles, masked contact details with access logging, encrypted (privacy-preserving) matching, and the points rubric for matches. **78/78 tests pass.** |
 | Synthetic data (3 hospitals, FHIR R4 JSON) | Generated in `backend/data/` |
-| Frontend (React, Vite, D3) | Done and **checked in a browser**: the constellation forms, zooms to fit, conflicts highlight on click, the "Same person / Different people" review works, and "Reset demo" works. |
+| Frontend (React, Vite, D3) | Done and **checked in a browser**: the constellation forms, zooms to fit, conflicts highlight on click, the "Same person / Different people" review works, "Reset demo" works, and the Summary tab compiles each patient's chart. |
 | Git / GitHub | Pushed to a **private** repo: https://github.com/johnha749-creator/constellation. Make it public before submitting to Devpost. |
 | README | Done, with screenshots in `docs/`. **Add your team's names** (see the comment near the top). |
-| Slides, pitch | Done: 11 slides with speaker notes at `/pitch.html`. Add your names (see "The pitch deck"). |
+| Slides, pitch | Done: 12 slides with speaker notes at `/pitch.html`. Add your names (see "The pitch deck"). |
 
 ## Run it
 
@@ -120,7 +120,8 @@ main.py (FastAPI)  ──/api──▶  React app: PatientList │ Constellation
 | `components/Constellation.jsx` | The D3 force graph: starfield, glow, the "forming" animation, zoom and drag, click to select |
 | `components/Galaxy3D.jsx` | The "All patients · 3D" view (three.js): hospital suns, a star per patient colored by its worst conflict, orbit and zoom, click a star to open it. Loaded only when opened. |
 | `components/PatientList.jsx` | Search and patient list with severity badges |
-| `components/DetailPanel.jsx` | Patient header, selected-star details, and three tabs: Conflicts, Medications, Record links |
+| `components/DetailPanel.jsx` | Patient header, selected-star details, and four tabs: Summary, Conflicts, Medications, Record links |
+| `components/PatientSummary.jsx`, `summary.js` | Summary tab: one combined chart (allergies, conditions, medications) with each item's hospitals, tagging items only one hospital knew about and items from an unconfirmed match |
 | `components/MedicationList.jsx` | Medications tab: each drug, every hospital that prescribed it, and its issues |
 | `pitch/Pitch.jsx`, `pitch/pitch.css` | The pitch deck at `/pitch.html` (see "The pitch deck" below) |
 | `components/ReviewHistory.jsx` | Record links tab: this patient's access and review history, and the log's integrity check |
@@ -281,13 +282,9 @@ The other 18 patients are filler, and a test checks that they produce **zero** c
 3. **Rehearse the demo below** on the laptop and screen you'll present on. Use "Reset demo"
    between run-throughs.
 4. **Optional polish:**
-   - a medication-reconciliation summary ("what this patient is actually taking")
    - uploading a new hospital's FHIR bundle live during the demo
    - item labels can still overlap on busy patients like Maria; drag a star to tidy up live
-5. **Stretch goals** (only if time is left):
-   - [Synthea](https://github.com/synthetichealth/synthea) generated patients
-   - RxNorm codes instead of matching drug names as text
-   - blocking, so matching scales to large datasets
+5. **Stretch goal** (only if time is left): RxNorm codes instead of matching drug names as text.
 6. **Slides and pitch.** Leave at least an hour.
 
 ## The pitch deck
@@ -316,21 +313,23 @@ The slides are a page in the frontend: with `npm run dev` running, open
    hospitals, every patient between them. The red ones have something dangerous."
 3. **Click Maria Gonzalez's red star** (or pick her in the list). The view flies into her
    constellation: three hospitals, then gold "same person" lines, then a pulsing red line.
-4. **Click the red line:** "Penicillin allergy at Orion, amoxicillin ordered at Lyra." This is
-   the moment to land.
-5. **Show the record links:** "M." vs "Maria", Gonzales vs Gonzalez, and why we're 96–100% sure.
-6. **Click the other Maria Gonzalez:** "Same name, different person. We didn't merge them."
+4. **The Summary tab opens first:** "One chart from three hospitals. Ten of these facts were
+   known to only one hospital." Point at **Penicillin, only at Orion General Hospital**.
+5. **Click the red line:** "Penicillin allergy at Orion, amoxicillin ordered at Lyra. Lyra never
+   saw the allergy." This is the moment to land.
+6. **Show the record links:** "M." vs "Maria", Gonzales vs Gonzalez, and why we're 96–100% sure.
+7. **Click the other Maria Gonzalez:** "Same name, different person. We didn't merge them."
    Naive name matching would have.
-7. **Aisha:** "When we're not sure, we say so." Point to the "needs review" link and the
+8. **Aisha:** "When we're not sure, we say so." Point to the "needs review" link and the
    unconfirmed conflicts. Then open the **Record links** tab (it has an amber dot) and click
    **Same person**: the link turns gold and the conflicts become confirmed. "A human stays in
    control."
-8. **Privacy (optional, 15 s):** point at the masked phone numbers in the match explanation.
+9. **Privacy (optional, 15 s):** point at the masked phone numbers in the match explanation.
    Click **Show…**, pick a reason, and show the new "Unmasked contact details. Reason: ..." line
    in the history. "HIPAA doesn't even require this for treatment. We hide it anyway, and every
    access is logged." Optionally sign in as the registration clerk to show that their view has no
    allergies, medications or conflicts at all.
-9. **Close:** "Built on FHIR, the real standard hospitals use, so it could sit on top of TEFCA
+10. **Close:** "Built on FHIR, the real standard hospitals use, so it could sit on top of TEFCA
    or Epic's network."
 
 ## Likely judge questions

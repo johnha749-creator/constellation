@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { CONFLICT_TYPE_LABELS, REVEAL_CONTACTS, REVIEW_MATCHES } from "../labels";
 import MedicationList from "./MedicationList";
+import PatientSummary from "./PatientSummary";
 import ReviewHistory from "./ReviewHistory";
 import { formatPoints, HowScoringWorks, ScoreBreakdown } from "./ScoreBreakdown";
 
@@ -97,7 +98,7 @@ export default function DetailPanel({
   can,
   roleLabel,
 }) {
-  const [tab, setTab] = useState("conflicts");
+  const [tab, setTab] = useState("summary");
   const panelRef = useRef(null);
 
   // Selecting a conflict (in the sky or from a medication) shows its card.
@@ -118,7 +119,12 @@ export default function DetailPanel({
   const clinical = graph.clinical_visible !== false;
   const linksTab = ["links", "Record links", matches.length, patient.needs_review];
   const tabs = clinical
-    ? [["conflicts", "Conflicts", conflicts.length], ["medications", "Medications", medications?.list.length ?? "…"], linksTab]
+    ? [
+        ["summary", "Summary", null],
+        ["conflicts", "Conflicts", conflicts.length],
+        ["medications", "Medications", medications?.list.length ?? "…"],
+        linksTab,
+      ]
     : [linksTab];
   const activeTab = clinical ? tab : "links";
 
@@ -170,11 +176,22 @@ export default function DetailPanel({
             className={`tab ${activeTab === id ? "active" : ""}`}
             onClick={() => setTab(id)}
           >
-            {label} <span className="tab-count">{count}</span>
+            {label} {count !== null && <span className="tab-count">{count}</span>}
             {needsReview && <span className="review-dot" title="A possible match needs review" />}
           </button>
         ))}
       </div>
+
+      {activeTab === "summary" && (
+        <PatientSummary
+          graph={graph}
+          medications={medications}
+          hospitals={hospitals}
+          selectedNodeId={selectedNodeId}
+          onSelectNode={onSelectNode}
+          onShowConflicts={() => setTab("conflicts")}
+        />
+      )}
 
       {activeTab === "conflicts" && (
         <>

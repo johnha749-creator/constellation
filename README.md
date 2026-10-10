@@ -45,9 +45,14 @@ two problems remain:
    - the same drug at different doses
 
    Each conflict says how serious it is and which hospital each side came from.
-6. **Lists what the patient is actually taking:** every drug, every hospital that prescribed it,
+6. **Compiles one chart per patient.** The **Summary** tab puts every hospital's allergies,
+   conditions and medications in one list, with the hospital each item came from. Items that
+   only one hospital knew about are tagged: Maria's penicillin allergy is only in Orion's
+   records, and every one of her 10 allergies, conditions and medications is known to just one
+   hospital. Items from a match that still needs review are tagged too.
+7. **Lists what the patient is actually taking:** every drug, every hospital that prescribed it,
    and its problems.
-7. **Shows the whole network in 3D** (three.js). Hospitals are suns, and every patient is a
+8. **Shows the whole network in 3D** (three.js). Hospitals are suns, and every patient is a
    star placed between the hospitals that hold their records, glowing red if something is
    wrong. Click a star to fly into that patient's constellation.
 

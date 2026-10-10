@@ -586,6 +586,8 @@ button {
   gap: 2px;
   margin: 18px 0 12px;
   border-bottom: 1px solid var(--border);
+  overflow-x: auto; /* four tabs in a narrow panel: scroll rather than wrap */
+  scrollbar-width: none;
 }
 
 .tab {
@@ -594,9 +596,10 @@ button {
   border: none;
   border-bottom: 2px solid transparent;
   margin-bottom: -1px;
-  padding: 8px 10px;
+  padding: 8px 7px;
   font-size: 12.5px;
   font-weight: 600;
+  white-space: nowrap;
   color: var(--muted);
   cursor: pointer;
 }
@@ -725,6 +728,79 @@ button {
 
 .issue:hover {
   border-color: var(--accent);
+}
+
+/* --- summary tab (the combined chart) */
+.summary-section {
+  margin-top: 14px;
+}
+
+.summary-section h4 {
+  margin: 0 0 6px;
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.summary-item {
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.summary-item:last-child {
+  border-bottom: none;
+}
+
+.summary-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  padding: 0 6px;
+}
+
+.summary-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.tag.only {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.only-count {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.summary-alert {
+  display: block;
+  width: 100%;
+  margin: 4px 0 6px;
+  padding: 8px 10px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 1px solid;
+  background: var(--bg-card);
+  cursor: pointer;
+}
+
+.summary-alert.high {
+  color: var(--high);
+  border-color: var(--high);
+}
+
+.summary-alert.moderate {
+  color: var(--moderate);
+  border-color: var(--moderate);
+}
+
+.summary-alert:hover {
+  background: #18214a;
 }
 
 .card {
