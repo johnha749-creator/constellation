@@ -286,6 +286,8 @@ The other 18 patients are filler, and a test checks that they produce **zero** c
    - item labels can still overlap on busy patients like Maria; drag a star to tidy up live
 5. **Stretch goal** (only if time is left): RxNorm codes instead of matching drug names as text.
 6. **Slides and pitch.** Leave at least an hour.
+7. **Submit on Devpost.** The paste-ready text (tagline, story, tags, gallery list) is in
+   [DEVPOST.md](DEVPOST.md). Fill in the `[brackets]` first.
 
 ## The pitch deck
 
