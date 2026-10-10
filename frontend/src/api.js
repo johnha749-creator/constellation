@@ -35,6 +35,8 @@ export async function fetchMedications(id, graph) {
 export const fetchStats = (patients, hospitals) =>
   fetchOrPreview("/api/stats", () => statsFromPatients(patients, hospitals));
 
-export const resetDemo = () => postJson("/api/reload", {});
-export const reviewMatch = (recordA, recordB, samePerson) =>
-  postJson("/api/matches/review", { record_a: recordA, record_b: recordB, same_person: samePerson });
+export const fetchPatientAudit = (id) => request(`/api/patients/${encodeURIComponent(id)}/audit`);
+
+export const resetDemo = (reviewer) => postJson("/api/demo/reset", { reviewer });
+export const reviewMatch = (recordA, recordB, samePerson, reviewer) =>
+  postJson("/api/matches/review", { record_a: recordA, record_b: recordB, same_person: samePerson, reviewer });

@@ -5,8 +5,9 @@ import re
 from collections import Counter, defaultdict
 from pathlib import Path
 
+from .audit import AuditLog
 from .conflicts import Conflict, find_conflicts
-from .matching import Cluster, cluster_records
+from .matching import Cluster, candidate_pairs, cluster_records, compare_records, score_pairs
 from .records import ClinicalItem, load_dataset
 
 KIND_LABELS = {"allergy": "Allergy", "medication": "Medication", "condition": "Condition"}
@@ -15,38 +16,104 @@ KIND_LABELS = {"allergy": "Allergy", "medication": "Medication", "condition": "C
 class PatientIndex:
     """Loads every hospital bundle, links records into patients, and finds their conflicts."""
 
-    def __init__(self, data_dir: Path):
+    def __init__(self, data_dir: Path, audit: AuditLog | None = None):
         self.dataset = load_dataset(data_dir)
         self.items_by_record: dict[str, list[ClinicalItem]] = defaultdict(list)
         for item in self.dataset.items:
             self.items_by_record[item.record_id].append(item)
-        # Clinicians' decisions on possible matches. In memory only, so a restart (or
-        # /api/reload) resets the demo.
-        self.reviews: dict[frozenset[str], bool] = {}
+        # Score candidate pairs once (see blocking in matching.py); reviews only change decisions.
+        records = self.dataset.records
+        self.scored = score_pairs(records, candidate_pairs(records.values()))
+        # Clinicians' decisions, replayed from the audit log so they survive a restart.
+        self.audit = audit or AuditLog()
+        self.reviews = self.audit.current_reviews()
+        self._conflict_cache: dict[frozenset, list[Conflict]] = {}
         self._link()
 
     def _link(self) -> None:
-        records = list(self.dataset.records.values())
-        self.clusters = {c.id: c for c in cluster_records(records, self.reviews)}
-        self.conflicts: dict[str, list[Conflict]] = {
-            c.id: find_conflicts(self.items_of(c), self.dataset.hospitals, c.confirmed)
-            for c in self.clusters.values()
-        }
+        clusters = cluster_records(list(self.dataset.records.values()), self.reviews, self.scored)
+        self.clusters: dict[str, Cluster] = {}
+        self.conflicts: dict[str, list[Conflict]] = {}
+        self._cluster_of: dict[str, str] = {}
+        cache, self._conflict_cache = self._conflict_cache, {}
+        for cluster in clusters:
+            # A patient's conflicts only change if its records or confirmed links change, so
+            # after a review only the one or two affected patients are re-checked.
+            key = _confirmed_partition(cluster)
+            found = cache.get(key)
+            if found is None:
+                found = find_conflicts(self.items_of(cluster), self.dataset.hospitals, cluster.confirmed)
+            self._conflict_cache[key] = found
+            self.clusters[cluster.id] = cluster
+            self.conflicts[cluster.id] = found
+            for rid in cluster.record_ids:
+                self._cluster_of[rid] = cluster.id
 
     def items_of(self, cluster: Cluster) -> list[ClinicalItem]:
         """Every allergy, medication and condition on any of the patient's records."""
         return [item for rid in cluster.record_ids for item in self.items_by_record[rid]]
 
-    def review_match(self, record_a: str, record_b: str, same_person: bool) -> str | None:
-        """Apply a clinician's decision about two records. Returns record_a's patient id."""
-        if record_a not in self.dataset.records or record_b not in self.dataset.records:
+    def review_match(self, record_a: str, record_b: str, same_person: bool,
+                     reviewer: str = "Unknown reviewer", note: str | None = None) -> str | None:
+        """Apply and log a clinician's decision about two records. Returns record_a's patient id."""
+        records = self.dataset.records
+        if record_a not in records or record_b not in records:
             return None
-        self.reviews[frozenset((record_a, record_b))] = same_person
+        pair = frozenset((record_a, record_b))
+        result = self.scored.get(tuple(sorted(pair))) or compare_records(records[record_a], records[record_b])
+        self.audit.record_review(record_a, record_b, same_person, reviewer=reviewer,
+                                 score=round(result.probability, 4), previous=self.reviews.get(pair), note=note)
+        self.reviews[pair] = same_person
         self._link()
         return self.cluster_of(record_a).id
 
+    def reset_reviews(self, reviewer: str = "Unknown reviewer") -> None:
+        """Undo every decision (for re-running the demo). The log keeps them, plus a reset entry."""
+        self.audit.record_reset(reviewer)
+        self.reviews = {}
+        self._link()
+
     def cluster_of(self, record_id: str) -> Cluster:
-        return next(c for c in self.clusters.values() if record_id in c.record_ids)
+        return self.clusters[self._cluster_of[record_id]]
+
+    def audit_status(self) -> dict:
+        broken = self.audit.verify()
+        return {"total_events": len(self.audit.events), "verified": broken is None, "first_bad_seq": broken}
+
+    def audit_log(self, limit: int = 100) -> dict:
+        """The whole log, newest first."""
+        events = [self._describe(e) for e in self.audit.events[::-1][:limit]]
+        return {"events": events, **self.audit_status()}
+
+    def audit_for(self, cluster_id: str) -> dict | None:
+        """Decisions about this patient's records, newest first, plus any resets after them."""
+        cluster = self.clusters.get(cluster_id)
+        if cluster is None:
+            return None
+        mine = set(cluster.record_ids)
+        events, involved = [], False
+        for event in self.audit.events:
+            if event["action"] == "review" and {event["record_a"], event["record_b"]} & mine:
+                involved = True
+                events.append(self._describe(event))
+            elif event["action"] == "reset" and involved:
+                events.append(self._describe(event))
+        return {"events": events[::-1], **self.audit_status()}
+
+    def _describe(self, event: dict) -> dict:
+        """An audit entry, with readable names for the records it mentions."""
+        described = {k: event.get(k) for k in
+                     ("seq", "at", "action", "reviewer", "decision", "previous", "score", "note", "hash")}
+        if event["action"] == "review":
+            described["records"] = [self._record_label(event[k]) for k in ("record_a", "record_b")]
+        return described
+
+    def _record_label(self, record_id: str) -> dict:
+        record = self.dataset.records.get(record_id)
+        if record is None:  # the data files changed since the decision was made
+            return {"id": record_id, "name": None, "hospital": None}
+        return {"id": record_id, "name": record.display_name,
+                "hospital": self.dataset.hospitals[record.hospital_id].name}
 
     def summaries(self, query: str | None = None) -> list[dict]:
         clusters = self.clusters.values()
@@ -151,6 +218,14 @@ class PatientIndex:
             "conflicts": {s: counts.get(s, 0) for s in ("high", "moderate", "low")},
             "needs_review": cluster.needs_review,
         }
+
+
+def _confirmed_partition(cluster: Cluster) -> frozenset:
+    """The cluster's records, grouped by confirmed links. Same partition = same conflicts."""
+    groups: dict[str, set[str]] = defaultdict(set)
+    for rid, group in cluster.confirmed_group.items():
+        groups[group].add(rid)
+    return frozenset(frozenset(g) for g in groups.values())
 
 
 def _letters(text: str) -> str:

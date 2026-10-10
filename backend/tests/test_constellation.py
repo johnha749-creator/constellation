@@ -138,12 +138,19 @@ def test_api_match_review_round_trip():
     graph = client.get(f"/api/patients/{aisha['id']}/constellation").json()
     link = next(l for l in graph["links"] if l["kind"] == "match" and l["tier"] == "review")
     try:
-        res = client.post("/api/matches/review",
-                          json={"record_a": link["source"], "record_b": link["target"], "same_person": True})
-        graph = client.get(f"/api/patients/{res.json()['patient_id']}/constellation").json()
+        res = client.post("/api/matches/review", json={
+            "record_a": link["source"], "record_b": link["target"], "same_person": True, "reviewer": "Dr. Lee"})
+        patient_id = res.json()["patient_id"]
+        graph = client.get(f"/api/patients/{patient_id}/constellation").json()
         confirmed = next(l for l in graph["links"] if l["kind"] == "match")
         assert (confirmed["tier"], confirmed["reviewed"]) == ("match", "same")
+        history = client.get(f"/api/patients/{patient_id}/audit").json()
+        assert history["verified"]
+        assert (history["events"][0]["reviewer"], history["events"][0]["decision"]) == ("Dr. Lee", "same")
         bad = {"record_a": "nope", "record_b": link["target"], "same_person": True}
         assert client.post("/api/matches/review", json=bad).status_code == 404
+        assert client.get("/api/patients/nope/audit").status_code == 404
     finally:
-        client.post("/api/reload")  # don't leak the review into other tests
+        client.post("/api/demo/reset", json={"reviewer": "test"})  # don't leak the review into other tests
+    assert client.get("/api/audit").json()["events"][0]["action"] == "reset"
+    assert any(p["needs_review"] for p in client.get("/api/patients").json())

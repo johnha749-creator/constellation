@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { CONFLICT_TYPE_LABELS } from "../labels";
 import MedicationList from "./MedicationList";
+import ReviewHistory from "./ReviewHistory";
 
 const KIND_LABELS = { record: "Patient record", allergy: "Allergy", medication: "Medication", condition: "Condition" };
 
@@ -13,6 +14,9 @@ const MATCH_HEADINGS = {
 export default function DetailPanel({
   graph,
   medications,
+  audit,
+  reviewer,
+  onReviewerChange,
   hospitals,
   selectedConflictId,
   selectedNodeId,
@@ -120,6 +124,15 @@ export default function DetailPanel({
 
       {tab === "links" && (
         <>
+          <label className="reviewer">
+            <span className="muted small">Reviewing as</span>
+            <input
+              value={reviewer}
+              onChange={(e) => onReviewerChange(e.target.value)}
+              placeholder="Your name, e.g. Dr. Lee"
+              maxLength={80}
+            />
+          </label>
           {matches.length === 0 && <p className="muted">Only one record found for this patient.</p>}
           {matches.map((m) => (
             <div key={`${m.source}-${m.target}`} className={`card match-card ${m.tier}`}>
@@ -147,6 +160,7 @@ export default function DetailPanel({
               )}
             </div>
           ))}
+          <ReviewHistory audit={audit} />
         </>
       )}
     </aside>

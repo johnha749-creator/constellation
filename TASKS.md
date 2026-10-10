@@ -10,6 +10,13 @@ merges cleanly. Read [HANDOFF.md](HANDOFF.md) first for how the project works an
 
 If you need something changed in the other person's folder, ask them in chat instead of editing it.
 
+> **Heads-up for the partner:** the owner made one exception and changed backend files to add
+> scalability (blocking) and the audit trail: `app/matching.py`, `app/constellation.py`,
+> `app/main.py`, new `app/audit.py` and `app/benchmark.py`, plus `tests/conftest.py`,
+> `tests/test_audit.py`, `tests/test_matching.py` and `tests/test_constellation.py`.
+> **Run `git pull` before your next backend change.** The details are in HANDOFF.md under
+> "Matching" and "Audit trail".
+
 ## Partner: backend track (about 1.5 hours)
 
 Do these in order. Push after each one.

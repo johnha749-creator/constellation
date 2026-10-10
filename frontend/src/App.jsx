@@ -3,6 +3,7 @@ import {
   fetchConstellation,
   fetchHospitals,
   fetchMedications,
+  fetchPatientAudit,
   fetchPatients,
   fetchStats,
   resetDemo,
@@ -14,6 +15,24 @@ import DetailPanel from "./components/DetailPanel";
 import StatsBar from "./components/StatsBar";
 
 const HOSPITAL_PALETTE = ["#7cc6fe", "#f4a7ff", "#9ef0c4", "#ffd29d", "#a5b4fc"];
+const REVIEWER_KEY = "constellation.reviewer";
+
+// Remembering the reviewer's name is a convenience only; storage can be blocked or empty.
+function loadReviewer() {
+  try {
+    return localStorage.getItem(REVIEWER_KEY) || "";
+  } catch {
+    return "";
+  }
+}
+
+function saveReviewer(name) {
+  try {
+    localStorage.setItem(REVIEWER_KEY, name);
+  } catch {
+    // not saved; the name still works for this visit
+  }
+}
 
 export default function App() {
   const [hospitals, setHospitals] = useState([]);
@@ -22,6 +41,8 @@ export default function App() {
   const [graph, setGraph] = useState(null);
   const [medications, setMedications] = useState(null); // { list, preview }
   const [stats, setStats] = useState(null); // { data, preview }
+  const [audit, setAudit] = useState(null); // this patient's review history
+  const [reviewer, setReviewer] = useState(loadReviewer);
   const [selectedConflictId, setSelectedConflictId] = useState(null);
   const [selectedNodeId, setSelectedNodeId] = useState(null);
   const [error, setError] = useState(null);
@@ -63,6 +84,24 @@ export default function App() {
     };
   }, [graph]);
 
+  useEffect(() => {
+    setAudit(null);
+    if (!graph) return;
+    let cancelled = false;
+    fetchPatientAudit(graph.patient.id)
+      .then((a) => !cancelled && setAudit(a))
+      .catch((e) => setError(e.message));
+    return () => {
+      cancelled = true;
+    };
+  }, [graph]);
+
+  const changeReviewer = (name) => {
+    setReviewer(name);
+    saveReviewer(name);
+  };
+  const reviewerName = reviewer.trim() || "Unnamed reviewer";
+
   // Re-count whenever the patient list changes (after a review or a reset).
   useEffect(() => {
     if (!hospitals.length) return;
@@ -78,7 +117,7 @@ export default function App() {
   // A clinician decides whether two records are the same person; the constellation re-forms.
   const decideMatch = async (recordA, recordB, samePerson) => {
     try {
-      const { patient_id } = await reviewMatch(recordA, recordB, samePerson);
+      const { patient_id } = await reviewMatch(recordA, recordB, samePerson, reviewerName);
       setPatients(await fetchPatients());
       setSelectedId(patient_id);
       setVersion((v) => v + 1);
@@ -90,7 +129,7 @@ export default function App() {
   // Undo every match review so the demo can be run again from the start.
   const reset = async () => {
     try {
-      await resetDemo();
+      await resetDemo(reviewerName);
       const list = await fetchPatients();
       setPatients(list);
       if (!list.some((p) => p.id === selectedId)) setSelectedId(list[0]?.id ?? null);
@@ -165,6 +204,9 @@ export default function App() {
         <DetailPanel
           graph={graph}
           medications={medications}
+          audit={audit}
+          reviewer={reviewer}
+          onReviewerChange={changeReviewer}
           hospitals={hospitalInfo}
           selectedConflictId={selectedConflictId}
           selectedNodeId={selectedNodeId}

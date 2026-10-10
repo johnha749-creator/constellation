@@ -10,7 +10,8 @@ from __future__ import annotations
 import math
 import re
 import unicodedata
-from dataclasses import dataclass
+from collections import defaultdict
+from dataclasses import dataclass, replace
 from itertools import combinations
 from typing import Callable, Iterable
 
@@ -247,43 +248,121 @@ class Cluster:
         return any(e.result.tier == "review" for e in self.edges)
 
 
-def cluster_records(records: list[PatientRecord],
-                    reviews: dict[frozenset[str], bool] | None = None) -> list[Cluster]:
-    """Group records into people. `reviews` holds clinicians' decisions on record pairs
-    (True = same person) and overrides the score for those pairs."""
-    reviews = reviews or {}
-    # Compares every pair: fine for a demo. At real scale, add "blocking" (only compare
-    # records that share e.g. birth year or a phonetic code of the last name).
-    edges = []
-    for a, b in combinations(records, 2):
-        result = compare_records(a, b)
-        decision = reviews.get(frozenset((a.id, b.id)))
-        if decision is not None:
-            result.tier = "match" if decision else "non-match"
-            result.reviewed = "same" if decision else "different"
-        if result.tier != "non-match":
-            edges.append(MatchEdge(a.id, b.id, result))
+# --- blocking: decide which pairs are worth comparing at all
+#
+# Comparing every record with every other is n²/2 comparisons: 5 billion for 100,000 records.
+# Instead, two records are compared only if they share at least one "blocking key". Each key
+# survives a different kind of mistake, so a pair is missed only if all of them fail at once.
 
-    linked = _UnionFind(r.id for r in records)
-    confirmed = _UnionFind(r.id for r in records)
+Pair = tuple[str, str]  # two record ids, smaller first
+
+
+def blocking_keys(record: PatientRecord) -> set[str]:
+    keys = set()
+    # Same birth date: survives any name change, nickname or move.
+    if record.birth_date:
+        keys.add(f"dob:{record.birth_date}")
+    # Same phone: survives a name change and a birth-date typo.
+    phone = re.sub(r"\D", "", record.phone or "")[-10:]
+    if len(phone) >= 7:
+        keys.add(f"phone:{phone}")
+    # Last name that sounds alike, plus birth year: survives misspellings, swapped day/month
+    # and day typos. Each part of a hyphenated name counts, so "Patel-Khan" meets "Patel".
+    year = (record.birth_date or "")[:4]
+    tokens = _tokens(record.family)
+    for name in {"".join(tokens), *(t for t in tokens if len(t) > 1)}:
+        if name:
+            keys.add(f"name:{soundex(name)}:{year}")
+    return keys
+
+
+def candidate_pairs(records: Iterable[PatientRecord]) -> set[Pair]:
+    blocks: dict[str, list[str]] = defaultdict(list)
+    for record in records:
+        for key in blocking_keys(record):
+            blocks[key].append(record.id)
+    pairs = set()
+    for ids in blocks.values():
+        for a, b in combinations(ids, 2):
+            pairs.add((a, b) if a < b else (b, a))
+    return pairs
+
+
+_SOUNDEX = {**dict.fromkeys("bfpv", "1"), **dict.fromkeys("cgjkqsxz", "2"), **dict.fromkeys("dt", "3"),
+            "l": "4", **dict.fromkeys("mn", "5"), "r": "6"}
+
+
+def soundex(name: str) -> str:
+    """American Soundex: names that sound alike share a code (Whittaker, Whitaker -> W326)."""
+    letters = _letters(name)
+    if not letters:
+        return ""
+    code, last = letters[0].upper(), _SOUNDEX.get(letters[0], "")
+    for ch in letters[1:]:
+        digit = _SOUNDEX.get(ch, "")
+        if digit and digit != last:
+            code += digit
+        if ch not in "hw":  # h and w don't separate letters with the same code; vowels do
+            last = digit
+    return (code + "000")[:4]
+
+
+def score_pairs(records_by_id: dict[str, PatientRecord], pairs: Iterable[Pair]) -> dict[Pair, MatchResult]:
+    """Score each pair, keeping only the ones that could be the same person."""
+    scored = {}
+    for a, b in pairs:
+        result = compare_records(records_by_id[a], records_by_id[b])
+        if result.tier != "non-match":
+            scored[(a, b)] = result
+    return scored
+
+
+# --- clustering
+
+def cluster_records(records: list[PatientRecord],
+                    reviews: dict[frozenset[str], bool] | None = None,
+                    scored: dict[Pair, MatchResult] | None = None) -> list[Cluster]:
+    """Group records into people.
+
+    `reviews` holds clinicians' decisions on record pairs (True = same person) and overrides
+    the score for those pairs. Pass `scored` (from score_pairs) to skip re-scoring: after a
+    review only the decisions change, so relinking is then roughly linear in the record count.
+    """
+    reviews = reviews or {}
+    by_id = {r.id: r for r in records}
+    if scored is None:
+        scored = score_pairs(by_id, candidate_pairs(records))
+    reviewed_pairs = {tuple(sorted(p)) for p in reviews if len(p) == 2 and all(i in by_id for i in p)}
+
+    edges = []
+    for pair in sorted(scored.keys() | reviewed_pairs):
+        result = scored.get(pair) or compare_records(by_id[pair[0]], by_id[pair[1]])
+        decision = reviews.get(frozenset(pair))
+        if decision is not None:
+            # Copy, so cached scores stay untouched when the decision is later undone.
+            result = replace(result, tier="match" if decision else "non-match",
+                             reviewed="same" if decision else "different")
+        if result.tier != "non-match":
+            edges.append(MatchEdge(pair[0], pair[1], result))
+
+    linked = _UnionFind(by_id)
+    confirmed = _UnionFind(by_id)
     for edge in edges:
         linked.union(edge.a, edge.b)
         if edge.result.tier == "match":
             confirmed.union(edge.a, edge.b)
 
-    groups: dict[str, list[str]] = {}
+    groups: dict[str, list[str]] = defaultdict(list)
     for record in records:
-        groups.setdefault(linked.find(record.id), []).append(record.id)
-    clusters = []
-    for ids in groups.values():
-        members = set(ids)
-        clusters.append(Cluster(
-            id=f"c-{min(ids)}",
-            record_ids=ids,
-            edges=[e for e in edges if e.a in members],
-            confirmed_group={i: confirmed.find(i) for i in ids},
-        ))
-    return clusters
+        groups[linked.find(record.id)].append(record.id)
+    edges_by_group: dict[str, list[MatchEdge]] = defaultdict(list)
+    for edge in edges:
+        edges_by_group[linked.find(edge.a)].append(edge)
+    return [
+        Cluster(id=f"c-{min(ids)}", record_ids=ids, edges=edges_by_group[root],
+                confirmed_group={i: confirmed.find(i) for i in ids})
+        for root, ids in groups.items()
+    ]
 
 
 class _UnionFind:

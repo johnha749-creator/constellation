@@ -32,7 +32,7 @@ still unsolved:
 
 | Part | State |
 |---|---|
-| Backend (Python, FastAPI) | Done, including the partner's `/medications` and `/api/stats` endpoints and two extra demo stories. **25/25 tests pass.** |
+| Backend (Python, FastAPI) | Done, including the partner's `/medications` and `/api/stats` endpoints and two extra demo stories, blocking for scale, and the audit trail. **34/34 tests pass.** |
 | Synthetic data (3 hospitals, FHIR R4 JSON) | Generated in `backend/data/` |
 | Frontend (React, Vite, D3) | Done and **checked in a browser**: the constellation forms, zooms to fit, conflicts highlight on click, the "Same person / Different people" review works, and "Reset demo" works. |
 | Git / GitHub | Pushed to a **private** repo: https://github.com/johnha749-creator/constellation. Make it public before submitting to Devpost. |
@@ -69,6 +69,9 @@ Then open http://localhost:5173. Vite forwards `/api/*` to the backend on port 8
 > - `python` can open the Microsoft Store instead of running Python. Use `py` instead, as shown above.
 > - `--reload` sometimes says "Reloading..." and then keeps running the **old** code. If a new
 >   API route returns 404, stop the backend (Ctrl+C) and start it again.
+> - The frontend dev server can miss quick edits in the same way. If the page doesn't match
+>   the code, stop `npm run dev` and start it again. If it then says port 5173 is in use, an
+>   old Vite `node.exe` is still running; end it in Task Manager.
 
 ## How it works
 
@@ -95,7 +98,10 @@ main.py (FastAPI)  ──/api──▶  React app: PatientList │ Constellation
 | `main.py` | API routes (listed below) |
 | `seed.py` | Generates the synthetic hospitals and patients. **Edit demo stories here.** |
 | `records.py` | Loads FHIR bundles into Python dataclasses |
-| `matching.py` | Record linkage (see "Matching" below) |
+| `matching.py` | Record linkage, including blocking (see "Matching" below) |
+| `audit.py` | The hash-chained audit log of match decisions (see "Audit trail" below) |
+| `reconcile.py` | One row per drug across hospitals, for the Medications tab |
+| `benchmark.py` | `python -m app.benchmark`: speed and accuracy of matching on synthetic patients |
 | `knowledge.py` | Small hand-made drug list: drug classes, allergy groups, interactions, duplicate therapy, condition rules. **Add rules here.** |
 | `conflicts.py` | Applies the rules to one patient and writes the explanations |
 | `constellation.py` | `PatientIndex`: loads everything once, then serves patient summaries and graphs |
@@ -109,6 +115,7 @@ main.py (FastAPI)  ──/api──▶  React app: PatientList │ Constellation
 | `components/PatientList.jsx` | Search and patient list with severity badges |
 | `components/DetailPanel.jsx` | Patient header, selected-star details, and three tabs: Conflicts, Medications, Record links |
 | `components/MedicationList.jsx` | Medications tab: each drug, every hospital that prescribed it, and its issues |
+| `components/ReviewHistory.jsx` | Record links tab: this patient's audit history and the log's integrity check |
 | `components/StatsBar.jsx` | Header totals: patients, records, conflicts caught, matches to review |
 | `medications.js`, `stats.js` | Build the medication list and the header totals in the browser until the backend's `/medications` and `/api/stats` endpoints exist |
 | `labels.js` | Shared display labels and severity order |
@@ -122,9 +129,14 @@ main.py (FastAPI)  ──/api──▶  React app: PatientList │ Constellation
 | GET | `/api/health` | `{ok: true}` |
 | GET | `/api/hospitals` | `[{id, name}]` |
 | GET | `/api/patients?q=` | Patient summaries, most urgent first |
+| GET | `/api/stats` | Totals for the header |
 | GET | `/api/patients/{id}/constellation` | `{patient, hospitals, nodes, links, conflicts}` |
-| POST | `/api/matches/review` | Body `{record_a, record_b, same_person}`. A clinician confirms or rejects a possible match. Returns `{patient_id}` |
-| POST | `/api/reload` | Re-reads `backend/data/*.json` and clears all match reviews. The "Reset demo" button calls this. |
+| GET | `/api/patients/{id}/medications` | One row per drug across hospitals |
+| GET | `/api/patients/{id}/audit` | This patient's decisions, newest first, plus `verified` / `first_bad_seq` |
+| GET | `/api/audit?limit=` | The whole audit log, newest first, plus the integrity check |
+| POST | `/api/matches/review` | Body `{record_a, record_b, same_person, reviewer, note?}`. A clinician confirms or rejects a possible match; logged. Returns `{patient_id}` |
+| POST | `/api/demo/reset` | Body `{reviewer}`. Undoes every decision by adding a reset entry to the log. The "Reset demo" button calls this. |
+| POST | `/api/reload` | Re-reads `backend/data/*.json` and the audit log from disk. Keeps decisions. |
 
 ### Matching
 
@@ -149,11 +161,28 @@ This is a Fellegi–Sunter style scorer, a standard method for record linkage. J
   `unconfirmed`, so we never claim certainty we don't have.
 - **Human in the loop:** a "review" link shows **Same person / Different people** buttons.
   "Same person" turns the link into a confirmed match, so its conflicts become confirmed.
-  "Different people" splits the records into two patients. Decisions are kept in memory only;
-  restarting the backend or clicking "Reset demo" clears them.
-- **Scaling note:** every pair of records is compared, which is fine for a demo. At real scale
-  you add "blocking": only compare records that share, say, a birth year or a phonetic code of
-  the last name.
+  "Different people" splits the records into two patients. Decisions go into the audit log and
+  survive a restart; "Reset demo" undoes them by adding a reset entry.
+- **Blocking (scalability):** two records are only compared if they share a birth date, a phone
+  number, or a sound-alike surname (Soundex) plus birth year. On the demo data that's 22
+  comparisons instead of 990, with no real link missed (a test checks this). Benchmark: 20,000
+  records in 2.5 s with 5,686× fewer comparisons, and 100,000 in 58 s with 7,283× fewer;
+  recall and precision stay around 99.7%. Pair scores are cached, so a review relinks without
+  re-scoring, and conflicts are only re-checked for patients whose links changed.
+
+### Audit trail
+
+- **Where it lives:** `backend/audit/reviews.jsonl`, one JSON entry per line, ignored by git.
+  Tests write to a temporary file instead (see `tests/conftest.py`).
+- **What each entry holds:** `seq`, `at` (UTC), `action` (`review` or `reset`), `reviewer`,
+  the two record ids, `decision`, `previous`, the `score` at the time, an optional `note`,
+  `prev_hash` and `hash`.
+- **Append-only and hash-chained:** if an entry is edited or deleted, `verify()` reports it, the
+  app shows a red warning, and that entry and everything after it are **ignored**, so a forged
+  decision can't change a patient.
+- **Clean history before presenting:** stop the backend, delete `backend/audit/reviews.jsonl`,
+  and start it again. Clicking "Reset demo" undoes decisions but keeps them in the history,
+  which is the point of an audit trail.
 
 ### Conflict types
 

@@ -32,7 +32,8 @@ two problems remain:
    reason.
 3. **Puts a human in charge of uncertain matches.** A link scored between 50% and 95% is flagged
    "needs review". A clinician clicks **Same person** or **Different people**, and the
-   constellation re-forms.
+   constellation re-forms. Every decision goes into a **tamper-evident audit trail**: who
+   decided, when, and what the score was.
 4. **Catches conflicts across the combined record:**
    - allergy vs drug
    - two drugs that do the same job
@@ -81,6 +82,38 @@ separate, because their birth dates and phone numbers disagree.
 A conflict that depends on a link nobody has confirmed yet is labelled **unconfirmed**. We never
 claim more certainty than we have.
 
+### Scaling to a real hospital network
+
+Comparing every record with every other doesn't scale: 100,000 records would take 5 billion
+comparisons. Constellation uses **blocking**: two records are only compared if they share at
+least one of these:
+- the same birth date;
+- the same phone number;
+- a last name that sounds alike (Soundex) plus the same birth year.
+
+Each of these survives a different kind of mistake, so a real match is missed only if all three
+fail at once. Pair scores are cached, so a clinician's decision relinks patients without
+re-scoring.
+
+`python -m app.benchmark` generates synthetic patients with known answers and realistic
+mistakes, then measures speed and accuracy:
+
+| Records | Comparing every pair | With blocking | Time | Real links kept by blocking | Auto-linked: recall / precision |
+|---|---|---|---|---|---|
+| 20,000 | 200 million | 35,174 (**5,686× fewer**) | 2.5 s | 99.98% | 99.73% / 99.97% |
+| 100,000 | 5 billion (est. 110 h) | 686,541 (**7,283× fewer**) | 58 s | 99.97% | 99.69% / 99.67% |
+
+### An audit trail clinicians can trust
+
+Every match decision is appended to a log and never edited or deleted. Undoing a decision, or
+resetting the demo, adds a new entry. Each entry stores who decided, when, the matcher's score at
+the time, and what the decision replaced.
+
+The log is **hash-chained**: each entry includes the SHA-256 of the one before it. If someone
+edits or deletes an earlier entry, the chain breaks. The app then shows a warning and **ignores
+that entry and everything after it**, so a forged decision can never merge or split a patient's
+records. Decisions are replayed from the log at startup, so they survive a restart.
+
 ### Catching conflicts
 
 A small, hand-written knowledge base groups drugs into classes (penicillins, NSAIDs, blood
@@ -122,12 +155,13 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173. To run the backend tests, run `pytest` inside `backend/`.
+Open http://localhost:5173. Inside `backend/`, run the tests with `pytest` and the scaling
+benchmark with `python -m app.benchmark --records 20000`.
 
 ## Built with
 
-- **Backend:** Python, FastAPI, FHIR R4 (synthetic data), and our own record-matching and conflict
-  engine with no ML black box
+- **Backend:** Python, FastAPI, FHIR R4 (synthetic data), our own record-matching and conflict
+  engine with no ML black box, and a hash-chained audit log
 - **Frontend:** React, Vite, D3 force layout
 - **Tests:** pytest
 
@@ -135,9 +169,11 @@ Open http://localhost:5173. To run the backend tests, run `pytest` inside `backe
 
 - **Drug rules:** the knowledge base is a small demo. A real product would use RxNorm drug codes
   and a licensed interaction database.
-- **Scale:** matching compares every pair of records. At hospital scale it would add "blocking",
-  comparing only records that share something like a birth year.
+- **Faster scoring:** blocking removes thousands of times more work than it costs, but scoring
+  the remaining pairs still runs on one CPU core. It splits easily across cores or machines, and
+  new records could be matched as they arrive instead of all at once.
 - **Privacy:** a real deployment would run inside the hospital network or through TEFCA, under
   HIPAA, rather than copying data around.
-- **Saving reviews:** clinicians' match decisions are kept in memory only. A real system would
-  store them with an audit trail.
+- **Audit log:** it's a local file with no logins, so "who" is the name a reviewer types in. A
+  real system would tie entries to authenticated clinicians and keep a copy of the log elsewhere,
+  because a hash chain alone can't detect entries cut off the end.
