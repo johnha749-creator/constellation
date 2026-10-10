@@ -34,7 +34,10 @@ two problems remain:
    "needs review". A clinician clicks **Same person** or **Different people**, and the
    constellation re-forms. Every decision goes into a **tamper-evident audit trail**: who
    decided, when, and what the score was.
-4. **Catches conflicts across the combined record:**
+4. **Protects privacy by design:** clinicians sign in, contact details stay masked until there's
+   a logged reason, every access is recorded, and records can be matched on encrypted
+   fingerprints instead of names (see [Privacy and HIPAA](#privacy-and-hipaa)).
+5. **Catches conflicts across the combined record:**
    - allergy vs drug
    - two drugs that do the same job
    - dangerous drug pairs
@@ -42,9 +45,9 @@ two problems remain:
    - the same drug at different doses
 
    Each conflict says how serious it is and which hospital each side came from.
-5. **Lists what the patient is actually taking:** every drug, every hospital that prescribed it,
+6. **Lists what the patient is actually taking:** every drug, every hospital that prescribed it,
    and its problems.
-6. **Shows the whole network in 3D** (three.js). Hospitals are suns, and every patient is a
+7. **Shows the whole network in 3D** (three.js). Hospitals are suns, and every patient is a
    star placed between the hospitals that hold their records, glowing red if something is
    wrong. Click a star to fly into that patient's constellation.
 
@@ -110,14 +113,44 @@ mistakes, then measures speed and accuracy:
 
 ### An audit trail clinicians can trust
 
-Every match decision is appended to a log and never edited or deleted. Undoing a decision, or
-resetting the demo, adds a new entry. Each entry stores who decided, when, the matcher's score at
-the time, and what the decision replaced.
+Every match decision, every time a clinician opens a patient, and every time they unmask contact
+details is appended to a log and never edited or deleted. Undoing a decision, or resetting the
+demo, adds a new entry. Each entry stores the signed-in clinician, when, and what happened: for a
+decision, the matcher's score at the time and what it replaced; for unmasking, the stated reason.
 
 The log is **hash-chained**: each entry includes the SHA-256 of the one before it. If someone
 edits or deletes an earlier entry, the chain breaks. The app then shows a warning and **ignores
 that entry and everything after it**, so a forged decision can never merge or split a patient's
 records. Decisions are replayed from the log at startup, so they survive a restart.
+
+### Privacy and HIPAA
+
+**All patients and hospitals in this project are synthetic.** We never used real patient data:
+it's protected health information under HIPAA, and a hackathon isn't a permitted use. We also
+don't claim the prototype is "HIPAA compliant". Compliance also takes policies, agreements and
+risk assessments, not just code. What we did was build in the **technical safeguards** that
+HIPAA's Security Rule asks for:
+
+| Safeguard | In Constellation |
+|---|---|
+| Unique user identification | Every clinician signs in with their own account. Passwords are checked against salted PBKDF2 hashes, and the session lives in an HttpOnly, SameSite=Strict cookie. |
+| Automatic logoff | Sessions end after 15 minutes without activity. Signing out clears all patient data from the page. |
+| Minimum necessary | Names and birth dates are shown, because clinicians need them. Phone, address, ZIP and record numbers are masked everywhere, including inside match explanations, until the clinician states a reason ("break the glass"). |
+| Audit controls | Opening a patient, unmasking details and every match decision are logged with who, when and why, and each patient shows its own history. |
+| Integrity | The log is hash-chained, so an edited or deleted entry is detected and ignored. |
+| Transmission security | Cookies are marked `Secure` when served over HTTPS (`CONSTELLATION_HTTPS=1`). A real deployment must use HTTPS. |
+
+**Privacy-preserving matching.** With `CONSTELLATION_MATCHING=private`, records are linked on
+**encrypted fingerprints** instead of names and birth dates, following the Bloom-filter method of
+Schnell et al. Each hospital hashes its identifiers with a key that the hospitals share and the
+matcher never sees. Similar names still produce similar fingerprints, so typos and nicknames
+still match, but the matcher never learns who anyone is. On 20,000 synthetic records (`python -m
+app.benchmark --private`) it keeps **99.50% recall and 99.97% precision**, against 99.73% and
+99.97% for standard matching. Uncertain cases go to human review instead of being lost.
+
+**How it would really be deployed:** inside a hospital, or inside a health information exchange
+that signs a Business Associate Agreement with each hospital. Sharing records between providers to
+treat a patient is a disclosure HIPAA permits, which is exactly this use case.
 
 ### Catching conflicts
 
@@ -160,14 +193,19 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173, or http://localhost:5173/pitch.html for our pitch deck (F for full
-screen). Inside `backend/`, run the tests with `pytest` and the scaling
-benchmark with `python -m app.benchmark --records 20000`.
+Open http://localhost:5173 and sign in with a demo account from `backend/demo_users.json`, or
+open http://localhost:5173/pitch.html for our pitch deck (F for full screen). Inside `backend/`,
+run the tests with `pytest` and the benchmark with `python -m app.benchmark --records 20000
+--private`.
+
+To run the whole app on encrypted fingerprints, start the backend with
+`CONSTELLATION_MATCHING=private` set. A "🔒 encrypted matching" badge appears in the header.
 
 ## Built with
 
 - **Backend:** Python, FastAPI, FHIR R4 (synthetic data), our own record-matching and conflict
-  engine with no ML black box, and a hash-chained audit log
+  engine with no ML black box, Bloom-filter privacy-preserving matching, sign-in with PBKDF2, and a
+  hash-chained audit log
 - **Frontend:** React, Vite, D3 force layout (each patient), three.js (the whole network in 3D)
 - **Tests:** pytest
 
@@ -178,8 +216,11 @@ benchmark with `python -m app.benchmark --records 20000`.
 - **Faster scoring:** blocking removes thousands of times more work than it costs, but scoring
   the remaining pairs still runs on one CPU core. It splits easily across cores or machines, and
   new records could be matched as they arrive instead of all at once.
-- **Privacy:** a real deployment would run inside the hospital network or through TEFCA, under
-  HIPAA, rather than copying data around.
-- **Audit log:** it's a local file with no logins, so "who" is the name a reviewer types in. A
-  real system would tie entries to authenticated clinicians and keep a copy of the log elsewhere,
-  because a hash chain alone can't detect entries cut off the end.
+- **Accounts:** the demo accounts live in `backend/demo_users.json` with plain-text passwords so
+  presenters can sign in. A real deployment would use the hospital's single sign-on with
+  two-factor authentication.
+- **Audit log:** it's a local file. A real system would keep a copy somewhere else too, because a
+  hash chain alone can't detect entries cut off the end.
+- **Encrypted matching:** Bloom-filter fingerprints can be attacked by frequency analysis if
+  someone collects many of them. Real deployments add "hardening" (salting and balancing the
+  filters), which we haven't built.

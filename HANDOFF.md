@@ -32,7 +32,7 @@ still unsolved:
 
 | Part | State |
 |---|---|
-| Backend (Python, FastAPI) | Done, including the partner's `/medications` and `/api/stats` endpoints and two extra demo stories, blocking for scale, and the audit trail. **34/34 tests pass.** |
+| Backend (Python, FastAPI) | Done, including the partner's `/medications` and `/api/stats` endpoints and two extra demo stories, blocking for scale, the audit trail, clinician sign-in, masked contact details with access logging, and encrypted (privacy-preserving) matching. **48/48 tests pass.** |
 | Synthetic data (3 hospitals, FHIR R4 JSON) | Generated in `backend/data/` |
 | Frontend (React, Vite, D3) | Done and **checked in a browser**: the constellation forms, zooms to fit, conflicts highlight on click, the "Same person / Different people" review works, and "Reset demo" works. |
 | Git / GitHub | Pushed to a **private** repo: https://github.com/johnha749-creator/constellation. Make it public before submitting to Devpost. |
@@ -61,7 +61,8 @@ npm install
 npm run dev
 ```
 
-Then open http://localhost:5173. Vite forwards `/api/*` to the backend on port 8000.
+Then open http://localhost:5173 and **sign in** with one of the demo accounts in
+`backend/demo_users.json`. Vite forwards `/api/*` to the backend on port 8000.
 
 **Tests:** run `pytest` from inside `backend/`, with the virtual environment active.
 
@@ -99,7 +100,10 @@ main.py (FastAPI)  ──/api──▶  React app: PatientList │ Constellation
 | `seed.py` | Generates the synthetic hospitals and patients. **Edit demo stories here.** |
 | `records.py` | Loads FHIR bundles into Python dataclasses |
 | `matching.py` | Record linkage, including blocking (see "Matching" below) |
-| `audit.py` | The hash-chained audit log of match decisions (see "Audit trail" below) |
+| `audit.py` | The hash-chained audit log of match decisions and patient access (see "Audit trail" below) |
+| `auth.py` | Sign-in: demo accounts, PBKDF2 password checks, sessions that end after 15 idle minutes |
+| `privacy.py` | Masks phone, address, ZIP and MRN, and tracks who unmasked which patient and until when |
+| `pprl.py` | Privacy-preserving matching on encrypted fingerprints (Bloom filters and keyed hashes) |
 | `reconcile.py` | One row per drug across hospitals, for the Medications tab |
 | `benchmark.py` | `python -m app.benchmark`: speed and accuracy of matching on synthetic patients |
 | `snapshot.py` | `python -m app.snapshot`: saves the demo data the pitch deck draws from |
@@ -118,7 +122,8 @@ main.py (FastAPI)  ──/api──▶  React app: PatientList │ Constellation
 | `components/DetailPanel.jsx` | Patient header, selected-star details, and three tabs: Conflicts, Medications, Record links |
 | `components/MedicationList.jsx` | Medications tab: each drug, every hospital that prescribed it, and its issues |
 | `pitch/Pitch.jsx`, `pitch/pitch.css` | The pitch deck at `/pitch.html` (see "The pitch deck" below) |
-| `components/ReviewHistory.jsx` | Record links tab: this patient's audit history and the log's integrity check |
+| `components/ReviewHistory.jsx` | Record links tab: this patient's access and review history, and the log's integrity check |
+| `components/Login.jsx` | The sign-in screen. `App.jsx` shows it until someone signs in, and again after a timeout. |
 | `components/StatsBar.jsx` | Header totals: patients, records, conflicts caught, matches to review |
 | `medications.js`, `stats.js` | Build the medication list and the header totals in the browser until the backend's `/medications` and `/api/stats` endpoints exist |
 | `labels.js` | Shared display labels and severity order |
@@ -129,7 +134,11 @@ main.py (FastAPI)  ──/api──▶  React app: PatientList │ Constellation
 
 | Method | Path | Returns |
 |---|---|---|
-| GET | `/api/health` | `{ok: true}` |
+| GET | `/api/health` | `{ok: true}` (no sign-in needed) |
+| POST | `/api/login` | Body `{username, password}`. Sets the session cookie. Returns `{user, idle_timeout_minutes, matching}` |
+| POST | `/api/logout` | Ends the session |
+| GET | `/api/me` | The signed-in user, or 401 |
+| POST | `/api/patients/{id}/reveal` | Body `{reason}`. Unmasks this patient's contact details for this user for 15 minutes; logged |
 | GET | `/api/hospitals` | `[{id, name}]` |
 | GET | `/api/patients?q=` | Patient summaries, most urgent first |
 | GET | `/api/stats` | Totals for the header |
@@ -137,8 +146,12 @@ main.py (FastAPI)  ──/api──▶  React app: PatientList │ Constellation
 | GET | `/api/patients/{id}/medications` | One row per drug across hospitals |
 | GET | `/api/patients/{id}/audit` | This patient's decisions, newest first, plus `verified` / `first_bad_seq` |
 | GET | `/api/audit?limit=` | The whole audit log, newest first, plus the integrity check |
-| POST | `/api/matches/review` | Body `{record_a, record_b, same_person, reviewer, note?}`. A clinician confirms or rejects a possible match; logged. Returns `{patient_id}` |
-| POST | `/api/demo/reset` | Body `{reviewer}`. Undoes every decision by adding a reset entry to the log. The "Reset demo" button calls this. |
+| POST | `/api/matches/review` | Body `{record_a, record_b, same_person, note?}`. The signed-in clinician confirms or rejects a possible match; logged under their account. Returns `{patient_id}` |
+| POST | `/api/demo/reset` | Undoes every decision by adding a reset entry to the log. The "Reset demo" button calls this. |
+
+**Every route except `/api/health` and `/api/login` returns 401 unless someone is signed in.**
+Opening a patient (`/constellation`) is logged as a view, and phone, address, ZIP and MRN in it are
+masked unless that user has unmasked them.
 | POST | `/api/reload` | Re-reads `backend/data/*.json` and the audit log from disk. Keeps decisions. |
 
 ### Matching
@@ -177,15 +190,33 @@ This is a Fellegi–Sunter style scorer, a standard method for record linkage. J
 
 - **Where it lives:** `backend/audit/reviews.jsonl`, one JSON entry per line, ignored by git.
   Tests write to a temporary file instead (see `tests/conftest.py`).
-- **What each entry holds:** `seq`, `at` (UTC), `action` (`review` or `reset`), `reviewer`,
-  the two record ids, `decision`, `previous`, the `score` at the time, an optional `note`,
-  `prev_hash` and `hash`.
+- **What each entry holds:** `seq`, `at` (UTC), `action` (`review`, `reset`, `view` or `reveal`),
+  `reviewer` (display name) and `username` of the signed-in clinician, `prev_hash` and `hash`.
+  Reviews add the two record ids, `decision`, `previous`, the `score` at the time and an optional
+  `note`. Views and reveals add the patient's record ids, and reveals add the stated `reason`.
 - **Append-only and hash-chained:** if an entry is edited or deleted, `verify()` reports it, the
   app shows a red warning, and that entry and everything after it are **ignored**, so a forged
   decision can't change a patient.
 - **Clean history before presenting:** stop the backend, delete `backend/audit/reviews.jsonl`,
   and start it again. Clicking "Reset demo" undoes decisions but keeps them in the history,
   which is the point of an audit trail.
+
+### Sign-in and privacy
+
+- **Demo accounts:** `backend/demo_users.json` has three (a physician, a nurse and a generic demo
+  account) with their passwords. They're demo-only; the file says so.
+- **Sessions:** in memory, so **restarting the backend signs everyone out**. A session also ends
+  after **15 minutes without activity**; the app then shows the sign-in screen with a message.
+- **Masked contact details:** phone, address, ZIP and MRN show as `•••-•••-••42`, `941••` and so
+  on, even inside match explanations. **Show…** in the right panel asks for a reason (logged),
+  then shows them to that clinician for 15 minutes. Other clinicians still see them masked.
+- **Encrypted matching:** start the backend with `CONSTELLATION_MATCHING=private` (PowerShell:
+  `$env:CONSTELLATION_MATCHING="private"`). Records are then linked on fingerprints only, and the
+  header shows "🔒 encrypted matching". It finds the same patients on the demo data, but is more
+  cautious: Maria's Lyra ↔ Vega link (90%) goes to review. The default stays standard matching so
+  the demo script doesn't change.
+- **Production settings** (documented, not needed for the demo): `CONSTELLATION_HTTPS=1` marks
+  cookies Secure, and `CONSTELLATION_LINKAGE_KEY` sets the hospitals' shared fingerprint key.
 
 ### Conflict types
 
@@ -253,6 +284,8 @@ The slides are a page in the frontend: with `npm run dev` running, open
 
 ## The 2-minute demo
 
+**Right before you present:** sign in (sessions end after 15 idle minutes) and click "Reset demo".
+
 1. **Problem (20 s):** "Hospitals can share records now, but a clinician gets a pile of
    documents from 3 systems. The same patient is spelled 3 ways, and nobody reads the pile."
 2. **Open "All patients · 3D"** (top right of the sky): "Here's the whole network: three
@@ -268,7 +301,10 @@ The slides are a page in the frontend: with `npm run dev` running, open
    unconfirmed conflicts. Then open the **Record links** tab (it has an amber dot) and click
    **Same person**: the link turns gold and the conflicts become confirmed. "A human stays in
    control."
-8. **Close:** "Built on FHIR, the real standard hospitals use, so it could sit on top of TEFCA
+8. **Privacy (optional, 15 s):** point at the masked phone numbers in the match explanation.
+   Click **Show…**, pick a reason, and show the new "Unmasked contact details. Reason: ..." line
+   in the history. "Minimum necessary, and every access is logged."
+9. **Close:** "Built on FHIR, the real standard hospitals use, so it could sit on top of TEFCA
    or Epic's network."
 
 ## Likely judge questions
@@ -276,9 +312,16 @@ The slides are a page in the frontend: with `npm run dev` running, open
 - **"Isn't this just Epic Care Everywhere?"** Epic moves the documents. We work on what happens
   after they arrive: matching identities across systems and catching contradictions between
   them.
-- **"HIPAA?"** All the data is synthetic. A real deployment would run inside the hospital
-  network or under a Business Associate Agreement, and exchange data through TEFCA rather than
-  copying it.
+- **"HIPAA?" / "Why not real patient data?"** Real records are protected health information, and
+  a hackathon isn't a permitted use, so everything is synthetic, which is how health IT is demoed
+  and tested. We built HIPAA Security Rule safeguards in: unique sign-in, automatic logoff,
+  minimum-necessary masking with "break the glass", audit controls and integrity checking. A real
+  deployment would run inside the hospital or an HIE under a Business Associate Agreement;
+  sharing records between providers for treatment is a permitted disclosure. We don't claim
+  "HIPAA compliant": that also takes policies, agreements and a risk assessment.
+- **"Does the matcher have to see names?"** No. With encrypted matching it only sees
+  fingerprints (Bloom filters keyed with a secret the hospitals share), and still keeps 99.5%
+  recall at 99.97% precision on 20,000 synthetic records.
 - **"Why not machine learning for matching?"** Fellegi–Sunter is explainable. We can tell a
   nurse exactly why two records were linked, and in healthcare that matters more than a black
   box. The m/u weights could later be learned from data, for example with the EM algorithm.
@@ -287,6 +330,8 @@ The slides are a page in the frontend: with `npm run dev` running, open
 
 ## Gotchas
 
+- **Signed out unexpectedly?** Sessions end after 15 idle minutes and whenever the backend
+  restarts. Sign in again; passwords are in `backend/demo_users.json`.
 - **Not clinical advice.** The drug list in `knowledge.py` is for the demo only. The app header
   says "Synthetic data only. Not for clinical use."
 - **Which patient opens first:** the list is sorted by number of high-severity conflicts, so

@@ -26,9 +26,11 @@ USERS_PATH = Path(os.environ.get("CONSTELLATION_USERS", BACKEND_DIR / "demo_user
 # Session cookies must only travel over HTTPS in a real deployment. Local development is plain
 # HTTP, so this is opt-in here.
 SECURE_COOKIES = os.environ.get("CONSTELLATION_HTTPS") == "1"
+# "private" links records on encrypted fingerprints only, never names or birth dates (pprl.py).
+MATCHING = os.environ.get("CONSTELLATION_MATCHING", "standard")
 
 ensure_seed_data(DATA_DIR)
-index = PatientIndex(DATA_DIR, AuditLog(AUDIT_PATH))
+index = PatientIndex(DATA_DIR, AuditLog(AUDIT_PATH), MATCHING)
 accounts = Accounts(USERS_PATH)
 disclosures = Disclosures()
 
@@ -68,7 +70,7 @@ def login(body: Login, response: Response) -> dict:
         raise HTTPException(status_code=401, detail="Wrong username or password")
     token, user = session
     response.set_cookie(COOKIE, token, httponly=True, samesite="strict", secure=SECURE_COOKIES, path="/")
-    return {"user": user.as_dict(), "idle_timeout_minutes": accounts.idle_timeout / 60}
+    return session_info(user)
 
 
 @app.post("/api/logout")
@@ -80,7 +82,12 @@ def logout(request: Request, response: Response) -> dict:
 
 @app.get("/api/me")
 def me(request: Request) -> dict:
-    return {"user": signed_in(request).as_dict(), "idle_timeout_minutes": accounts.idle_timeout / 60}
+    return session_info(signed_in(request))
+
+
+def session_info(user: User) -> dict:
+    return {"user": user.as_dict(), "idle_timeout_minutes": accounts.idle_timeout / 60,
+            "matching": index.matching}
 
 
 @app.get("/api/hospitals")
@@ -181,5 +188,5 @@ def reload() -> dict:
     """Re-read backend/data/*.json and the audit log from disk, without restarting.
     Match decisions are kept: they are replayed from the log."""
     global index
-    index = PatientIndex(DATA_DIR, AuditLog(AUDIT_PATH))
+    index = PatientIndex(DATA_DIR, AuditLog(AUDIT_PATH), MATCHING)
     return {"patients": len(index.clusters)}

@@ -17,6 +17,7 @@ from collections import defaultdict
 from itertools import combinations
 
 from .matching import candidate_pairs, cluster_records, score_pairs
+from .pprl import compare_encoded, link_privately
 from .records import PatientRecord
 
 FIRST_NAMES = [
@@ -101,7 +102,7 @@ def _mistype_date(date: str, rng: random.Random) -> str:
     return f"{year}-{month}-{day[0]}{(int(day[1]) + rng.randint(1, 8)) % 10}"  # one digit off
 
 
-def run(n_records: int) -> None:
+def run(n_records: int, private: bool = False) -> None:
     records, person_of = make_population(n_records)
     by_id = {r.id: r for r in records}
     n = len(records)
@@ -142,6 +143,24 @@ def run(n_records: int) -> None:
     print(f"Sent to human review:    {len(review):,} pairs "
           f"({len(review & true_pairs):,} really the same person)")
 
+    if private:
+        # The same population, matched on encrypted fingerprints only (pprl.py).
+        start = time.perf_counter()
+        encoded, scored = link_privately(records)
+        clusters = cluster_records(list(encoded.values()), scored=scored, compare=compare_encoded)
+        took = time.perf_counter() - start
+        auto, review = set(), set()
+        for cluster in clusters:
+            for a, b in combinations(sorted(cluster.record_ids), 2):
+                (auto if cluster.confirmed(a, b) else review).add((a, b))
+        found_true = auto & true_pairs
+        print(f"\nPrivacy-preserving mode (encrypted fingerprints, no names or dates seen):")
+        print(f"Time:                    {took:.1f} s, including encoding every record")
+        print(f"Linked automatically:    recall {len(found_true) / len(true_pairs):.2%}, "
+              f"precision {len(found_true) / max(len(auto), 1):.2%}")
+        print(f"Sent to human review:    {len(review):,} pairs "
+              f"({len(review & true_pairs):,} really the same person)")
+
 
 def _duration(seconds: float) -> str:
     if seconds < 120:
@@ -154,4 +173,7 @@ def _duration(seconds: float) -> str:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     parser.add_argument("--records", type=int, default=20_000)
-    run(parser.parse_args().records)
+    parser.add_argument("--private", action="store_true",
+                        help="also match on encrypted fingerprints (privacy-preserving mode) and compare")
+    args = parser.parse_args()
+    run(args.records, args.private)

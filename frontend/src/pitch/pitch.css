@@ -515,6 +515,11 @@
   color: var(--muted);
 }
 
+.big-numbers.single {
+  grid-template-columns: 1fr;
+  margin: 1cqh 0;
+}
+
 /* --- what's next */
 .next-grid {
   display: grid;

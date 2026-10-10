@@ -31,7 +31,7 @@ export default function App() {
 
   useEffect(() => {
     fetchMe()
-      .then(({ user }) => setSession({ status: "signed-in", user }))
+      .then((info) => setSession({ status: "signed-in", ...info }))
       .catch((e) =>
         setSession({ status: "signed-out", message: e instanceof SignedOutError ? null : `Could not reach the API (${e.message}).` }),
       );
@@ -39,12 +39,18 @@ export default function App() {
 
   if (session.status === "checking") return <div className="loading">Checking your session…</div>;
   if (session.status === "signed-out") {
-    return <Login message={session.message} onSignedIn={(user) => setSession({ status: "signed-in", user })} />;
+    return <Login message={session.message} onSignedIn={(info) => setSession({ status: "signed-in", ...info })} />;
   }
-  return <Workspace user={session.user} onSignedOut={(message) => setSession({ status: "signed-out", message })} />;
+  return (
+    <Workspace
+      user={session.user}
+      matching={session.matching}
+      onSignedOut={(message) => setSession({ status: "signed-out", message })}
+    />
+  );
 }
 
-function Workspace({ user, onSignedOut }) {
+function Workspace({ user, matching, onSignedOut }) {
   const [hospitals, setHospitals] = useState([]);
   const [patients, setPatients] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
@@ -191,6 +197,11 @@ function Workspace({ user, onSignedOut }) {
         <div className="topbar-side">
           <div className="disclaimer">Synthetic data only. Not for clinical use.</div>
           <div className="session">
+            {matching === "private" && (
+              <span className="badge private" title="Patients are linked on encrypted fingerprints, never names or birth dates">
+                🔒 encrypted matching
+              </span>
+            )}
             <span className="session-user" title={`Signed in as ${user.username}`}>
               {user.name} · {user.role}
             </span>

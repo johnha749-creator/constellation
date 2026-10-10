@@ -466,6 +466,7 @@
    },
    "needs_review": false
   },
+  "contact_details_visible": false,
   "hospitals": [
    {
     "id": "lyra",
@@ -486,7 +487,7 @@
     "kind": "record",
     "hospital": "lyra",
     "label": "Maria Gonzales",
-    "sublabel": "Lyra Medical Center · MRN LY-917634",
+    "sublabel": "Lyra Medical Center · MRN LY-••••34",
     "details": [
      [
       "Hospital",
@@ -494,7 +495,7 @@
      ],
      [
       "MRN",
-      "LY-917634"
+      "LY-••••34"
      ],
      [
       "Date of birth",
@@ -506,15 +507,15 @@
      ],
      [
       "Phone",
-      "(415) 555-0142"
+      "•••-•••-••42"
      ],
      [
       "Address",
-      "88 Ocean Avenue, San Francisco"
+      "hidden"
      ],
      [
       "ZIP",
-      "94112"
+      "941••"
      ]
     ]
    },
@@ -597,7 +598,7 @@
     "kind": "record",
     "hospital": "orion",
     "label": "Maria Gonzalez",
-    "sublabel": "Orion General Hospital · MRN OR-430274",
+    "sublabel": "Orion General Hospital · MRN OR-••••74",
     "details": [
      [
       "Hospital",
@@ -605,7 +606,7 @@
      ],
      [
       "MRN",
-      "OR-430274"
+      "OR-••••74"
      ],
      [
       "Date of birth",
@@ -617,15 +618,15 @@
      ],
      [
       "Phone",
-      "415-555-0142"
+      "•••-•••-••42"
      ],
      [
       "Address",
-      "88 Ocean Ave, San Francisco"
+      "hidden"
      ],
      [
       "ZIP",
-      "94112"
+      "941••"
      ]
     ]
    },
@@ -756,7 +757,7 @@
     "kind": "record",
     "hospital": "vega",
     "label": "M. Gonzalez",
-    "sublabel": "Vega Community Clinic · MRN VG-578197",
+    "sublabel": "Vega Community Clinic · MRN VG-••••97",
     "details": [
      [
       "Hospital",
@@ -764,7 +765,7 @@
      ],
      [
       "MRN",
-      "VG-578197"
+      "VG-••••97"
      ],
      [
       "Date of birth",
@@ -776,11 +777,11 @@
      ],
      [
       "Address",
-      "1450 Noriega St, San Francisco"
+      "hidden"
      ],
      [
       "ZIP",
-      "94122"
+      "941••"
      ]
     ]
    },
@@ -917,7 +918,7 @@
      "First name is only an initial ('Maria' vs 'M.')",
      "Last names spelled differently ('Gonzales' vs 'Gonzalez')",
      "Phone missing in one record",
-     "ZIP differs (94112 vs 94122)"
+     "ZIP differs (941•• vs 941••)"
     ]
    },
    {
@@ -935,7 +936,7 @@
     "reasons": [
      "First name is only an initial ('Maria' vs 'M.')",
      "Phone missing in one record",
-     "ZIP differs (94112 vs 94122)"
+     "ZIP differs (941•• vs 941••)"
     ]
    },
    {

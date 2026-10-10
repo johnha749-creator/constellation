@@ -8,6 +8,7 @@ from pathlib import Path
 from .audit import AuditLog
 from .conflicts import Conflict, find_conflicts
 from .matching import Cluster, candidate_pairs, cluster_records, compare_records, score_pairs
+from .pprl import compare_encoded, link_privately
 from .privacy import masker
 from .records import ClinicalItem, load_dataset
 
@@ -17,14 +18,24 @@ KIND_LABELS = {"allergy": "Allergy", "medication": "Medication", "condition": "C
 class PatientIndex:
     """Loads every hospital bundle, links records into patients, and finds their conflicts."""
 
-    def __init__(self, data_dir: Path, audit: AuditLog | None = None):
+    def __init__(self, data_dir: Path, audit: AuditLog | None = None, matching: str = "standard"):
+        """`matching="private"` links records on encrypted fingerprints only (see pprl.py)."""
+        if matching not in ("standard", "private"):
+            raise ValueError(f"Unknown matching mode: {matching}")
+        self.matching = matching
         self.dataset = load_dataset(data_dir)
         self.items_by_record: dict[str, list[ClinicalItem]] = defaultdict(list)
         for item in self.dataset.items:
             self.items_by_record[item.record_id].append(item)
         # Score candidate pairs once (see blocking in matching.py); reviews only change decisions.
         records = self.dataset.records
-        self.scored = score_pairs(records, candidate_pairs(records.values()))
+        if matching == "private":
+            self._subjects, self.scored = link_privately(records.values())
+            self._compare = compare_encoded
+        else:
+            self._subjects = records
+            self.scored = score_pairs(records, candidate_pairs(records.values()))
+            self._compare = compare_records
         # Clinicians' decisions, replayed from the audit log so they survive a restart.
         self.audit = audit or AuditLog()
         self.reviews = self.audit.current_reviews()
@@ -32,7 +43,7 @@ class PatientIndex:
         self._link()
 
     def _link(self) -> None:
-        clusters = cluster_records(list(self.dataset.records.values()), self.reviews, self.scored)
+        clusters = cluster_records(list(self._subjects.values()), self.reviews, self.scored, self._compare)
         self.clusters: dict[str, Cluster] = {}
         self.conflicts: dict[str, list[Conflict]] = {}
         self._cluster_of: dict[str, str] = {}
@@ -62,7 +73,8 @@ class PatientIndex:
         if record_a not in records or record_b not in records:
             return None
         pair = frozenset((record_a, record_b))
-        result = self.scored.get(tuple(sorted(pair))) or compare_records(records[record_a], records[record_b])
+        result = (self.scored.get(tuple(sorted(pair)))
+                  or self._compare(self._subjects[record_a], self._subjects[record_b]))
         self.audit.record_review(record_a, record_b, same_person, reviewer=reviewer, username=username,
                                  score=round(result.probability, 4), previous=self.reviews.get(pair), note=note)
         self.reviews[pair] = same_person

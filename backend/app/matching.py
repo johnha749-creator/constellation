@@ -83,13 +83,18 @@ class MatchResult:
 
 def compare_records(a: PatientRecord, b: PatientRecord) -> MatchResult:
     fields = [
-        _weigh("first_name", *first_name_similarity(a.given, b.given)),
-        _weigh("last_name", *last_name_similarity(a.family, b.family)),
-        _weigh("birth_date", *birth_date_similarity(a.birth_date, b.birth_date)),
-        _weigh("sex", *_exact("Sex", a.gender, b.gender, str.lower)),
-        _weigh("phone", *_exact("Phone", a.phone, b.phone, lambda s: re.sub(r"\D", "", s)[-10:])),
-        _weigh("postal_code", *_exact("ZIP", a.postal_code, b.postal_code, lambda s: s.strip()[:5])),
+        weigh("first_name", *first_name_similarity(a.given, b.given)),
+        weigh("last_name", *last_name_similarity(a.family, b.family)),
+        weigh("birth_date", *birth_date_similarity(a.birth_date, b.birth_date)),
+        weigh("sex", *_exact("Sex", a.gender, b.gender, str.lower)),
+        weigh("phone", *_exact("Phone", a.phone, b.phone, lambda s: re.sub(r"\D", "", s)[-10:])),
+        weigh("postal_code", *_exact("ZIP", a.postal_code, b.postal_code, lambda s: s.strip()[:5])),
     ]
+    return decide(fields)
+
+
+def decide(fields: list[FieldComparison]) -> MatchResult:
+    """Add up the evidence from every field and turn it into a probability and a tier."""
     log2_odds = PRIOR_LOG2_ODDS + sum(f.weight for f in fields)
     probability = 1 / (1 + 2 ** -log2_odds)
     if probability >= MATCH_THRESHOLD:
@@ -101,7 +106,7 @@ def compare_records(a: PatientRecord, b: PatientRecord) -> MatchResult:
     return MatchResult(probability, tier, fields)
 
 
-def _weigh(field: str, similarity: float | None, note: str | None) -> FieldComparison:
+def weigh(field: str, similarity: float | None, note: str | None) -> FieldComparison:
     if similarity is None:
         return FieldComparison(field, None, 0.0, note)
     m, u = FIELD_PARAMS[field]
@@ -307,11 +312,13 @@ def soundex(name: str) -> str:
     return (code + "000")[:4]
 
 
-def score_pairs(records_by_id: dict[str, PatientRecord], pairs: Iterable[Pair]) -> dict[Pair, MatchResult]:
-    """Score each pair, keeping only the ones that could be the same person."""
+def score_pairs(records_by_id: dict, pairs: Iterable[Pair],
+                compare: Callable = compare_records) -> dict[Pair, MatchResult]:
+    """Score each pair, keeping only the ones that could be the same person. `compare` can be
+    swapped for pprl.compare_encoded to score encrypted fingerprints instead."""
     scored = {}
     for a, b in pairs:
-        result = compare_records(records_by_id[a], records_by_id[b])
+        result = compare(records_by_id[a], records_by_id[b])
         if result.tier != "non-match":
             scored[(a, b)] = result
     return scored
@@ -319,9 +326,10 @@ def score_pairs(records_by_id: dict[str, PatientRecord], pairs: Iterable[Pair]) 
 
 # --- clustering
 
-def cluster_records(records: list[PatientRecord],
+def cluster_records(records: list,
                     reviews: dict[frozenset[str], bool] | None = None,
-                    scored: dict[Pair, MatchResult] | None = None) -> list[Cluster]:
+                    scored: dict[Pair, MatchResult] | None = None,
+                    compare: Callable = compare_records) -> list[Cluster]:
     """Group records into people.
 
     `reviews` holds clinicians' decisions on record pairs (True = same person) and overrides
@@ -331,12 +339,12 @@ def cluster_records(records: list[PatientRecord],
     reviews = reviews or {}
     by_id = {r.id: r for r in records}
     if scored is None:
-        scored = score_pairs(by_id, candidate_pairs(records))
+        scored = score_pairs(by_id, candidate_pairs(records), compare)
     reviewed_pairs = {tuple(sorted(p)) for p in reviews if len(p) == 2 and all(i in by_id for i in p)}
 
     edges = []
     for pair in sorted(scored.keys() | reviewed_pairs):
-        result = scored.get(pair) or compare_records(by_id[pair[0]], by_id[pair[1]])
+        result = scored.get(pair) or compare(by_id[pair[0]], by_id[pair[1]])
         decision = reviews.get(frozenset(pair))
         if decision is not None:
             # Copy, so cached scores stay untouched when the decision is later undone.

@@ -12,8 +12,7 @@ export default function Login({ message, onSignedIn }) {
     setBusy(true);
     setError(null);
     try {
-      const { user } = await login(username.trim(), password);
-      onSignedIn(user);
+      onSignedIn(await login(username.trim(), password)); // { user, matching, ... }
     } catch (err) {
       setError(err.message);
       setPassword("");

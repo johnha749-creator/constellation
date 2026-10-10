@@ -318,6 +318,39 @@ function Trust() {
   );
 }
 
+function Privacy() {
+  const safeguards = [
+    ["Synthetic patients only", "Real records are protected health information. We never touched any."],
+    ["Every clinician signs in", "Their own account, and automatic logoff after 15 idle minutes."],
+    ["Minimum necessary", "Phone, address, ZIP and record numbers stay masked until a clinician states a reason."],
+    ["Every access is logged", "Who opened which patient, who unmasked what and why, in the tamper-evident log."],
+  ];
+  return (
+    <>
+      <div className="kicker">Privacy and HIPAA</div>
+      <h2>Privacy by design, not as an afterthought.</h2>
+      <div className="two-col wide-left">
+        <div className="next-grid">
+          {safeguards.map(([title, text]) => (
+            <div key={title} className="panel-card">
+              <div className="next-title">{title}</div>
+              <p className="small">{text}</p>
+            </div>
+          ))}
+        </div>
+        <div className="panel-card">
+          <div className="panel-label ok">Encrypted matching</div>
+          <p>Hospitals share <strong>encrypted fingerprints</strong>, never names or birth dates, and we still link the records.</p>
+          <div className="big-numbers single">
+            <div><strong>99.5%</strong><span>recall, vs 99.7% on plain names</span></div>
+          </div>
+          <p className="muted small">Bloom-filter linkage on 20,000 synthetic records. Deployed inside a hospital or an HIE under a Business Associate Agreement.</p>
+        </div>
+      </div>
+    </>
+  );
+}
+
 function Scale() {
   return (
     <>
@@ -342,7 +375,7 @@ function Next() {
   const items = [
     ["Real drug knowledge", "RxNorm drug codes and a licensed interaction database instead of our demo rules."],
     ["Plug into the networks", "Read records over FHIR APIs from TEFCA and Epic instead of files."],
-    ["Signed-in clinicians", "Tie every audit entry to a real login, and keep a copy of the log off-site."],
+    ["Hospital sign-on", "Use the hospital's single sign-on with two-factor login, and keep a copy of the audit log off-site."],
     ["Millions of records", "Spread scoring across CPU cores, and match new records as they arrive."],
   ];
   return (
@@ -412,6 +445,10 @@ const SLIDES = [
   {
     id: "trust", Body: Trust,
     notes: "In healthcare, a human has to stay in control. A clinician confirms uncertain matches, and every decision goes into a tamper-evident log. Each entry includes the hash of the one before it, so if anyone edits history, the chain breaks and we ignore it.",
+  },
+  {
+    id: "privacy", Body: Privacy,
+    notes: "We never used real patient data. Instead we built in the safeguards HIPAA asks for: every clinician signs in and is logged out when idle, contact details stay hidden until there's a reason, and every access is logged. And the matcher doesn't even need names: hospitals share encrypted fingerprints, and we still find 99.5% of the links.",
   },
   {
     id: "scale", Body: Scale,
