@@ -106,7 +106,10 @@ main.py (FastAPI)  ──/api──▶  React app: PatientList │ Constellation
 | `App.jsx` | Layout and state: selected patient, conflict and star |
 | `components/Constellation.jsx` | The D3 force graph: starfield, glow, the "forming" animation, zoom and drag, click to select |
 | `components/PatientList.jsx` | Search and patient list with severity badges |
-| `components/DetailPanel.jsx` | Patient header, selected-star details, conflict cards, record-link explanations |
+| `components/DetailPanel.jsx` | Patient header, selected-star details, and three tabs: Conflicts, Medications, Record links |
+| `components/MedicationList.jsx` | Medications tab: each drug, every hospital that prescribed it, and its issues |
+| `medications.js` | Builds the medication list in the browser until the backend's `/medications` endpoint exists |
+| `labels.js` | Shared display labels and severity order |
 | `api.js` | Fetch helpers |
 | `styles.css` | Dark space theme |
 
@@ -209,8 +212,9 @@ The other 18 patients are filler, and a test checks that they produce **zero** c
 5. **Click the other Maria Gonzalez:** "Same name, different person. We didn't merge them."
    Naive name matching would have.
 6. **Aisha:** "When we're not sure, we say so." Point to the "needs review" link and the
-   unconfirmed conflicts. Then click **Same person**: the link turns gold and the conflicts
-   become confirmed. "A human stays in control."
+   unconfirmed conflicts. Then open the **Record links** tab (it has an amber dot) and click
+   **Same person**: the link turns gold and the conflicts become confirmed. "A human stays in
+   control."
 7. **Close:** "Built on FHIR, the real standard hospitals use, so it could sit on top of TEFCA
    or Epic's network."
 

@@ -26,7 +26,9 @@ every hospital?"
 - `conflict_ids`: the ids of conflicts in `index.conflicts[cluster_id]` whose `item_ids` include
   one of this drug's items.
 - **Sort** drugs that have conflicts first, then alphabetically.
-- Return **404** for an unknown patient, the same way the constellation route does.
+- Return **404** for an unknown patient, the same way the constellation route does, with
+  `detail="Unknown patient"`. Don't use FastAPI's default "Not Found" message: the frontend
+  reads "Not Found" as "this endpoint doesn't exist yet" and falls back to its preview list.
 - **Tests** go in `backend/tests/`. Check, for example, that Robert Chen's atorvastatin has two
   sources and one conflict, and that his amlodipine has none.
 
@@ -53,9 +55,12 @@ from it automatically.
 
 ## Owner: frontend track (about 1.5 hours)
 
-1. **Medications tab:** give the right panel three tabs, Conflicts | Medications | Record links.
-   Build it against fake data that matches the shape below, then switch to the real endpoint
-   once the partner pushes task 1. Clicking a drug's conflict jumps to that conflict.
+1. ✅ **Medications tab** (done). The right panel has three tabs: Conflicts | Medications |
+   Record links. Until the partner's endpoint exists, the tab builds the list in the browser
+   (`frontend/src/medications.js`) and shows a yellow "Preview" note. **Nothing needs to change
+   when the endpoint lands:** the tab switches to it automatically as soon as
+   `/medications` stops answering 404 "Not Found". The preview note disappears then too, which
+   is how you can tell it worked.
 2. **Stats line** in the header, for example "23 patients · 41 records · 11 conflicts caught
    across hospitals".
 3. **README.md** for the judges: the problem, screenshots, how to run it, and how it works.

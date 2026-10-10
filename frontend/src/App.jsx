@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { fetchConstellation, fetchHospitals, fetchPatients, resetDemo, reviewMatch } from "./api";
+import { fetchConstellation, fetchHospitals, fetchMedications, fetchPatients, resetDemo, reviewMatch } from "./api";
 import PatientList from "./components/PatientList";
 import Constellation from "./components/Constellation";
 import DetailPanel from "./components/DetailPanel";
@@ -11,6 +11,7 @@ export default function App() {
   const [patients, setPatients] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [graph, setGraph] = useState(null);
+  const [medications, setMedications] = useState(null); // { list, preview }
   const [selectedConflictId, setSelectedConflictId] = useState(null);
   const [selectedNodeId, setSelectedNodeId] = useState(null);
   const [error, setError] = useState(null);
@@ -39,6 +40,18 @@ export default function App() {
       cancelled = true;
     };
   }, [selectedId, version]);
+
+  useEffect(() => {
+    setMedications(null);
+    if (!graph) return;
+    let cancelled = false;
+    fetchMedications(graph.patient.id, graph)
+      .then((m) => !cancelled && setMedications(m))
+      .catch((e) => setError(e.message));
+    return () => {
+      cancelled = true;
+    };
+  }, [graph]);
 
   // A clinician decides whether two records are the same person; the constellation re-forms.
   const decideMatch = async (recordA, recordB, samePerson) => {
@@ -124,10 +137,12 @@ export default function App() {
         </section>
         <DetailPanel
           graph={graph}
+          medications={medications}
           hospitals={hospitalInfo}
           selectedConflictId={selectedConflictId}
           selectedNodeId={selectedNodeId}
           onSelectConflict={selectConflict}
+          onSelectNode={selectNode}
           onDecideMatch={decideMatch}
         />
       </main>
