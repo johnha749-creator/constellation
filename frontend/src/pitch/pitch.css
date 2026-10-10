@@ -398,6 +398,12 @@
   color: var(--match);
 }
 
+.match-table .pts {
+  color: var(--ok);
+  font-weight: 700;
+  text-align: right;
+}
+
 .threshold {
   display: grid;
   grid-template-columns: 1fr 1.25fr 1fr;

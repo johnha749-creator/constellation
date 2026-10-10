@@ -18,6 +18,9 @@ If you need something changed in the other person's folder, ask them in chat ins
 > matching: new `app/auth.py`, `app/privacy.py`, `app/pprl.py`, `demo_users.json`,
 > `tests/test_privacy.py` and `tests/test_pprl.py`, plus changes to `main.py`, `audit.py`,
 > `constellation.py`, `matching.py` and `benchmark.py`.
+> Then roles (`auth.py`) and the match rubric: new `app/rubric.py` and `tests/test_rubric.py`;
+> `matching.py` and `pprl.py` now score through the rubric (Jaro-Winkler and Bloom filters are
+> gone, replaced by letter-pair Dice so both matchers agree exactly).
 > **The API now needs sign-in:** API tests must use the `client` fixture from `tests/conftest.py`
 > (already done for `test_reconcile.py` and `test_constellation.py`).
 > **Run `git pull` before your next backend change.** The details are in HANDOFF.md under

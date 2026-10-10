@@ -6,6 +6,7 @@ import {
   fetchMedications,
   fetchPatientAudit,
   fetchPatients,
+  fetchRubric,
   fetchStats,
   logout,
   resetDemo,
@@ -60,6 +61,7 @@ function Workspace({ user, matching, onSignedOut }) {
   const [medications, setMedications] = useState(null); // { list, preview }
   const [stats, setStats] = useState(null); // { data, preview }
   const [audit, setAudit] = useState(null); // this patient's access and review history
+  const [rubric, setRubric] = useState(null); // how record pairs are scored (the same for everyone)
   const [view, setView] = useState("patient"); // "patient" (2D constellation) | "galaxy" (all patients, 3D)
   const [selectedConflictId, setSelectedConflictId] = useState(null);
   const [selectedNodeId, setSelectedNodeId] = useState(null);
@@ -70,10 +72,11 @@ function Workspace({ user, matching, onSignedOut }) {
   const fail = (e) => (e instanceof SignedOutError ? onSignedOut(TIMED_OUT) : setError(e.message));
 
   useEffect(() => {
-    Promise.all([fetchHospitals(), fetchPatients()])
-      .then(([hospitalList, patientList]) => {
+    Promise.all([fetchHospitals(), fetchPatients(), fetchRubric()])
+      .then(([hospitalList, patientList, rubricTable]) => {
         setHospitals(hospitalList);
         setPatients(patientList);
+        setRubric(rubricTable);
         if (patientList.length) setSelectedId(patientList[0].id); // most urgent patient first
       })
       .catch(fail);
@@ -262,6 +265,7 @@ function Workspace({ user, matching, onSignedOut }) {
           graph={graph}
           medications={medications}
           audit={audit}
+          rubric={rubric}
           hospitals={hospitalInfo}
           selectedConflictId={selectedConflictId}
           selectedNodeId={selectedNodeId}

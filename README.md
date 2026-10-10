@@ -72,20 +72,44 @@ Hospital FHIR bundles ──► Record matching ──► Conflict rules ──�
 
 ### Matching records to people
 
-We use a **Fellegi–Sunter** style scorer, a standard method for linking records. It compares first
-name, last name, birth date, sex, phone and ZIP. Each field adds evidence for or against a match,
-and the total becomes a probability:
+Every pair of records is scored with **one fixed rubric** (`backend/app/rubric.py`). Each field
+lands on exactly one named level, and each level is worth a fixed number of points:
 
-| Score | What happens |
+| Field | Levels and points |
 |---|---|
-| ≥ 95% | Linked automatically as the same person |
-| 50–95% | Linked as a **possible match**, and a clinician decides |
-| < 50% | Treated as different people |
+| First name | Same **+5.6** · Nickname of the same name **+5.6** · Close spelling, likely a typo **+4.1** · Only an initial, and it matches **+1.6** · Similar spelling **−0.3** · Different **−4.3** |
+| Last name | Same **+6.6** · One contains the other (hyphenated or married name) **+5.5** · Close spelling, likely a typo **+4.9** · Similar spelling **0.0** · Different **−4.3** |
+| Date of birth | Same **+9.9** · Day and month swapped **+6.9** · One digit off, likely a typo **+5.4** · Same year and month, different day **+2.4** · Different **−5.1** |
+| Sex | Same **+1.0** · Different **−4.6** |
+| Phone | Same **+13.0** · Different **−2.3** |
+| ZIP | Same **+4.1** · Different **−2.7** |
 
-It handles nicknames (Jim = James), initials (M. = Maria), punctuation (O'Brien = OBrien), married
-and hyphenated names (Patel → Patel-Khan), misspellings (Jaro-Winkler similarity), and birth dates
-with the day and month swapped or digits mistyped. Two different women named Maria Gonzalez stay
-separate, because their birth dates and phone numbers disagree.
+A field missing from either record scores 0. Every pair **starts at −10**, because most pairs of
+records belong to different people. Then:
+
+| Total | What happens |
+|---|---|
+| **+4.2 or more** (about 95% likely) | Linked automatically as the same person |
+| **0 to +4.2** | Linked as a **possible match**, and a clinician decides |
+| **below 0** | Treated as different people |
+
+The points are **Fellegi–Sunter** weights, the standard statistics for record linkage: how much
+more often each level happens between records of the same person than between different people.
+"Close spelling" means the two names share at least 75% of their letter pairs (the Dice
+coefficient). Every link in the app shows its own breakdown, and "How scoring works" shows this
+table.
+
+**Why it's consistent:**
+- **Same evidence, same points.** The levels are named and the points are fixed, so two similar
+  typos always score the same.
+- **Order doesn't matter.** A compared with B scores exactly like B with A.
+- **Both matchers agree exactly.** The encrypted matcher (see Privacy below) decides levels with
+  the same rules. Tests check that both give identical levels and points on every candidate pair
+  of 3,000 synthetic records.
+
+Two different women named Maria Gonzalez stay separate: −10, plus the same first and last name
+(+5.6 +6.6) and sex (+1.0), but a different birth date (−5.1), phone (−2.3) and ZIP (−2.7),
+leaves them at −6.9.
 
 A conflict that depends on a link nobody has confirmed yet is labelled **unconfirmed**. We never
 claim more certainty than we have.
@@ -108,8 +132,11 @@ mistakes, then measures speed and accuracy:
 
 | Records | Comparing every pair | With blocking | Time | Real links kept by blocking | Auto-linked: recall / precision |
 |---|---|---|---|---|---|
-| 20,000 | 200 million | 35,174 (**5,686× fewer**) | 2.5 s | 99.98% | 99.73% / 99.97% |
-| 100,000 | 5 billion (est. 110 h) | 686,541 (**7,283× fewer**) | 58 s | 99.97% | 99.69% / 99.67% |
+| 20,000 | 200 million | 35,174 (**5,686× fewer**) | 1.3 s | 99.98% | 99.53% / 99.98% |
+| 100,000 | 5 billion (100+ hours) | 686,541 (**7,283× fewer**) | 86 s | 99.97% | 99.48% / 99.63% |
+
+Times depend on the machine and how busy it is; the accuracy numbers don't. Encrypted matching
+gives exactly the same accuracy, because it scores with the same rubric.
 
 ### An audit trail clinicians can trust
 
@@ -150,12 +177,14 @@ including inside match explanations, until the clinician states a reason ("break
 which is logged.
 
 **Privacy-preserving matching.** With `CONSTELLATION_MATCHING=private`, records are linked on
-**encrypted fingerprints** instead of names and birth dates, following the Bloom-filter method of
-Schnell et al. Each hospital hashes its identifiers with a key that the hospitals share and the
-matcher never sees. Similar names still produce similar fingerprints, so typos and nicknames
-still match, but the matcher never learns who anyone is. On 20,000 synthetic records (`python -m
-app.benchmark --private`) it keeps **99.50% recall and 99.97% precision**, against 99.73% and
-99.97% for standard matching. Uncertain cases go to human review instead of being lost.
+**encrypted fingerprints** instead of names and birth dates. Each hospital hashes its identifiers
+with a key that the hospitals share and the matcher never sees: whole values become keyed hashes,
+and names are also broken into keyed hashes of their letter pairs. Similar names share most of
+their letter-pair hashes, so typos and nicknames still match, but the matcher never learns who
+anyone is. Because every rubric rule has an exact fingerprint equivalent, encrypted matching gives
+**exactly the same levels, points and decisions** as standard matching. On 20,000 synthetic records
+(`python -m app.benchmark --private`) both modes give **99.53% recall and 99.98% precision**.
+Uncertain cases go to human review instead of being lost.
 
 **How it would really be deployed:** inside a hospital, or inside a health information exchange
 that signs a Business Associate Agreement with each hospital. Sharing records between providers to
@@ -214,7 +243,8 @@ To run the whole app on encrypted fingerprints, start the backend with
 ## Built with
 
 - **Backend:** Python, FastAPI, FHIR R4 (synthetic data), our own record-matching and conflict
-  engine with no ML black box, Bloom-filter privacy-preserving matching, sign-in with PBKDF2, and a
+  engine scored with a fixed points rubric (no ML black box), privacy-preserving matching on keyed
+  letter-pair hashes, sign-in with PBKDF2, and a
   hash-chained audit log
 - **Frontend:** React, Vite, D3 force layout (each patient), three.js (the whole network in 3D)
 - **Tests:** pytest
@@ -231,6 +261,11 @@ To run the whole app on encrypted fingerprints, start the backend with
   two-factor authentication.
 - **Audit log:** it's a local file. A real system would keep a copy somewhere else too, because a
   hash chain alone can't detect entries cut off the end.
-- **Encrypted matching:** Bloom-filter fingerprints can be attacked by frequency analysis if
-  someone collects many of them. Real deployments add "hardening" (salting and balancing the
-  filters), which we haven't built.
+- **Encrypted matching:** letter-pair fingerprints can be attacked by frequency analysis if
+  someone collects many of them, because common letter pairs show up often. Real deployments add
+  hardening, for example Bloom filters with salting and balancing, which trades some exactness
+  for stronger protection. We haven't built that.
+- **Recall vs precision:** the rubric deliberately prefers sending a pair to a clinician over a
+  wrong automatic merge. Looser spelling thresholds found slightly more true links (99.72%
+  recall), but merged more wrong pairs (99.78% precision instead of 99.98%). In healthcare a wrong
+  merge puts one person's allergy in someone else's chart.

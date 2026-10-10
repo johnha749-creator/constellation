@@ -41,6 +41,7 @@ export const logout = () => postJson("/api/logout");
 export const fetchMe = () => request("/api/me");
 
 export const fetchHospitals = () => request("/api/hospitals");
+export const fetchRubric = () => request("/api/rubric");
 export const fetchPatients = () => request("/api/patients");
 export const fetchConstellation = (id) => request(`/api/patients/${encodeURIComponent(id)}/constellation`);
 export const revealContactDetails = (id, reason) =>

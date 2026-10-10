@@ -467,6 +467,7 @@
    "needs_review": false
   },
   "contact_details_visible": false,
+  "clinical_visible": true,
   "hospitals": [
    {
     "id": "lyra",
@@ -897,17 +898,56 @@
      "date of birth",
      "sex",
      "phone",
-     "ZIP"
+     "zip"
     ],
     "reasons": [
-     "Last names spelled differently ('Gonzales' vs 'Gonzalez')"
+     "Last name: close spelling, likely a typo (Gonzales vs Gonzalez)"
+    ],
+    "points": 28.5,
+    "breakdown": [
+     {
+      "field": "First name",
+      "level": "Same",
+      "values": null,
+      "points": 5.6
+     },
+     {
+      "field": "Last name",
+      "level": "Close spelling, likely a typo",
+      "values": "Gonzales vs Gonzalez",
+      "points": 4.9
+     },
+     {
+      "field": "Date of birth",
+      "level": "Same",
+      "values": null,
+      "points": 9.9
+     },
+     {
+      "field": "Sex",
+      "level": "Same",
+      "values": null,
+      "points": 1.0
+     },
+     {
+      "field": "Phone",
+      "level": "Same",
+      "values": null,
+      "points": 13.0
+     },
+     {
+      "field": "ZIP",
+      "level": "Same",
+      "values": null,
+      "points": 4.1
+     }
     ]
    },
    {
     "source": "lyra-pt-001",
     "target": "vega-pt-001",
     "kind": "match",
-    "probability": 0.9616,
+    "probability": 0.963,
     "tier": "match",
     "reviewed": null,
     "agrees_on": [
@@ -915,17 +955,56 @@
      "sex"
     ],
     "reasons": [
-     "First name is only an initial ('Maria' vs 'M.')",
-     "Last names spelled differently ('Gonzales' vs 'Gonzalez')",
+     "First name: only an initial, and it matches (Maria vs M.)",
+     "Last name: close spelling, likely a typo (Gonzales vs Gonzalez)",
      "Phone missing in one record",
-     "ZIP differs (941•• vs 941••)"
+     "ZIP: different (941•• vs 941••)"
+    ],
+    "points": 4.7,
+    "breakdown": [
+     {
+      "field": "First name",
+      "level": "Only an initial, and it matches",
+      "values": "Maria vs M.",
+      "points": 1.6
+     },
+     {
+      "field": "Last name",
+      "level": "Close spelling, likely a typo",
+      "values": "Gonzales vs Gonzalez",
+      "points": 4.9
+     },
+     {
+      "field": "Date of birth",
+      "level": "Same",
+      "values": null,
+      "points": 9.9
+     },
+     {
+      "field": "Sex",
+      "level": "Same",
+      "values": null,
+      "points": 1.0
+     },
+     {
+      "field": "Phone",
+      "level": "Missing in one record",
+      "values": null,
+      "points": 0.0
+     },
+     {
+      "field": "ZIP",
+      "level": "Different",
+      "values": "941•• vs 941••",
+      "points": -2.7
+     }
     ]
    },
    {
     "source": "orion-pt-001",
     "target": "vega-pt-001",
     "kind": "match",
-    "probability": 0.9888,
+    "probability": 0.9883,
     "tier": "match",
     "reviewed": null,
     "agrees_on": [
@@ -934,9 +1013,48 @@
      "sex"
     ],
     "reasons": [
-     "First name is only an initial ('Maria' vs 'M.')",
+     "First name: only an initial, and it matches (Maria vs M.)",
      "Phone missing in one record",
-     "ZIP differs (941•• vs 941••)"
+     "ZIP: different (941•• vs 941••)"
+    ],
+    "points": 6.4,
+    "breakdown": [
+     {
+      "field": "First name",
+      "level": "Only an initial, and it matches",
+      "values": "Maria vs M.",
+      "points": 1.6
+     },
+     {
+      "field": "Last name",
+      "level": "Same",
+      "values": null,
+      "points": 6.6
+     },
+     {
+      "field": "Date of birth",
+      "level": "Same",
+      "values": null,
+      "points": 9.9
+     },
+     {
+      "field": "Sex",
+      "level": "Same",
+      "values": null,
+      "points": 1.0
+     },
+     {
+      "field": "Phone",
+      "level": "Missing in one record",
+      "values": null,
+      "points": 0.0
+     },
+     {
+      "field": "ZIP",
+      "level": "Different",
+      "values": "941•• vs 941••",
+      "points": -2.7
+     }
     ]
    },
    {

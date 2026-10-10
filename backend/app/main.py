@@ -11,6 +11,7 @@ from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
+from . import rubric
 from .audit import AuditLog
 from .auth import COOKIE, REVEAL_CONTACTS, REVIEW_MATCHES, ROLES, VIEW_CLINICAL, Accounts, User
 from .constellation import PatientIndex
@@ -96,6 +97,12 @@ def me(request: Request) -> dict:
 def session_info(user: User) -> dict:
     return {"user": user.as_dict(), "idle_timeout_minutes": accounts.idle_timeout / 60,
             "matching": index.matching}
+
+
+@app.get("/api/rubric")
+def match_rubric() -> dict:
+    """How record pairs are scored: every field's levels and points, and the thresholds."""
+    return rubric.as_table()
 
 
 @app.get("/api/hospitals")

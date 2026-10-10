@@ -245,11 +245,12 @@ function Demo() {
 
 function Matching() {
   const examples = [
-    ["Jim", "James", "nickname"],
-    ["O'Brien", "OBrien", "punctuation"],
-    ["1947-11-02", "1947-02-11", "day and month swapped"],
-    ["Patel", "Patel-Khan", "married name"],
-    ["Whittaker", "Whitaker", "misspelling"],
+    // [one record, the other, rubric level, points]: the same numbers as rubric.py
+    ["Jim", "James", "nickname", "+5.6"],
+    ["O'Brien", "OBrien", "same once punctuation is ignored", "+6.6"],
+    ["1947-11-02", "1947-02-11", "day and month swapped", "+6.9"],
+    ["Patel", "Patel-Khan", "one contains the other", "+5.5"],
+    ["Whittaker", "Whitaker", "close spelling", "+4.9"],
   ];
   return (
     <>
@@ -258,24 +259,25 @@ function Matching() {
       <div className="two-col wide-left">
         <table className="match-table">
           <tbody>
-            {examples.map(([a, b, why]) => (
+            {examples.map(([a, b, why, points]) => (
               <tr key={why}>
                 <td>{a}</td>
                 <td className="eq">≈</td>
                 <td>{b}</td>
                 <td className="muted">{why}</td>
+                <td className="pts">{points}</td>
               </tr>
             ))}
           </tbody>
         </table>
         <div>
-          <p>A <strong>Fellegi–Sunter</strong> score weighs name, birth date, sex, phone and ZIP, and says <em>why</em>.</p>
+          <p>One fixed <strong>points rubric</strong>: every field lands on a named level worth set points. Start at −10, add them up:</p>
           <div className="threshold">
-            <div className="t-different">&lt; 50%<span>different people</span></div>
-            <div className="t-review">50–95%<span>a clinician decides</span></div>
-            <div className="t-same">≥ 95%<span>same person</span></div>
+            <div className="t-different">below 0<span>different people</span></div>
+            <div className="t-review">0 to +4.2<span>a clinician decides</span></div>
+            <div className="t-same">+4.2 or more<span>same person</span></div>
           </div>
-          <p className="muted">Two different women named Maria Gonzalez stay separate.</p>
+          <p className="muted">The two Maria Gonzalezes score −6.9: kept apart. Encrypted matching scores every pair identically.</p>
         </div>
       </div>
     </>
@@ -342,9 +344,9 @@ function Privacy() {
           <div className="panel-label ok">Encrypted matching</div>
           <p>Hospitals share <strong>encrypted fingerprints</strong>, never names or birth dates, and we still link the records.</p>
           <div className="big-numbers single">
-            <div><strong>99.5%</strong><span>recall, vs 99.7% on plain names</span></div>
+            <div><strong>Identical</strong><span>scores to matching on real names</span></div>
           </div>
-          <p className="muted small">Bloom-filter linkage on 20,000 synthetic records. Deployed inside a hospital or an HIE under a Business Associate Agreement.</p>
+          <p className="muted small">Keyed letter-pair hashes, scored with the same rubric: 99.5% recall and 99.98% precision on 20,000 synthetic records, the same as plain names. Deployed inside a hospital or an HIE under a Business Associate Agreement.</p>
         </div>
       </div>
     </>
@@ -358,13 +360,13 @@ function Scale() {
       <h2>Built for a whole network, not just a demo.</h2>
       <div className="big-numbers">
         <div><strong>100,000</strong><span>patient records</span></div>
-        <div><strong>58 s</strong><span>to link them all</span></div>
+        <div><strong>&lt; 90 s</strong><span>to link them all</span></div>
         <div><strong>7,283×</strong><span>fewer comparisons</span></div>
-        <div><strong>99.7%</strong><span>recall &amp; precision</span></div>
+        <div><strong>99.6%</strong><span>of automatic links correct</span></div>
       </div>
       <p className="center">
         <strong>Blocking:</strong> only compare records that share a birth date, a phone number, or a sound-alike surname plus birth year.
-        Comparing every pair would take an estimated <strong>110 hours</strong>.
+        Comparing every pair would take <strong>over 100 hours</strong>.
       </p>
       <p className="muted center small">Measured with our benchmark on synthetic patients with realistic mistakes (python -m app.benchmark).</p>
     </>
@@ -440,7 +442,7 @@ const SLIDES = [
   },
   {
     id: "matching", Body: Matching,
-    notes: "Matching is the hard part. We use Fellegi–Sunter, a proven record-linkage method that weighs each field and explains its reasoning: nicknames, typos, swapped dates, married names. Uncertain matches go to a human. And two different women with the same name stay separate.",
+    notes: "Matching is the hard part, so we made it a fixed rubric. Every field lands on a named level worth set points: a nickname is plus 5.6, a swapped day and month plus 6.9. Start at minus 10; plus 4.2 links the records, below zero keeps them apart, and in between a human decides. Same evidence, same score, every time, and the app shows the breakdown for every link.",
   },
   {
     id: "trust", Body: Trust,
@@ -448,11 +450,11 @@ const SLIDES = [
   },
   {
     id: "privacy", Body: Privacy,
-    notes: "We never used real patient data. Instead we built in the technical safeguards from HIPAA's Security Rule: every clinician signs in and is logged out when idle, each role only sees what its job needs, and every access is logged. We even hide contact details until there's a reason, which HIPAA doesn't require for treatment. And the matcher doesn't need names: hospitals share encrypted fingerprints, and we still find 99.5% of the links.",
+    notes: "We never used real patient data. Instead we built in the technical safeguards from HIPAA's Security Rule: every clinician signs in and is logged out when idle, each role only sees what its job needs, and every access is logged. We even hide contact details until there's a reason, which HIPAA doesn't require for treatment. And the matcher doesn't need names: hospitals share encrypted fingerprints, and the rubric gives exactly the same scores.",
   },
   {
     id: "scale", Body: Scale,
-    notes: "And it scales. Comparing every pair of 100,000 records would take about 110 hours. With blocking, we link them in under a minute, with about 99.7% recall and precision, measured on synthetic data with realistic mistakes.",
+    notes: "And it scales. Comparing every pair of 100,000 records would take over 100 hours. With blocking, we link them in about a minute and a half. 99.6% of the automatic links are correct and 99.5% of the true links are found, measured on synthetic data with realistic mistakes, and anything uncertain goes to a human.",
   },
   {
     id: "next", Body: Next,

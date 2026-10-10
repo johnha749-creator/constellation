@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { CONFLICT_TYPE_LABELS, REVEAL_CONTACTS, REVIEW_MATCHES } from "../labels";
 import MedicationList from "./MedicationList";
 import ReviewHistory from "./ReviewHistory";
+import { formatPoints, HowScoringWorks, ScoreBreakdown } from "./ScoreBreakdown";
 
 const KIND_LABELS = { record: "Patient record", allergy: "Allergy", medication: "Medication", condition: "Condition" };
 
@@ -85,6 +86,7 @@ export default function DetailPanel({
   graph,
   medications,
   audit,
+  rubric,
   hospitals,
   selectedConflictId,
   selectedNodeId,
@@ -215,17 +217,13 @@ export default function DetailPanel({
           {matches.map((m) => (
             <div key={`${m.source}-${m.target}`} className={`card match-card ${m.tier}`}>
               <div className="card-kicker">
-                {MATCH_HEADINGS[m.reviewed ?? m.tier]} · scored {(m.probability * 100).toFixed(1)}%
+                {MATCH_HEADINGS[m.reviewed ?? m.tier]} · {formatPoints(m.points)} points (
+                {Math.round(m.probability * 100)}%)
               </div>
               <div className="small">
                 {hospitals[nodesById[m.source]?.hospital]?.name} ↔ {hospitals[nodesById[m.target]?.hospital]?.name}
               </div>
-              {m.agrees_on.length > 0 && <div className="small muted">Agrees on: {m.agrees_on.join(", ")}</div>}
-              <ul className="reasons">
-                {m.reasons.map((r) => (
-                  <li key={r}>{r}</li>
-                ))}
-              </ul>
+              <ScoreBreakdown link={m} rubric={rubric} />
               {m.tier === "review" && can(REVIEW_MATCHES) && (
                 <div className="review-actions">
                   <button className="btn confirm" onClick={() => onDecideMatch(m.source, m.target, true)}>
@@ -241,6 +239,7 @@ export default function DetailPanel({
               )}
             </div>
           ))}
+          <HowScoringWorks rubric={rubric} />
           <ReviewHistory audit={audit} />
         </>
       )}

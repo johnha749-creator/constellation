@@ -213,6 +213,10 @@ class PatientIndex:
                 "probability": round(edge.result.probability, 4), "tier": edge.result.tier,
                 "reviewed": edge.result.reviewed, "agrees_on": edge.result.agrees_on,
                 "reasons": [mask(reason) for reason in edge.result.reasons],
+                # The rubric: each field's level and points, and the total that decided the tier.
+                "points": edge.result.points,
+                "breakdown": [dict(row, values=row["values"] and mask(row["values"]))
+                              for row in edge.result.breakdown()],
             })
         conflicts = self.conflicts[cluster.id] if clinical else []
         for conflict in conflicts:

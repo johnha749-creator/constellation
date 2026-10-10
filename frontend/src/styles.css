@@ -1039,11 +1039,75 @@ button {
   font-weight: 600;
 }
 
-.reasons {
-  margin: 6px 0 0;
-  padding-left: 18px;
+/* --- match rubric */
+.rubric-table {
+  width: 100%;
+  margin-top: 8px;
+  border-collapse: collapse;
   font-size: 12px;
+}
+
+.rubric-table td,
+.rubric-table th {
+  padding: 3px 4px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  text-align: left;
+}
+
+.rubric-table td:first-child {
   color: var(--muted);
+  white-space: nowrap;
+}
+
+.rubric-table .pts {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.rubric-table .pts.plus {
+  color: var(--ok);
+}
+
+.rubric-table .pts.minus {
+  color: var(--high);
+}
+
+.rubric-table tr.total td {
+  border-bottom: none;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.rubric-table.compact {
+  margin-top: 10px;
+}
+
+.rubric-table.compact th {
+  color: var(--text);
+  font-size: 12px;
+}
+
+.rubric-table.compact td:first-child {
+  color: var(--text);
+  white-space: normal;
+}
+
+.how-scoring {
+  margin-top: 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.how-scoring summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.how-scoring p {
+  margin: 8px 0 0;
 }
 
 @media (max-width: 1100px) {

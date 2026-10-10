@@ -103,7 +103,8 @@ main.py (FastAPI)  ──/api──▶  React app: PatientList │ Constellation
 | `audit.py` | The hash-chained audit log of match decisions and patient access (see "Audit trail" below) |
 | `auth.py` | Sign-in: demo accounts, PBKDF2 password checks, sessions that end after 15 idle minutes |
 | `privacy.py` | Masks phone, address, ZIP and MRN, and tracks who unmasked which patient and until when |
-| `pprl.py` | Privacy-preserving matching on encrypted fingerprints (Bloom filters and keyed hashes) |
+| `rubric.py` | The match rubric: every field's levels and points, the thresholds, and the rules that pick a level |
+| `pprl.py` | Privacy-preserving matching on encrypted fingerprints (keyed hashes and keyed letter-pair hashes), scored with the same rubric |
 | `reconcile.py` | One row per drug across hospitals, for the Medications tab |
 | `benchmark.py` | `python -m app.benchmark`: speed and accuracy of matching on synthetic patients |
 | `snapshot.py` | `python -m app.snapshot`: saves the demo data the pitch deck draws from |
@@ -153,26 +154,39 @@ main.py (FastAPI)  ──/api──▶  React app: PatientList │ Constellation
 Opening a patient (`/constellation`) is logged as a view, and phone, address, ZIP and MRN in it are
 masked unless that user has unmasked them.
 | POST | `/api/reload` | Re-reads `backend/data/*.json` and the audit log from disk. Keeps decisions. |
+| GET | `/api/rubric` | The match rubric: `{start, link_at, review_at, fields: [{field, levels: [{level, points}]}]}` |
+
+Each `match` link in a constellation also carries `points` (the rubric total) and `breakdown`
+(`[{field, level, values, points}]`, with values masked like everything else).
 
 ### Matching
 
-This is a Fellegi–Sunter style scorer, a standard method for record linkage. Judges may ask about it.
+Every pair of records is scored with **one fixed points rubric** (`rubric.py`). Judges may ask
+about it.
 
-- **Fields compared:** first name, last name, date of birth (DOB), sex, phone and ZIP. Each field
-  adds evidence for or against a match. The weight is `log2(m/u)` when the field agrees and
-  `log2((1-m)/(1-u))` when it disagrees. Partial agreement is interpolated between the two.
-- **Smart comparisons:**
-  - nicknames: Jim = James
-  - an initial only: "M." vs "Maria"
-  - punctuation: O'Brien = OBrien = O Brien
-  - hyphenated or married names: Patel ⊂ Patel-Khan
-  - Jaro-Winkler string similarity for misspellings
-  - DOB with day and month swapped, one wrong digit, or two digits transposed
-- **Turning evidence into a decision:** start from prior odds of 1 in 1000, add up the weights,
-  and convert to a probability.
-  - **≥ 95%:** match
-  - **≥ 50%:** possible match that needs human review
-  - **below 50%:** different people
+- **Fields compared:** first name, last name, date of birth, sex, phone and ZIP.
+- **Levels and points:** each field lands on exactly one named level, worth fixed points, for
+  example "Nickname of the same name" +5.6, "Day and month swapped" +6.9, "Different" −5.1. The
+  full table is in the README, in the app ("How scoring works" in the Record links tab), and at
+  `GET /api/rubric`.
+- **The decision:** start at **−10**, add each field's points.
+  - **+4.2 or more** (about 95%): same person.
+  - **0 to +4.2:** a clinician decides.
+  - **below 0:** different people.
+- **Where the points come from:** Fellegi–Sunter weights. Full agreement is worth `log2(m/u)`,
+  disagreement `log2((1-m)/(1-u))`, and each partial level is a fixed fraction between them.
+- **Spelling:** "Close spelling" means the names share at least 75% of their letter pairs
+  (Dice ≥ 0.75), and "Similar spelling" at least 50%. One letter off a short name such as Maria
+  vs Mario only reaches "similar", by design.
+- **Consistency, all checked by `tests/test_rubric.py`:**
+  - every documented case lands on its level;
+  - more agreement never scores lower;
+  - A vs B scores exactly like B vs A;
+  - standard and encrypted matching give identical levels and points on every candidate pair of
+    3,000 synthetic records.
+- **In the app:** every record-link card shows its breakdown table (start, each field, total).
+- **Why not looser thresholds?** They link a few more true pairs, but merge more wrong ones
+  (99.78% precision instead of 99.98%). A wrong merge is worse than a trip to human review.
 - **Unconfirmed conflicts:** a conflict that only exists because of a "review" link is marked
   `unconfirmed`, so we never claim certainty we don't have.
 - **Human in the loop:** a "review" link shows **Same person / Different people** buttons.
@@ -182,8 +196,9 @@ This is a Fellegi–Sunter style scorer, a standard method for record linkage. J
 - **Blocking (scalability):** two records are only compared if they share a birth date, a phone
   number, or a sound-alike surname (Soundex) plus birth year. On the demo data that's 22
   comparisons instead of 990, with no real link missed (a test checks this). Benchmark: 20,000
-  records in 2.5 s with 5,686× fewer comparisons, and 100,000 in 58 s with 7,283× fewer;
-  recall and precision stay around 99.7%. Pair scores are cached, so a review relinks without
+  records in about 1.3 s with 5,686× fewer comparisons (99.53% recall, 99.98% precision), and
+  100,000 in about 86 s with 7,283× fewer (99.48% recall, 99.63% precision). Encrypted matching
+  gives identical accuracy. Pair scores are cached, so a review relinks without
   re-scoring, and conflicts are only re-checked for patients whose links changed.
 
 ### Audit trail
@@ -220,9 +235,10 @@ This is a Fellegi–Sunter style scorer, a standard method for record linkage. J
   then shows them to that clinician for 15 minutes. Other clinicians still see them masked.
 - **Encrypted matching:** start the backend with `CONSTELLATION_MATCHING=private` (PowerShell:
   `$env:CONSTELLATION_MATCHING="private"`). Records are then linked on fingerprints only, and the
-  header shows "🔒 encrypted matching". It finds the same patients on the demo data, but is more
-  cautious: Maria's Lyra ↔ Vega link (90%) goes to review. The default stays standard matching so
-  the demo script doesn't change.
+  header shows "🔒 encrypted matching". It uses the same rubric with exact fingerprint
+  equivalents, so every level, point and decision is identical to standard matching; only the
+  breakdown hides the compared values. The default stays standard matching, so the breakdown can
+  show values once they're unmasked.
 - **Production settings** (documented, not needed for the demo): `CONSTELLATION_HTTPS=1` marks
   cookies Secure, and `CONSTELLATION_LINKAGE_KEY` sets the hospitals' shared fingerprint key.
 
@@ -333,8 +349,13 @@ The slides are a page in the frontend: with `npm run dev` running, open
   necessary does *not* apply to sharing for treatment (45 CFR 164.502(b)(2)). Our masking goes
   beyond what the law requires, as privacy by design.
 - **"Does the matcher have to see names?"** No. With encrypted matching it only sees
-  fingerprints (Bloom filters keyed with a secret the hospitals share), and still keeps 99.5%
-  recall at 99.97% precision on 20,000 synthetic records.
+  fingerprints: keyed hashes of each value and of each name's letter pairs, with a secret the
+  hospitals share. It reaches exactly the same scores as matching on real names (99.53% recall,
+  99.98% precision on 20,000 synthetic records), and the tests check that.
+- **"How do you decide two records are the same person?"** A fixed points rubric. Each field
+  lands on one named level worth fixed points, for example a nickname is +5.6 and a day/month
+  swap is +6.9. Start at −10, and +4.2 or more links them. Open any record link to see its
+  breakdown, or "How scoring works" for the whole table.
 - **"Why not machine learning for matching?"** Fellegi–Sunter is explainable. We can tell a
   nurse exactly why two records were linked, and in healthcare that matters more than a black
   box. The m/u weights could later be learned from data, for example with the EM algorithm.

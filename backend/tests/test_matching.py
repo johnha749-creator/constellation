@@ -1,7 +1,7 @@
 from itertools import combinations
 
-from app.matching import (blocking_keys, candidate_pairs, cluster_records, compare_records,
-                          jaro_winkler, score_pairs, soundex)
+from app.matching import (bigrams, blocking_keys, candidate_pairs, cluster_records, compare_records, dice,
+                          score_pairs, soundex)
 from app.records import PatientRecord, load_dataset
 from app.seed import write_seed
 
@@ -10,8 +10,11 @@ def record(given, family, birth_date, gender="female", phone=None, postal_code=N
     return PatientRecord(rid, "h", None, given, family, birth_date, gender, phone, postal_code, None)
 
 
-def test_jaro_winkler_known_value():
-    assert round(jaro_winkler("martha", "marhta"), 3) == 0.961
+def test_letter_pair_similarity():
+    assert bigrams("ann") == {"_a", "an", "nn", "n_"}
+    assert dice(bigrams("gonzalez"), bigrams("gonzalez")) == 1.0
+    assert round(dice(bigrams("gonzales"), bigrams("gonzalez")), 2) == 0.78  # one letter off
+    assert dice(bigrams("smith"), bigrams("patel")) == 0.0
 
 
 def test_nickname_and_punctuation_still_match():
