@@ -3,6 +3,7 @@
 Run from the backend folder:  uvicorn app.main:app --reload --port 8000
 """
 from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
 
 from .constellation import PatientIndex
 from .seed import DATA_DIR, ensure_seed_data
@@ -36,9 +37,25 @@ def constellation(cluster_id: str) -> dict:
     return graph
 
 
+class MatchReview(BaseModel):
+    record_a: str
+    record_b: str
+    same_person: bool
+
+
+@app.post("/api/matches/review")
+def review_match(review: MatchReview) -> dict:
+    """A clinician confirms or rejects a possible match between two records."""
+    patient_id = index.review_match(review.record_a, review.record_b, review.same_person)
+    if patient_id is None:
+        raise HTTPException(status_code=404, detail="Unknown record")
+    return {"patient_id": patient_id}
+
+
 @app.post("/api/reload")
 def reload() -> dict:
-    """Re-read the JSON files in backend/data after you edit them, without restarting."""
+    """Re-read the JSON files in backend/data after you edit them, without restarting.
+    Also clears match reviews, which resets the demo."""
     global index
     index = PatientIndex(DATA_DIR)
     return {"patients": len(index.clusters)}

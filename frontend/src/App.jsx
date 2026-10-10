@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { fetchConstellation, fetchHospitals, fetchPatients } from "./api";
+import { fetchConstellation, fetchHospitals, fetchPatients, resetDemo, reviewMatch } from "./api";
 import PatientList from "./components/PatientList";
 import Constellation from "./components/Constellation";
 import DetailPanel from "./components/DetailPanel";
@@ -14,6 +14,7 @@ export default function App() {
   const [selectedConflictId, setSelectedConflictId] = useState(null);
   const [selectedNodeId, setSelectedNodeId] = useState(null);
   const [error, setError] = useState(null);
+  const [version, setVersion] = useState(0); // bumped when a review changes the data
 
   useEffect(() => {
     Promise.all([fetchHospitals(), fetchPatients()])
@@ -37,7 +38,32 @@ export default function App() {
     return () => {
       cancelled = true;
     };
-  }, [selectedId]);
+  }, [selectedId, version]);
+
+  // A clinician decides whether two records are the same person; the constellation re-forms.
+  const decideMatch = async (recordA, recordB, samePerson) => {
+    try {
+      const { patient_id } = await reviewMatch(recordA, recordB, samePerson);
+      setPatients(await fetchPatients());
+      setSelectedId(patient_id);
+      setVersion((v) => v + 1);
+    } catch (e) {
+      setError(e.message);
+    }
+  };
+
+  // Undo every match review so the demo can be run again from the start.
+  const reset = async () => {
+    try {
+      await resetDemo();
+      const list = await fetchPatients();
+      setPatients(list);
+      if (!list.some((p) => p.id === selectedId)) setSelectedId(list[0]?.id ?? null);
+      setVersion((v) => v + 1);
+    } catch (e) {
+      setError(e.message);
+    }
+  };
 
   const hospitalInfo = useMemo(
     () =>
@@ -64,6 +90,9 @@ export default function App() {
         </div>
         <div className="tagline">Connecting the scattered records of one patient, and the conflicts between them</div>
         <div className="disclaimer">Synthetic data only. Not for clinical use.</div>
+        <button className="reset" onClick={reset} title="Undo match reviews and start the demo over">
+          Reset demo
+        </button>
       </header>
 
       {error && (
@@ -99,6 +128,7 @@ export default function App() {
           selectedConflictId={selectedConflictId}
           selectedNodeId={selectedNodeId}
           onSelectConflict={selectConflict}
+          onDecideMatch={decideMatch}
         />
       </main>
     </div>

@@ -69,6 +69,7 @@ class MatchResult:
     probability: float
     tier: str  # "match" | "review" | "non-match"
     fields: list[FieldComparison]
+    reviewed: str | None = None  # "same" | "different" once a clinician has decided
 
     @property
     def reasons(self) -> list[str]:
@@ -246,12 +247,20 @@ class Cluster:
         return any(e.result.tier == "review" for e in self.edges)
 
 
-def cluster_records(records: list[PatientRecord]) -> list[Cluster]:
+def cluster_records(records: list[PatientRecord],
+                    reviews: dict[frozenset[str], bool] | None = None) -> list[Cluster]:
+    """Group records into people. `reviews` holds clinicians' decisions on record pairs
+    (True = same person) and overrides the score for those pairs."""
+    reviews = reviews or {}
     # Compares every pair: fine for a demo. At real scale, add "blocking" (only compare
     # records that share e.g. birth year or a phonetic code of the last name).
     edges = []
     for a, b in combinations(records, 2):
         result = compare_records(a, b)
+        decision = reviews.get(frozenset((a.id, b.id)))
+        if decision is not None:
+            result.tier = "match" if decision else "non-match"
+            result.reviewed = "same" if decision else "different"
         if result.tier != "non-match":
             edges.append(MatchEdge(a.id, b.id, result))
 

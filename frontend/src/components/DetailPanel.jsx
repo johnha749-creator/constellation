@@ -6,7 +6,22 @@ const TYPE_LABELS = {
   dose_mismatch: "Dose mismatch",
 };
 
-export default function DetailPanel({ graph, hospitals, selectedConflictId, selectedNodeId, onSelectConflict }) {
+const KIND_LABELS = { record: "Patient record", allergy: "Allergy", medication: "Medication", condition: "Condition" };
+
+const MATCH_HEADINGS = {
+  same: "Confirmed same person by a clinician",
+  match: "Same person",
+  review: "Possible match, needs review",
+};
+
+export default function DetailPanel({
+  graph,
+  hospitals,
+  selectedConflictId,
+  selectedNodeId,
+  onSelectConflict,
+  onDecideMatch,
+}) {
   if (!graph) return <aside className="panel" />;
 
   const { patient, conflicts } = graph;
@@ -26,7 +41,7 @@ export default function DetailPanel({ graph, hospitals, selectedConflictId, sele
 
       {node && (
         <section className="card node-card" style={{ borderColor: hospitals[node.hospital]?.color }}>
-          <div className="card-kicker">{node.kind === "record" ? "Patient record" : node.kind}</div>
+          <div className="card-kicker">{KIND_LABELS[node.kind]}</div>
           <h3>{node.label}</h3>
           <dl>
             {node.details.map(([label, value]) => (
@@ -69,8 +84,7 @@ export default function DetailPanel({ graph, hospitals, selectedConflictId, sele
       {matches.map((m) => (
         <div key={`${m.source}-${m.target}`} className={`card match-card ${m.tier}`}>
           <div className="card-kicker">
-            {m.tier === "match" ? "Same person" : "Possible match, needs review"} ·{" "}
-            {(m.probability * 100).toFixed(1)}%
+            {MATCH_HEADINGS[m.reviewed ?? m.tier]} · scored {(m.probability * 100).toFixed(1)}%
           </div>
           <div className="small">
             {hospitals[nodesById[m.source]?.hospital]?.name} ↔ {hospitals[nodesById[m.target]?.hospital]?.name}
@@ -81,6 +95,16 @@ export default function DetailPanel({ graph, hospitals, selectedConflictId, sele
               <li key={r}>{r}</li>
             ))}
           </ul>
+          {m.tier === "review" && (
+            <div className="review-actions">
+              <button className="btn confirm" onClick={() => onDecideMatch(m.source, m.target, true)}>
+                Same person
+              </button>
+              <button className="btn reject" onClick={() => onDecideMatch(m.source, m.target, false)}>
+                Different people
+              </button>
+            </div>
+          )}
         </div>
       ))}
     </aside>

@@ -20,7 +20,14 @@ class PatientIndex:
         self.items_by_record: dict[str, list[ClinicalItem]] = defaultdict(list)
         for item in self.dataset.items:
             self.items_by_record[item.record_id].append(item)
-        self.clusters = {c.id: c for c in cluster_records(list(self.dataset.records.values()))}
+        # Clinicians' decisions on possible matches. In memory only, so a restart (or
+        # /api/reload) resets the demo.
+        self.reviews: dict[frozenset[str], bool] = {}
+        self._link()
+
+    def _link(self) -> None:
+        records = list(self.dataset.records.values())
+        self.clusters = {c.id: c for c in cluster_records(records, self.reviews)}
         self.conflicts: dict[str, list[Conflict]] = {
             c.id: find_conflicts(
                 [item for rid in c.record_ids for item in self.items_by_record[rid]],
@@ -29,6 +36,17 @@ class PatientIndex:
             )
             for c in self.clusters.values()
         }
+
+    def review_match(self, record_a: str, record_b: str, same_person: bool) -> str | None:
+        """Apply a clinician's decision about two records. Returns record_a's patient id."""
+        if record_a not in self.dataset.records or record_b not in self.dataset.records:
+            return None
+        self.reviews[frozenset((record_a, record_b))] = same_person
+        self._link()
+        return self.cluster_of(record_a).id
+
+    def cluster_of(self, record_id: str) -> Cluster:
+        return next(c for c in self.clusters.values() if record_id in c.record_ids)
 
     def summaries(self, query: str | None = None) -> list[dict]:
         clusters = self.clusters.values()
@@ -79,7 +97,7 @@ class PatientIndex:
             links.append({
                 "source": edge.a, "target": edge.b, "kind": "match",
                 "probability": round(edge.result.probability, 4), "tier": edge.result.tier,
-                "agrees_on": edge.result.agrees_on, "reasons": edge.result.reasons,
+                "reviewed": edge.result.reviewed, "agrees_on": edge.result.agrees_on, "reasons": edge.result.reasons,
             })
         conflicts = self.conflicts[cluster.id]
         for conflict in conflicts:

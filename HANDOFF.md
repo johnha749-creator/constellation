@@ -32,9 +32,9 @@ still unsolved:
 
 | Part | State |
 |---|---|
-| Backend (Python, FastAPI) | Done. **13/13 tests pass.** |
+| Backend (Python, FastAPI) | Done. **16/16 tests pass.** |
 | Synthetic data (3 hospitals, FHIR R4 JSON) | Generated in `backend/data/` |
-| Frontend (React, Vite, D3) | Written, and `vite build` succeeds. **Not yet looked at in a browser.** Do this first. |
+| Frontend (React, Vite, D3) | Done and **checked in a browser**: the constellation forms, zooms to fit, conflicts highlight on click, the "Same person / Different people" review works, and "Reset demo" works. |
 | Git / GitHub | Pushed to a **private** repo: https://github.com/johnha749-creator/constellation. Make it public before submitting to Devpost. |
 | README, slides, pitch | Not started (the pitch notes below are a head start) |
 
@@ -64,8 +64,10 @@ Then open http://localhost:5173. Vite forwards `/api/*` to the backend on port 8
 
 **Tests:** run `pytest` from inside `backend/`, with the virtual environment active.
 
-> **Windows gotcha:** `python` can open the Microsoft Store instead of running Python.
-> Use `py` instead, as shown above.
+> **Windows gotchas:**
+> - `python` can open the Microsoft Store instead of running Python. Use `py` instead, as shown above.
+> - `--reload` sometimes says "Reloading..." and then keeps running the **old** code. If a new
+>   API route returns 404, stop the backend (Ctrl+C) and start it again.
 
 ## How it works
 
@@ -116,7 +118,8 @@ main.py (FastAPI)  ──/api──▶  React app: PatientList │ Constellation
 | GET | `/api/hospitals` | `[{id, name}]` |
 | GET | `/api/patients?q=` | Patient summaries, most urgent first |
 | GET | `/api/patients/{id}/constellation` | `{patient, hospitals, nodes, links, conflicts}` |
-| POST | `/api/reload` | Re-reads `backend/data/*.json` after hand edits, without a restart |
+| POST | `/api/matches/review` | Body `{record_a, record_b, same_person}`. A clinician confirms or rejects a possible match. Returns `{patient_id}` |
+| POST | `/api/reload` | Re-reads `backend/data/*.json` and clears all match reviews. The "Reset demo" button calls this. |
 
 ### Matching
 
@@ -139,6 +142,10 @@ This is a Fellegi–Sunter style scorer, a standard method for record linkage. J
   - **below 50%:** different people
 - **Unconfirmed conflicts:** a conflict that only exists because of a "review" link is marked
   `unconfirmed`, so we never claim certainty we don't have.
+- **Human in the loop:** a "review" link shows **Same person / Different people** buttons.
+  "Same person" turns the link into a confirmed match, so its conflicts become confirmed.
+  "Different people" splits the records into two patients. Decisions are kept in memory only;
+  restarting the backend or clicking "Reset demo" clears them.
 - **Scaling note:** every pair of records is compared, which is fine for a demo. At real scale
   you add "blocking": only compare records that share, say, a birth year or a phonetic code of
   the last name.
@@ -173,22 +180,17 @@ The other 18 patients are filler, and a test checks that they produce **zero** c
 
 ## Next steps (in order)
 
-1. **Run the frontend and look at it.** It compiles but has never been seen in a browser.
-   Check:
-   - the hospitals are spread around a circle
-   - the animation plays: stars appear, then gold match lines, then pulsing red conflict lines
-   - clicking a red line highlights the matching card in the right panel
-   - nothing overlaps badly at laptop size
-2. **Share the GitHub repo.** It's already pushed (private). Add your partner as a
+1. **Share the GitHub repo.** It's already pushed (private). Add your partner as a
    collaborator (repo Settings → Collaborators), and make the repo public before submitting
    to Devpost so the judges can see it.
-3. **Write the README** for judges: the problem, a screenshot or GIF, how to run it, and the
+2. **Write the README** for judges: the problem, a screenshot or GIF, how to run it, and the
    architecture.
-4. **Pick one polish item:**
-   - a "Confirm match" button on review-tier links, which turns Aisha's conflicts from
-     unconfirmed to confirmed
+3. **Rehearse the demo below** on the laptop and screen you'll present on. Use "Reset demo"
+   between run-throughs.
+4. **Optional polish:**
    - a medication-reconciliation summary ("what this patient is actually taking")
    - uploading a new hospital's FHIR bundle live during the demo
+   - item labels can still overlap on busy patients like Maria; drag a star to tidy up live
 5. **Stretch goals** (only if time is left):
    - [Synthea](https://github.com/synthetichealth/synthea) generated patients
    - RxNorm codes instead of matching drug names as text
@@ -207,7 +209,8 @@ The other 18 patients are filler, and a test checks that they produce **zero** c
 5. **Click the other Maria Gonzalez:** "Same name, different person. We didn't merge them."
    Naive name matching would have.
 6. **Aisha:** "When we're not sure, we say so." Point to the "needs review" link and the
-   unconfirmed conflicts.
+   unconfirmed conflicts. Then click **Same person**: the link turns gold and the conflicts
+   become confirmed. "A human stays in control."
 7. **Close:** "Built on FHIR, the real standard hospitals use, so it could sit on top of TEFCA
    or Epic's network."
 

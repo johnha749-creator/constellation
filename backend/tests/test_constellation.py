@@ -62,6 +62,29 @@ def test_filler_patients_have_no_conflicts(index):
             assert sum(summary["conflicts"].values()) == 0, summary
 
 
+@pytest.fixture
+def fresh_index(tmp_path):
+    write_seed(tmp_path)
+    return PatientIndex(tmp_path)
+
+
+def test_confirming_a_possible_match_confirms_its_conflicts(fresh_index):
+    a, b = fresh_index.find("Aisha Patel", "1990-07-22").record_ids
+    patient_id = fresh_index.review_match(a, b, same_person=True)
+    assert not fresh_index.clusters[patient_id].needs_review
+    conflicts = fresh_index.conflicts[patient_id]
+    assert conflicts and not any(c.unconfirmed for c in conflicts)
+
+
+def test_rejecting_a_possible_match_splits_the_patient(fresh_index):
+    a, b = fresh_index.find("Aisha Patel", "1990-07-22").record_ids
+    fresh_index.review_match(a, b, same_person=False)
+    for record_id in (a, b):
+        cluster = fresh_index.cluster_of(record_id)
+        assert cluster.record_ids == [record_id]
+        assert fresh_index.conflicts[cluster.id] == []
+
+
 def test_api_serves_a_constellation():
     client = TestClient(app)
     patients = client.get("/api/patients").json()
@@ -70,3 +93,20 @@ def test_api_serves_a_constellation():
     node_ids = {n["id"] for n in graph["nodes"]}
     assert all(link["source"] in node_ids and link["target"] in node_ids for link in graph["links"])
     assert client.get("/api/patients/nope/constellation").status_code == 404
+
+
+def test_api_match_review_round_trip():
+    client = TestClient(app)
+    aisha = next(p for p in client.get("/api/patients").json() if p["needs_review"])
+    graph = client.get(f"/api/patients/{aisha['id']}/constellation").json()
+    link = next(l for l in graph["links"] if l["kind"] == "match" and l["tier"] == "review")
+    try:
+        res = client.post("/api/matches/review",
+                          json={"record_a": link["source"], "record_b": link["target"], "same_person": True})
+        graph = client.get(f"/api/patients/{res.json()['patient_id']}/constellation").json()
+        confirmed = next(l for l in graph["links"] if l["kind"] == "match")
+        assert (confirmed["tier"], confirmed["reviewed"]) == ("match", "same")
+        bad = {"record_a": "nope", "record_b": link["target"], "same_person": True}
+        assert client.post("/api/matches/review", json=bad).status_code == 404
+    finally:
+        client.post("/api/reload")  # don't leak the review into other tests
