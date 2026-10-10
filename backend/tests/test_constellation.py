@@ -62,6 +62,18 @@ def test_filler_patients_have_no_conflicts(index):
             assert sum(summary["conflicts"].values()) == 0, summary
 
 
+def test_stats_add_up_to_the_patient_list(index):
+    stats, summaries = index.stats(), index.summaries()
+    assert stats["hospitals"] == 3
+    assert stats["patients"] == len(summaries)
+    assert stats["records"] == sum(s["record_count"] for s in summaries) == len(index.dataset.records)
+    assert stats["needs_review"] == sum(s["needs_review"] for s in summaries) == 1  # Aisha
+    for severity in ("high", "moderate", "low"):
+        assert stats["conflicts"][severity] == sum(s["conflicts"][severity] for s in summaries)
+    # Every demo conflict spans two hospitals.
+    assert stats["cross_hospital_conflicts"] == sum(stats["conflicts"].values()) > 0
+
+
 @pytest.fixture
 def fresh_index(tmp_path):
     write_seed(tmp_path)
@@ -93,6 +105,15 @@ def test_api_serves_a_constellation():
     node_ids = {n["id"] for n in graph["nodes"]}
     assert all(link["source"] in node_ids and link["target"] in node_ids for link in graph["links"])
     assert client.get("/api/patients/nope/constellation").status_code == 404
+
+
+def test_api_serves_stats():
+    client = TestClient(app)
+    stats = client.get("/api/stats").json()
+    assert set(stats) == {"hospitals", "records", "patients", "needs_review", "conflicts",
+                          "cross_hospital_conflicts"}
+    assert set(stats["conflicts"]) == {"high", "moderate", "low"}
+    assert stats["patients"] == len(client.get("/api/patients").json())
 
 
 def test_api_match_review_round_trip():

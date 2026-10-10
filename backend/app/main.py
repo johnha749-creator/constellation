@@ -25,6 +25,11 @@ def hospitals() -> list[dict]:
     return [{"id": h.id, "name": h.name} for h in index.dataset.hospitals.values()]
 
 
+@app.get("/api/stats")
+def stats() -> dict:
+    return index.stats()
+
+
 @app.get("/api/patients")
 def patients(q: str | None = None) -> list[dict]:
     return index.summaries(q)

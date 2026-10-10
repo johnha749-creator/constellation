@@ -59,6 +59,19 @@ class PatientIndex:
         return sorted(summaries, key=lambda s: (-s["conflicts"]["high"], -s["conflicts"]["moderate"],
                                                 -s["conflicts"]["low"], s["name"]))
 
+    def stats(self) -> dict:
+        """Totals across every patient, for the header."""
+        conflicts = [c for found in self.conflicts.values() for c in found]
+        counts = Counter(c.severity for c in conflicts)
+        return {
+            "hospitals": len(self.dataset.hospitals),
+            "records": sum(len(c.record_ids) for c in self.clusters.values()),
+            "patients": len(self.clusters),
+            "needs_review": sum(c.needs_review for c in self.clusters.values()),
+            "conflicts": {s: counts.get(s, 0) for s in ("high", "moderate", "low")},
+            "cross_hospital_conflicts": sum(c.cross_hospital for c in conflicts),
+        }
+
     def find(self, name: str, birth_date: str) -> Cluster | None:
         """The patient with a record under this exact name and birth date (handy in tests)."""
         for cluster in self.clusters.values():
