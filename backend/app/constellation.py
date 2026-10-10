@@ -29,13 +29,13 @@ class PatientIndex:
         records = list(self.dataset.records.values())
         self.clusters = {c.id: c for c in cluster_records(records, self.reviews)}
         self.conflicts: dict[str, list[Conflict]] = {
-            c.id: find_conflicts(
-                [item for rid in c.record_ids for item in self.items_by_record[rid]],
-                self.dataset.hospitals,
-                c.confirmed,
-            )
+            c.id: find_conflicts(self.items_of(c), self.dataset.hospitals, c.confirmed)
             for c in self.clusters.values()
         }
+
+    def items_of(self, cluster: Cluster) -> list[ClinicalItem]:
+        """Every allergy, medication and condition on any of the patient's records."""
+        return [item for rid in cluster.record_ids for item in self.items_by_record[rid]]
 
     def review_match(self, record_a: str, record_b: str, same_person: bool) -> str | None:
         """Apply a clinician's decision about two records. Returns record_a's patient id."""

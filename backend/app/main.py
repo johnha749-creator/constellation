@@ -6,6 +6,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 from .constellation import PatientIndex
+from .reconcile import medication_list
 from .seed import DATA_DIR, ensure_seed_data
 
 ensure_seed_data(DATA_DIR)
@@ -35,6 +36,15 @@ def constellation(cluster_id: str) -> dict:
     if graph is None:
         raise HTTPException(status_code=404, detail="Unknown patient")
     return graph
+
+
+@app.get("/api/patients/{cluster_id}/medications")
+def medications(cluster_id: str) -> list[dict]:
+    """What the patient is actually taking, across every hospital."""
+    cluster = index.clusters.get(cluster_id)
+    if cluster is None:
+        raise HTTPException(status_code=404, detail="Unknown patient")
+    return medication_list(index.items_of(cluster), index.conflicts[cluster.id])
 
 
 class MatchReview(BaseModel):
