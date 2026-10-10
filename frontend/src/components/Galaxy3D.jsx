@@ -245,6 +245,7 @@ export default function Galaxy3D({ patients, hospitals, selectedId, onSelect, le
 }
 
 function worstSeverity(p) {
+  if (!p.conflicts) return "none"; // this role can't see clinical data
   if (p.conflicts.high) return "high";
   if (p.conflicts.moderate) return "moderate";
   if (p.conflicts.low) return "low";
@@ -253,8 +254,12 @@ function worstSeverity(p) {
 
 function describe(p, hospitals) {
   const where = p.hospitals.map((h) => hospitals[h]?.name ?? h).join(", ");
-  const { high, moderate, low } = p.conflicts;
-  const issues = high + moderate + low ? `${high} high, ${moderate} moderate, ${low} low` : "no conflicts";
+  const { high, moderate, low } = p.conflicts ?? { high: 0, moderate: 0, low: 0 };
+  const issues = !p.conflicts
+    ? "clinical details hidden for your role"
+    : high + moderate + low
+      ? `${high} high, ${moderate} moderate, ${low} low`
+      : "no conflicts";
   return `${p.name} (${p.birth_date}) · ${p.record_count} records at ${where} · ${issues}${p.needs_review ? " · match needs review" : ""}`;
 }
 

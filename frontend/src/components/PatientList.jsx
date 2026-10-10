@@ -41,9 +41,9 @@ export default function PatientList({ patients, hospitals, selectedId, onSelect 
                 </span>
               </div>
               <div className="badges">
-                {p.conflicts.high > 0 && <span className="badge high">{p.conflicts.high} high</span>}
-                {p.conflicts.moderate > 0 && <span className="badge moderate">{p.conflicts.moderate} moderate</span>}
-                {p.conflicts.low > 0 && <span className="badge low">{p.conflicts.low} low</span>}
+                {p.conflicts?.high > 0 && <span className="badge high">{p.conflicts.high} high</span>}
+                {p.conflicts?.moderate > 0 && <span className="badge moderate">{p.conflicts.moderate} moderate</span>}
+                {p.conflicts?.low > 0 && <span className="badge low">{p.conflicts.low} low</span>}
                 {p.needs_review && <span className="badge review">match needs review</span>}
               </div>
             </button>

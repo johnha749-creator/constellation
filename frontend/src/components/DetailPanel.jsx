@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { CONFLICT_TYPE_LABELS } from "../labels";
+import { CONFLICT_TYPE_LABELS, REVEAL_CONTACTS, REVIEW_MATCHES } from "../labels";
 import MedicationList from "./MedicationList";
 import ReviewHistory from "./ReviewHistory";
 
@@ -11,8 +11,8 @@ const REVEAL_REASONS = [
   "Care coordination with another hospital",
 ];
 
-/** Minimum necessary: contact details stay hidden until the clinician says why they need them. */
-function ContactAccess({ visible, onReveal }) {
+/** Contact details stay hidden until the clinician says why they need them ("break the glass"). */
+function ContactAccess({ visible, allowed, onReveal }) {
   const [open, setOpen] = useState(false);
   const [reason, setReason] = useState(REVEAL_REASONS[0]);
   const [other, setOther] = useState("");
@@ -32,7 +32,7 @@ function ContactAccess({ visible, onReveal }) {
     <div className="privacy-bar">
       <div className="privacy-row">
         <span>Phone, address, ZIP and record numbers are hidden.</span>
-        {!open && (
+        {!open && allowed && (
           <button className="btn small-btn" onClick={() => setOpen(true)}>
             Show…
           </button>
@@ -92,6 +92,8 @@ export default function DetailPanel({
   onSelectNode,
   onDecideMatch,
   onRevealContacts,
+  can,
+  roleLabel,
 }) {
   const [tab, setTab] = useState("conflicts");
   const panelRef = useRef(null);
@@ -110,11 +112,13 @@ export default function DetailPanel({
   const node = graph.nodes.find((n) => n.id === selectedNodeId);
   const nodesById = Object.fromEntries(graph.nodes.map((n) => [n.id, n]));
   const matches = graph.links.filter((l) => l.kind === "match");
-  const tabs = [
-    ["conflicts", "Conflicts", conflicts.length],
-    ["medications", "Medications", medications?.list.length ?? "…"],
-    ["links", "Record links", matches.length, patient.needs_review],
-  ];
+  // Roles without clinical access (registration) only get the identity tab.
+  const clinical = graph.clinical_visible !== false;
+  const linksTab = ["links", "Record links", matches.length, patient.needs_review];
+  const tabs = clinical
+    ? [["conflicts", "Conflicts", conflicts.length], ["medications", "Medications", medications?.list.length ?? "…"], linksTab]
+    : [linksTab];
+  const activeTab = clinical ? tab : "links";
 
   return (
     <aside className="panel" ref={panelRef}>
@@ -126,7 +130,19 @@ export default function DetailPanel({
         </div>
       </div>
 
-      <ContactAccess key={patient.id} visible={graph.contact_details_visible} onReveal={onRevealContacts} />
+      <ContactAccess
+        key={patient.id}
+        visible={graph.contact_details_visible}
+        allowed={can(REVEAL_CONTACTS)}
+        onReveal={onRevealContacts}
+      />
+
+      {!clinical && (
+        <div className="privacy-bar">
+          Allergies, medications, diagnoses and conflicts are hidden for your role ({roleLabel}). You can
+          still check and fix which records belong to this patient.
+        </div>
+      )}
 
       {node && (
         <section className="card node-card" style={{ borderColor: hospitals[node.hospital]?.color }}>
@@ -148,8 +164,8 @@ export default function DetailPanel({
           <button
             key={id}
             role="tab"
-            aria-selected={tab === id}
-            className={`tab ${tab === id ? "active" : ""}`}
+            aria-selected={activeTab === id}
+            className={`tab ${activeTab === id ? "active" : ""}`}
             onClick={() => setTab(id)}
           >
             {label} <span className="tab-count">{count}</span>
@@ -158,7 +174,7 @@ export default function DetailPanel({
         ))}
       </div>
 
-      {tab === "conflicts" && (
+      {activeTab === "conflicts" && (
         <>
           {conflicts.length === 0 && <p className="muted">No conflicts found across these records.</p>}
           {conflicts.map((c) => (
@@ -182,7 +198,7 @@ export default function DetailPanel({
         </>
       )}
 
-      {tab === "medications" && (
+      {activeTab === "medications" && (
         <MedicationList
           medications={medications}
           conflicts={conflicts}
@@ -193,7 +209,7 @@ export default function DetailPanel({
         />
       )}
 
-      {tab === "links" && (
+      {activeTab === "links" && (
         <>
           {matches.length === 0 && <p className="muted">Only one record found for this patient.</p>}
           {matches.map((m) => (
@@ -210,7 +226,7 @@ export default function DetailPanel({
                   <li key={r}>{r}</li>
                 ))}
               </ul>
-              {m.tier === "review" && (
+              {m.tier === "review" && can(REVIEW_MATCHES) && (
                 <div className="review-actions">
                   <button className="btn confirm" onClick={() => onDecideMatch(m.source, m.target, true)}>
                     Same person
@@ -219,6 +235,9 @@ export default function DetailPanel({
                     Different people
                   </button>
                 </div>
+              )}
+              {m.tier === "review" && !can(REVIEW_MATCHES) && (
+                <p className="muted small">A physician or registration clerk needs to decide this match.</p>
               )}
             </div>
           ))}

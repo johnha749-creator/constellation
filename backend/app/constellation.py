@@ -140,14 +140,18 @@ class PatientIndex:
         return {"id": record_id, "name": record.display_name,
                 "hospital": self.dataset.hospitals[record.hospital_id].name}
 
-    def summaries(self, query: str | None = None) -> list[dict]:
+    def summaries(self, query: str | None = None, clinical: bool = True) -> list[dict]:
+        """Patients, most urgent first. Without `clinical` (e.g. for registration staff) conflict
+        counts are left out and the list is alphabetical, since even the order would hint at them."""
         clusters = self.clusters.values()
         if query:
             q = query.strip().lower()
             clusters = [c for c in clusters if any(
                 q in r.display_name.lower() or q in (r.birth_date or "")
                 for r in (self.dataset.records[rid] for rid in c.record_ids))]
-        summaries = [self._summary(c) for c in clusters]
+        summaries = [self._summary(c, clinical) for c in clusters]
+        if not clinical:
+            return sorted(summaries, key=lambda s: s["name"])
         return sorted(summaries, key=lambda s: (-s["conflicts"]["high"], -s["conflicts"]["moderate"],
                                                 -s["conflicts"]["low"], s["name"]))
 
@@ -172,9 +176,11 @@ class PatientIndex:
                 return cluster
         return None
 
-    def constellation(self, cluster_id: str, reveal: bool = False) -> dict | None:
+    def constellation(self, cluster_id: str, reveal: bool = False, clinical: bool = True) -> dict | None:
         """The patient's graph. Contact details (phone, address, ZIP, MRN) are masked everywhere,
-        including inside match explanations, unless `reveal` is set (see privacy.py)."""
+        including inside match explanations, unless `reveal` is set (see privacy.py). Without
+        `clinical`, only the identity part is returned: records and match links, with no allergies,
+        medications, conditions or conflicts."""
         cluster = self.clusters.get(cluster_id)
         if cluster is None:
             return None
@@ -192,7 +198,7 @@ class PatientIndex:
                     ("Date of birth", record.birth_date), ("Sex", record.gender),
                     ("Phone", record.phone), ("Address", record.address), ("ZIP", record.postal_code))],
             })
-            for item in self.items_by_record[rid]:
+            for item in self.items_by_record[rid] if clinical else ():
                 nodes.append({
                     "id": item.id, "kind": item.kind, "hospital": item.hospital_id, "record": record.id,
                     "label": item.text,
@@ -208,15 +214,16 @@ class PatientIndex:
                 "reviewed": edge.result.reviewed, "agrees_on": edge.result.agrees_on,
                 "reasons": [mask(reason) for reason in edge.result.reasons],
             })
-        conflicts = self.conflicts[cluster.id]
+        conflicts = self.conflicts[cluster.id] if clinical else []
         for conflict in conflicts:
             source, target = conflict.item_ids
             links.append({"source": source, "target": target, "kind": "conflict",
                           "severity": conflict.severity, "conflict_id": conflict.id})
         present = {records[rid].hospital_id for rid in cluster.record_ids}
         return {
-            "patient": self._summary(cluster),
+            "patient": self._summary(cluster, clinical),
             "contact_details_visible": reveal,
+            "clinical_visible": clinical,
             "hospitals": [{"id": h.id, "name": h.name} for h in hospitals.values() if h.id in present],
             "nodes": nodes,
             "links": links,
@@ -228,7 +235,7 @@ class PatientIndex:
             } for c in conflicts],
         }
 
-    def _summary(self, cluster: Cluster) -> dict:
+    def _summary(self, cluster: Cluster, clinical: bool = True) -> dict:
         records = [self.dataset.records[rid] for rid in cluster.record_ids]
         # Show the record most others agree with: the majority birth date and last name,
         # then the fullest spelling ("Maria" over "M.", "James" over "Jim", "O'Brien" over "OBrien").
@@ -245,7 +252,7 @@ class PatientIndex:
             "gender": best.gender,
             "hospitals": [h for h in self.dataset.hospitals if h in hospital_ids],
             "record_count": len(records),
-            "conflicts": {s: counts.get(s, 0) for s in ("high", "moderate", "low")},
+            "conflicts": {s: counts.get(s, 0) for s in ("high", "moderate", "low")} if clinical else None,
             "needs_review": cluster.needs_review,
         }
 

@@ -66,7 +66,7 @@ def test_passwords_are_not_kept_in_plain_text():
     assert not any(p.encode() in stored for p in passwords)
 
 
-# --- minimum necessary and access logging
+# --- masked contact details and access logging
 
 def test_masks():
     assert mask_phone("415-555-0142") == "•••-•••-••42"
@@ -122,3 +122,58 @@ def test_reveal_expires():
     assert not grants.allowed("nurse.ruiz", ["a"])
     clock.now = 16 * 60
     assert not grants.allowed("dr.lee", ["a"])
+
+
+# --- role-based access
+
+def signed_in_as(username):
+    account = next(a for a in json.loads(USERS_PATH.read_text(encoding="utf-8"))["accounts"]
+                   if a["username"] == username)
+    client = TestClient(app)
+    assert client.post("/api/login", json={"username": username, "password": account["password"]}).status_code == 200
+    return client
+
+
+def test_every_demo_account_has_a_known_role():
+    accounts = json.loads(USERS_PATH.read_text(encoding="utf-8"))["accounts"]
+    assert {a["role"] for a in accounts} == {"physician", "nurse", "registration"}
+
+
+def test_registration_sees_identity_but_no_clinical_data():
+    clerk = signed_in_as("reg.kim")
+    assert clerk.get("/api/me").json()["user"]["role"] == "Registration clerk"
+    patients = clerk.get("/api/patients").json()
+    assert all(p["conflicts"] is None for p in patients)
+    assert [p["name"] for p in patients] == sorted(p["name"] for p in patients)  # order mustn't hint either
+    maria = next(p for p in patients if p["name"] == "Maria Gonzalez" and p["birth_date"] == "1958-03-14")
+    graph = clerk.get(f"/api/patients/{maria['id']}/constellation").json()
+    assert graph["clinical_visible"] is False and graph["conflicts"] == []
+    assert {n["kind"] for n in graph["nodes"]} == {"record"}
+    assert "Penicillin" not in str(graph) and "Amoxicillin" not in str(graph)
+    assert any(link["kind"] == "match" for link in graph["links"])  # but can work on identity
+    assert clerk.get(f"/api/patients/{maria['id']}/medications").status_code == 403
+
+
+def test_nurses_see_clinical_data_but_cannot_decide_matches():
+    nurse = signed_in_as("nurse.ruiz")
+    aisha = next(p for p in nurse.get("/api/patients").json() if p["needs_review"])
+    assert aisha["conflicts"]["high"] == 2
+    graph = nurse.get(f"/api/patients/{aisha['id']}/constellation").json()
+    link = next(l for l in graph["links"] if l["kind"] == "match")
+    decision = {"record_a": link["source"], "record_b": link["target"], "same_person": True}
+    response = nurse.post("/api/matches/review", json=decision)
+    assert response.status_code == 403 and "Registered nurse" in response.json()["detail"]
+    assert nurse.post("/api/demo/reset").status_code == 403
+    assert nurse.post(f"/api/patients/{aisha['id']}/reveal", json={"reason": "Calling the patient"}).status_code == 200
+
+
+def test_registration_can_decide_matches():
+    clerk = signed_in_as("reg.kim")
+    aisha = next(p for p in clerk.get("/api/patients").json() if p["needs_review"])
+    graph = clerk.get(f"/api/patients/{aisha['id']}/constellation").json()
+    link = next(l for l in graph["links"] if l["kind"] == "match")
+    try:
+        decision = {"record_a": link["source"], "record_b": link["target"], "same_person": True}
+        assert clerk.post("/api/matches/review", json=decision).status_code == 200
+    finally:
+        clerk.post("/api/demo/reset")

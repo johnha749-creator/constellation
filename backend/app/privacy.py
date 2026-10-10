@@ -1,4 +1,4 @@
-"""Minimum necessary: show only what a clinician needs, and log anything more.
+"""Contact details on a need-to-know basis: hide them until a clinician gives a reason.
 
 Names and birth dates stay visible, because a clinician needs them to know who they're looking
 at. Phone numbers, street addresses, full ZIP codes and medical record numbers are masked until

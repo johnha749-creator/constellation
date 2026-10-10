@@ -15,7 +15,7 @@ import hmac
 import json
 import secrets
 import time
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
@@ -23,15 +23,42 @@ COOKIE = "constellation_session"
 IDLE_TIMEOUT = 15 * 60  # seconds
 _ITERATIONS = 200_000
 
+# What a role is allowed to do.
+VIEW_CLINICAL = "view_clinical"  # allergies, medications, conditions and conflicts
+REVIEW_MATCHES = "review_matches"  # decide whether two records are the same person (and reset the demo)
+REVEAL_CONTACTS = "reveal_contacts"  # unmask phone, address, ZIP and MRN after giving a reason
+
+
+@dataclass(frozen=True)
+class Role:
+    label: str
+    permissions: frozenset[str]
+
+
+# Role-based access (HIPAA Security Rule 164.312(a)(1), 164.308(a)(4)): each job gets what it needs.
+ROLES = {
+    "physician": Role("Physician", frozenset({VIEW_CLINICAL, REVIEW_MATCHES, REVEAL_CONTACTS})),
+    # Nurses treat from the clinical picture, but don't merge or split patient records.
+    "nurse": Role("Registered nurse", frozenset({VIEW_CLINICAL, REVEAL_CONTACTS})),
+    # Registration fixes identity mix-ups and needs contact details to do it, but has no reason
+    # to see diagnoses or medications.
+    "registration": Role("Registration clerk", frozenset({REVIEW_MATCHES, REVEAL_CONTACTS})),
+}
+
 
 @dataclass(frozen=True)
 class User:
     username: str
     name: str
-    role: str
+    role: str  # a key of ROLES
+
+    def can(self, permission: str) -> bool:
+        return permission in ROLES[self.role].permissions
 
     def as_dict(self) -> dict:
-        return asdict(self)
+        role = ROLES[self.role]
+        return {"username": self.username, "name": self.name, "role": role.label, "role_id": self.role,
+                "permissions": sorted(role.permissions)}
 
 
 class Accounts:
@@ -41,6 +68,8 @@ class Accounts:
         self._clock = clock
         self._users: dict[str, tuple[User, bytes, bytes]] = {}  # username -> (user, salt, hash)
         for entry in json.loads(users_file.read_text(encoding="utf-8"))["accounts"]:
+            if entry["role"] not in ROLES:
+                raise ValueError(f"{entry['username']}: unknown role {entry['role']!r}, expected one of {sorted(ROLES)}")
             salt = secrets.token_bytes(16)
             user = User(entry["username"], entry["name"], entry["role"])
             self._users[user.username] = (user, salt, _hash(entry["password"], salt))

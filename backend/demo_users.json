@@ -4,20 +4,27 @@
     {
       "username": "dr.lee",
       "name": "Dr. Lee",
-      "role": "Physician",
-      "password": "nebula-nebula-902"
+      "role": "physician",
+      "password": "nebula"
     },
     {
       "username": "nurse.ruiz",
       "name": "Nurse Ruiz",
-      "role": "Registered nurse",
+      "role": "nurse",
       "password": "nova-orion-907"
     },
     {
       "username": "demo",
       "name": "Demo Clinician",
-      "role": "Physician",
+      "role": "physician",
       "password": "vega-sirius-177"
+    },
+    {
+      "username": "reg.kim",
+      "name": "Sam Kim",
+      "role": "registration",
+      "password": "quasar-vega-127"
     }
-  ]
+  ],
+  "roles": "physician: everything; nurse: clinical data, no match decisions; registration: identity and contact details, no clinical data"
 }

@@ -203,8 +203,16 @@ This is a Fellegi–Sunter style scorer, a standard method for record linkage. J
 
 ### Sign-in and privacy
 
-- **Demo accounts:** `backend/demo_users.json` has three (a physician, a nurse and a generic demo
-  account) with their passwords. They're demo-only; the file says so.
+- **Demo accounts:** `backend/demo_users.json` has four with their passwords: two physicians
+  (`dr.lee`, `demo`), a nurse (`nurse.ruiz`) and a registration clerk (`reg.kim`). They're
+  demo-only; the file says so.
+- **Roles** (`ROLES` in `auth.py`, enforced by the backend):
+  - **Physician:** everything.
+  - **Nurse:** clinical data and "Show…", but no match decisions and no "Reset demo". Review
+    cards say a physician or registration clerk must decide.
+  - **Registration clerk:** identity only. The patient list is alphabetical with no severity
+    badges, only the Record links tab shows, the sky shows just the record stars, and
+    `/medications` returns 403. They can decide matches and use "Show…".
 - **Sessions:** in memory, so **restarting the backend signs everyone out**. A session also ends
   after **15 minutes without activity**; the app then shows the sign-in screen with a message.
 - **Masked contact details:** phone, address, ZIP and MRN show as `•••-•••-••42`, `941••` and so
@@ -303,7 +311,9 @@ The slides are a page in the frontend: with `npm run dev` running, open
    control."
 8. **Privacy (optional, 15 s):** point at the masked phone numbers in the match explanation.
    Click **Show…**, pick a reason, and show the new "Unmasked contact details. Reason: ..." line
-   in the history. "Minimum necessary, and every access is logged."
+   in the history. "HIPAA doesn't even require this for treatment. We hide it anyway, and every
+   access is logged." Optionally sign in as the registration clerk to show that their view has no
+   allergies, medications or conflicts at all.
 9. **Close:** "Built on FHIR, the real standard hospitals use, so it could sit on top of TEFCA
    or Epic's network."
 
@@ -314,11 +324,14 @@ The slides are a page in the frontend: with `npm run dev` running, open
   them.
 - **"HIPAA?" / "Why not real patient data?"** Real records are protected health information, and
   a hackathon isn't a permitted use, so everything is synthetic, which is how health IT is demoed
-  and tested. We built HIPAA Security Rule safeguards in: unique sign-in, automatic logoff,
-  minimum-necessary masking with "break the glass", audit controls and integrity checking. A real
+  and tested. We built in the Security Rule's technical safeguards (45 CFR 164.312): unique
+  sign-in, role-based access, automatic logoff, audit controls and integrity checking. A real
   deployment would run inside the hospital or an HIE under a Business Associate Agreement;
   sharing records between providers for treatment is a permitted disclosure. We don't claim
   "HIPAA compliant": that also takes policies, agreements and a risk assessment.
+- **"Isn't hiding contact details just HIPAA's minimum necessary rule?"** Careful: minimum
+  necessary does *not* apply to sharing for treatment (45 CFR 164.502(b)(2)). Our masking goes
+  beyond what the law requires, as privacy by design.
 - **"Does the matcher have to see names?"** No. With encrypted matching it only sees
   fingerprints (Bloom filters keyed with a secret the hospitals share), and still keeps 99.5%
   recall at 99.97% precision on 20,000 synthetic records.

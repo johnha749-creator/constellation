@@ -12,7 +12,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 from .audit import AuditLog
-from .auth import COOKIE, Accounts, User
+from .auth import COOKIE, REVEAL_CONTACTS, REVIEW_MATCHES, ROLES, VIEW_CLINICAL, Accounts, User
 from .constellation import PatientIndex
 from .privacy import REVEAL_MINUTES, Disclosures
 from .reconcile import medication_list
@@ -51,6 +51,14 @@ async def require_sign_in(request: Request, call_next):
 
 def signed_in(request: Request) -> User:
     return request.state.user
+
+
+def require(request: Request, permission: str) -> User:
+    """The signed-in user, if their role allows `permission`; otherwise 403."""
+    user = signed_in(request)
+    if not user.can(permission):
+        raise HTTPException(status_code=403, detail=f"Your role ({ROLES[user.role].label}) can't do this")
+    return user
 
 
 @app.get("/api/health")
@@ -101,8 +109,8 @@ def stats() -> dict:
 
 
 @app.get("/api/patients")
-def patients(q: str | None = None) -> list[dict]:
-    return index.summaries(q)
+def patients(request: Request, q: str | None = None) -> list[dict]:
+    return index.summaries(q, clinical=signed_in(request).can(VIEW_CLINICAL))
 
 
 @app.get("/api/patients/{cluster_id}/constellation")
@@ -113,7 +121,8 @@ def constellation(cluster_id: str, request: Request) -> dict:
     if cluster is None:
         raise HTTPException(status_code=404, detail="Unknown patient")
     index.log_access(cluster_id, "view", reviewer=user.name, username=user.username)
-    return index.constellation(cluster_id, reveal=disclosures.allowed(user.username, cluster.record_ids))
+    return index.constellation(cluster_id, reveal=disclosures.allowed(user.username, cluster.record_ids),
+                               clinical=user.can(VIEW_CLINICAL))
 
 
 class Reveal(BaseModel):
@@ -124,7 +133,7 @@ class Reveal(BaseModel):
 def reveal(cluster_id: str, body: Reveal, request: Request) -> dict:
     """Break the glass: show this patient's contact details to this clinician for a while,
     after they state why. The reason is logged."""
-    user = signed_in(request)
+    user = require(request, REVEAL_CONTACTS)
     cluster = index.clusters.get(cluster_id)
     if cluster is None:
         raise HTTPException(status_code=404, detail="Unknown patient")
@@ -134,8 +143,9 @@ def reveal(cluster_id: str, body: Reveal, request: Request) -> dict:
 
 
 @app.get("/api/patients/{cluster_id}/medications")
-def medications(cluster_id: str) -> list[dict]:
+def medications(cluster_id: str, request: Request) -> list[dict]:
     """What the patient is actually taking, across every hospital."""
+    require(request, VIEW_CLINICAL)
     cluster = index.clusters.get(cluster_id)
     if cluster is None:
         raise HTTPException(status_code=404, detail="Unknown patient")
@@ -152,7 +162,7 @@ class MatchReview(BaseModel):
 @app.post("/api/matches/review")
 def review_match(review: MatchReview, request: Request) -> dict:
     """The signed-in clinician confirms or rejects a possible match between two records. Logged."""
-    user = signed_in(request)
+    user = require(request, REVIEW_MATCHES)
     patient_id = index.review_match(review.record_a, review.record_b, review.same_person,
                                     reviewer=user.name, username=user.username, note=review.note)
     if patient_id is None:
@@ -163,7 +173,7 @@ def review_match(review: MatchReview, request: Request) -> dict:
 @app.post("/api/demo/reset")
 def reset_demo(request: Request) -> dict:
     """Undo every match decision so the demo can run again. The audit log keeps them."""
-    user = signed_in(request)
+    user = require(request, REVIEW_MATCHES)
     index.reset_reviews(user.name, user.username)
     return {"patients": len(index.clusters)}
 

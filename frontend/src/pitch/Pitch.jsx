@@ -322,8 +322,8 @@ function Privacy() {
   const safeguards = [
     ["Synthetic patients only", "Real records are protected health information. We never touched any."],
     ["Every clinician signs in", "Their own account, and automatic logoff after 15 idle minutes."],
-    ["Minimum necessary", "Phone, address, ZIP and record numbers stay masked until a clinician states a reason."],
-    ["Every access is logged", "Who opened which patient, who unmasked what and why, in the tamper-evident log."],
+    ["Each role sees what its job needs", "Registration fixes identity mix-ups but never sees medications or diagnoses. Nurses can't merge records."],
+    ["Every access is logged", "Contact details stay masked until there's a reason, and who opened what, and why, is in the tamper-evident log."],
   ];
   return (
     <>
@@ -448,7 +448,7 @@ const SLIDES = [
   },
   {
     id: "privacy", Body: Privacy,
-    notes: "We never used real patient data. Instead we built in the safeguards HIPAA asks for: every clinician signs in and is logged out when idle, contact details stay hidden until there's a reason, and every access is logged. And the matcher doesn't even need names: hospitals share encrypted fingerprints, and we still find 99.5% of the links.",
+    notes: "We never used real patient data. Instead we built in the technical safeguards from HIPAA's Security Rule: every clinician signs in and is logged out when idle, each role only sees what its job needs, and every access is logged. We even hide contact details until there's a reason, which HIPAA doesn't require for treatment. And the matcher doesn't need names: hospitals share encrypted fingerprints, and we still find 99.5% of the links.",
   },
   {
     id: "scale", Body: Scale,

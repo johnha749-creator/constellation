@@ -128,17 +128,26 @@ records. Decisions are replayed from the log at startup, so they survive a resta
 **All patients and hospitals in this project are synthetic.** We never used real patient data:
 it's protected health information under HIPAA, and a hackathon isn't a permitted use. We also
 don't claim the prototype is "HIPAA compliant". Compliance also takes policies, agreements and
-risk assessments, not just code. What we did was build in the **technical safeguards** that
-HIPAA's Security Rule asks for:
+risk assessments, not just code. What we did was build in the **technical safeguards** from
+HIPAA's Security Rule:
 
-| Safeguard | In Constellation |
+| Security Rule safeguard (45 CFR) | In Constellation |
 |---|---|
-| Unique user identification | Every clinician signs in with their own account. Passwords are checked against salted PBKDF2 hashes, and the session lives in an HttpOnly, SameSite=Strict cookie. |
-| Automatic logoff | Sessions end after 15 minutes without activity. Signing out clears all patient data from the page. |
-| Minimum necessary | Names and birth dates are shown, because clinicians need them. Phone, address, ZIP and record numbers are masked everywhere, including inside match explanations, until the clinician states a reason ("break the glass"). |
-| Audit controls | Opening a patient, unmasking details and every match decision are logged with who, when and why, and each patient shows its own history. |
-| Integrity | The log is hash-chained, so an edited or deleted entry is detected and ignored. |
-| Transmission security | Cookies are marked `Secure` when served over HTTPS (`CONSTELLATION_HTTPS=1`). A real deployment must use HTTPS. |
+| Unique user identification, §164.312(a)(2)(i) | Every clinician signs in with their own account, and every audit entry names them. |
+| Access control by role, §164.312(a)(1) and §164.308(a)(4) | **Physicians** see everything. **Nurses** see clinical data but can't merge or split patient records. **Registration clerks** can fix identity mix-ups but never see allergies, medications, diagnoses or conflicts. The backend enforces this; it isn't just hidden in the page. |
+| Automatic logoff, §164.312(a)(2)(iii) | Sessions end after 15 minutes without activity. Signing out clears all patient data from the page. |
+| Audit controls, §164.312(b) | Opening a patient, unmasking details and every match decision are logged with who, when and why, and each patient shows its own history. |
+| Integrity, §164.312(c) | The log is hash-chained, so an edited or deleted entry is detected and ignored. |
+| Person authentication, §164.312(d) | Passwords are checked against salted PBKDF2 hashes, and the session lives in an HttpOnly, SameSite=Strict cookie. |
+| Transmission security, §164.312(e) | Cookies are marked `Secure` when served over HTTPS (`CONSTELLATION_HTTPS=1`). A real deployment must use HTTPS. |
+
+**Going beyond the rule: masked contact details.** HIPAA's "minimum necessary" standard does
+*not* apply when providers share information to treat a patient (45 CFR §164.502(b)(2)), so the
+law doesn't require this. We do it anyway, because a clinician reconciling medications rarely
+needs a patient's home address. Names and birth dates are shown, since clinicians need them to
+know who they're looking at. Phone, address, ZIP and record numbers stay masked everywhere,
+including inside match explanations, until the clinician states a reason ("break the glass"),
+which is logged.
 
 **Privacy-preserving matching.** With `CONSTELLATION_MATCHING=private`, records are linked on
 **encrypted fingerprints** instead of names and birth dates, following the Bloom-filter method of
@@ -193,7 +202,8 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173 and sign in with a demo account from `backend/demo_users.json`, or
+Open http://localhost:5173 and sign in with a demo account from `backend/demo_users.json` (try
+`reg.kim`, the registration clerk, to see what a role without clinical access gets), or
 open http://localhost:5173/pitch.html for our pitch deck (F for full screen). Inside `backend/`,
 run the tests with `pytest` and the benchmark with `python -m app.benchmark --records 20000
 --private`.

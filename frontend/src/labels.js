@@ -8,6 +8,11 @@ export const CONFLICT_TYPE_LABELS = {
 
 export const SEVERITY_RANK = { low: 1, moderate: 2, high: 3 };
 
+// Role permissions, as named by the backend (auth.py).
+export const VIEW_CLINICAL = "view_clinical";
+export const REVIEW_MATCHES = "review_matches";
+export const REVEAL_CONTACTS = "reveal_contacts";
+
 const HOSPITAL_PALETTE = ["#7cc6fe", "#f4a7ff", "#9ef0c4", "#ffd29d", "#a5b4fc"];
 
 /** [{id, name}] from /api/hospitals -> {id: {id, name, color}}, colored in API order. */

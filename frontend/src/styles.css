@@ -495,7 +495,7 @@ button {
 /* --- view toggle and the 3D galaxy */
 .view-toggle {
   position: absolute;
-  top: 14px;
+  bottom: 14px; /* the legend sits top-left, so the two never overlap on narrow screens */
   right: 14px;
   display: flex;
   padding: 3px;

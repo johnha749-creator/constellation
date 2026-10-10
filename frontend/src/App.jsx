@@ -18,7 +18,7 @@ import Constellation from "./components/Constellation";
 import DetailPanel from "./components/DetailPanel";
 import Login from "./components/Login";
 import StatsBar from "./components/StatsBar";
-import { withHospitalColors } from "./labels";
+import { REVIEW_MATCHES, VIEW_CLINICAL, withHospitalColors } from "./labels";
 // three.js is large, so the 3D view is only downloaded when someone opens it.
 const Galaxy3D = lazy(() => import("./components/Galaxy3D"));
 
@@ -51,6 +51,8 @@ export default function App() {
 }
 
 function Workspace({ user, matching, onSignedOut }) {
+  // What this user's role allows. The backend enforces the same rules; this only hides controls.
+  const can = (permission) => user.permissions?.includes(permission) ?? false;
   const [hospitals, setHospitals] = useState([]);
   const [patients, setPatients] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
@@ -93,7 +95,7 @@ function Workspace({ user, matching, onSignedOut }) {
 
   useEffect(() => {
     setMedications(null);
-    if (!graph) return;
+    if (!graph || !can(VIEW_CLINICAL)) return;
     let cancelled = false;
     fetchMedications(graph.patient.id, graph)
       .then((m) => !cancelled && setMedications(m))
@@ -205,9 +207,11 @@ function Workspace({ user, matching, onSignedOut }) {
             <span className="session-user" title={`Signed in as ${user.username}`}>
               {user.name} · {user.role}
             </span>
-            <button className="reset" onClick={reset}>
-              Reset demo
-            </button>
+            {can(REVIEW_MATCHES) && (
+              <button className="reset" onClick={reset}>
+                Reset demo
+              </button>
+            )}
             <button className="reset" onClick={signOut}>
               Sign out
             </button>
@@ -265,6 +269,8 @@ function Workspace({ user, matching, onSignedOut }) {
           onSelectNode={selectNode}
           onDecideMatch={decideMatch}
           onRevealContacts={revealContacts}
+          can={can}
+          roleLabel={user.role}
         />
       </main>
     </div>
