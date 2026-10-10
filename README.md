@@ -59,7 +59,7 @@ Each hospital's record is a **star**, and the patient's allergies, medications a
 orbit it. **Gold lines** join records that are the same person. **Red glowing lines** join facts
 that conflict. Every patient becomes a constellation, and the dangerous ones are easy to spot.
 
-| Medications: what is this patient actually taking? | Human review of an uncertain match |
+| Medications: what is this patient actually taking? | Human review of an uncertain match (shown with contact details unmasked; by default the phone numbers read `•••-•••-••29`) |
 |---|---|
 | ![The Medications tab lists each drug, the hospital that prescribed it, and its issues](docs/medications.jpg) | ![An 85% match flagged for review with Same person and Different people buttons](docs/review.jpg) |
 
