@@ -66,6 +66,10 @@ then:
 - **Catches conflicts across hospitals:** allergy vs drug, duplicate drugs, dangerous drug pairs,
   a drug that worsens a diagnosis, and the same drug at different doses. Each one is ranked high,
   moderate or low and explained in plain English, naming the hospital behind each side.
+- **Connects a new hospital live.** Upload its FHIR bundle and Constellation checks the whole
+  file, matches its records against every patient, and reports new dangers. In our demo, Polaris
+  Urgent Care joins and Constellation immediately flags that Kenji Murphy, whose asthma is on file
+  at two other hospitals, was just prescribed propranolol, which can trigger an asthma attack.
 - **Draws every patient as a constellation.** Each hospital record is a star, the patient's
   allergies, medications and conditions orbit it, gold lines join records of the same person,
   and red lines join facts that conflict. A 3D view shows the whole network: hospitals are suns,
@@ -91,7 +95,7 @@ then:
   Editing or deleting an old entry breaks the chain, and the app then ignores everything from
   that point on.
 - **Frontend:** React and Vite, D3 for each patient's constellation, and three.js for the 3D view.
-- **Tests:** 78 pytest tests, including checks that the encrypted and plain matchers agree on
+- **Tests:** 95 pytest tests, including checks that the encrypted and plain matchers agree on
   every candidate pair of 3,000 synthetic records.
 
 ## Challenges we ran into

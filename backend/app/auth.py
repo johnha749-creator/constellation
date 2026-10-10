@@ -27,6 +27,9 @@ _ITERATIONS = 200_000
 VIEW_CLINICAL = "view_clinical"  # allergies, medications, conditions and conflicts
 REVIEW_MATCHES = "review_matches"  # decide whether two records are the same person (and reset the demo)
 REVEAL_CONTACTS = "reveal_contacts"  # unmask phone, address, ZIP and MRN after giving a reason
+# Upload a new hospital's FHIR bundle. A real deployment would give this to an integration
+# administrator; in the demo, physicians can do it so it can be shown live.
+CONNECT_HOSPITALS = "connect_hospitals"
 
 
 @dataclass(frozen=True)
@@ -37,7 +40,7 @@ class Role:
 
 # Role-based access (HIPAA Security Rule 164.312(a)(1), 164.308(a)(4)): each job gets what it needs.
 ROLES = {
-    "physician": Role("Physician", frozenset({VIEW_CLINICAL, REVIEW_MATCHES, REVEAL_CONTACTS})),
+    "physician": Role("Physician", frozenset({VIEW_CLINICAL, REVIEW_MATCHES, REVEAL_CONTACTS, CONNECT_HOSPITALS})),
     # Nurses treat from the clinical picture, but don't merge or split patient records.
     "nurse": Role("Registered nurse", frozenset({VIEW_CLINICAL, REVEAL_CONTACTS})),
     # Registration fixes identity mix-ups and needs contact details to do it, but has no reason

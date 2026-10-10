@@ -6,14 +6,20 @@ medication conflicts. The filler patients make the matching problem realistic an
 should produce no conflicts.
 
 Regenerate the JSON files with:  python -m app.seed
+
+That also writes a fourth hospital, Polaris Urgent Care, for the "Connect hospital" demo. It goes
+to the frontend's public folder rather than data/, so it isn't loaded at startup.
 """
 from __future__ import annotations
 
 import json
 import random
+import re
 from pathlib import Path
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+SAMPLE_PATH = (Path(__file__).resolve().parents[2] / "frontend" / "public" / "samples"
+               / "polaris-urgent-care.json")
 
 # id -> (name, MRN prefix)
 HOSPITALS = {
@@ -217,30 +223,83 @@ def build_bundles(seed: int = 2026) -> dict[str, dict]:
             h = rec["hospital"]
             pid = next_id(h, "pt")
             mrn = f"{HOSPITALS[h][1]}-{rng.randint(100000, 999999)}"
-            subject = {"reference": f"Patient/{pid}"}
-            entries[h].append(_entry(_patient(rec, pid, mrn, h)))
-            for a in rec.get("allergies", []):
-                entries[h].append(_entry({
-                    "resourceType": "AllergyIntolerance", "id": next_id(h, "al"), "patient": subject,
-                    "code": {"text": a["text"]}, "criticality": a["criticality"],
-                    "reaction": [{"manifestation": [{"text": a["reaction"]}]}],
-                    "recordedDate": a["date"],
-                }))
-            for c in rec.get("conditions", []):
-                entries[h].append(_entry({
-                    "resourceType": "Condition", "id": next_id(h, "cd"), "subject": subject,
-                    "clinicalStatus": {"coding": [{
-                        "system": "http://terminology.hl7.org/CodeSystem/condition-clinical", "code": "active"}]},
-                    "code": {"text": c["text"]}, "onsetDateTime": c["date"],
-                }))
-            for m in rec.get("medications", []):
-                entries[h].append(_entry({
-                    "resourceType": "MedicationRequest", "id": next_id(h, "rx"), "status": "active",
-                    "intent": "order", "subject": subject,
-                    "medicationCodeableConcept": {"text": m["name"]},
-                    "dosageInstruction": [{"text": m["dosage"]}], "authoredOn": m["date"],
-                }))
+            entries[h] += _record_entries(rec, pid, mrn, lambda kind, h=h: next_id(h, kind))
     return {h: {"resourceType": "Bundle", "id": h, "type": "collection", "entry": e} for h, e in entries.items()}
+
+
+def build_sample_bundle() -> dict:
+    """Polaris Urgent Care, the hospital connected live in the demo. Three visits:
+
+    - Kenji Murphy has asthma (Lyra and Orion know). He has moved, and Polaris writes his phone
+      differently. Polaris prescribes propranolol for migraines, which can set off an asthma attack
+      and blunts his albuterol inhaler. Before Polaris connects, he has no conflicts at all.
+    - "Bill" Santos is William Santos under a nickname, with no phone on file. Nothing dangerous.
+    - Priya Raman is new to the network, so she becomes a new patient.
+    """
+    known = {}
+    for bundle in build_bundles().values():
+        for entry in bundle["entry"]:
+            r = entry["resource"]
+            if r["resourceType"] == "Patient" and "telecom" in r:
+                known[(r["name"][0]["given"][0], r["name"][0]["family"])] = r
+    kenji, william = known[("Kenji", "Murphy")], known[("William", "Santos")]
+    digits = re.sub(r"\D", "", kenji["telecom"][0]["value"])
+    visits = [
+        {"given": "Kenji", "family": "Murphy", "gender": "male", "birthDate": kenji["birthDate"],
+         "phone": f"({digits[:3]}) {digits[3:6]}-{digits[6:]}", "line": "1450 Noriega St", "postalCode": "94122",
+         "conditions": [condition("Migraine", "2026-10-09")],
+         "medications": [med("Propranolol", "40 mg twice daily", "2026-10-09")]},
+        {"given": "Bill", "family": "Santos", "gender": "male", "birthDate": william["birthDate"],
+         "line": william["address"][0]["line"][0], "postalCode": william["address"][0]["postalCode"],
+         "conditions": [condition("Acute bronchitis", "2026-10-08")],
+         "medications": [med("Azithromycin", "500 mg on day 1, then 250 mg daily for 4 days", "2026-10-08")]},
+        {"given": "Priya", "family": "Raman", "gender": "female", "birthDate": "2001-07-23",
+         "phone": "650-555-0142", "line": "88 Taraval St", "postalCode": "94116",
+         "allergies": [allergy("Shellfish", "Hives", "low", "2026-10-09")],
+         "conditions": [condition("Sprained wrist", "2026-10-09")],
+         "medications": [med("Ibuprofen", "400 mg every 6 hours as needed", "2026-10-09")]},
+    ]
+    rng = random.Random(4)
+    counter = iter(range(1, 1000))
+
+    def next_id(kind: str) -> str:
+        return f"polaris-{kind}-{next(counter):03d}"
+
+    entries = [_entry({"resourceType": "Organization", "id": "polaris-org", "name": "Polaris Urgent Care"})]
+    for visit in visits:
+        entries += _record_entries(dict(visit, hospital="polaris"), next_id("pt"),
+                                   f"PL-{rng.randint(100000, 999999)}", next_id)
+    return {"resourceType": "Bundle", "id": "polaris", "type": "collection", "entry": entries}
+
+
+def _record_entries(rec: dict, pid: str, mrn: str, next_id) -> list[dict]:
+    """One hospital's record of a person as FHIR entries: the Patient, then their allergies,
+    conditions and medications. `next_id(kind)` hands out resource ids."""
+    h = rec["hospital"]
+    subject = {"reference": f"Patient/{pid}"}
+    entries = [_entry(_patient(rec, pid, mrn, h))]
+    for a in rec.get("allergies", []):
+        entries.append(_entry({
+            "resourceType": "AllergyIntolerance", "id": next_id("al"), "patient": subject,
+            "code": {"text": a["text"]}, "criticality": a["criticality"],
+            "reaction": [{"manifestation": [{"text": a["reaction"]}]}],
+            "recordedDate": a["date"],
+        }))
+    for c in rec.get("conditions", []):
+        entries.append(_entry({
+            "resourceType": "Condition", "id": next_id("cd"), "subject": subject,
+            "clinicalStatus": {"coding": [{
+                "system": "http://terminology.hl7.org/CodeSystem/condition-clinical", "code": "active"}]},
+            "code": {"text": c["text"]}, "onsetDateTime": c["date"],
+        }))
+    for m in rec.get("medications", []):
+        entries.append(_entry({
+            "resourceType": "MedicationRequest", "id": next_id("rx"), "status": "active",
+            "intent": "order", "subject": subject,
+            "medicationCodeableConcept": {"text": m["name"]},
+            "dosageInstruction": [{"text": m["dosage"]}], "authoredOn": m["date"],
+        }))
+    return entries
 
 
 def _patient(rec: dict, pid: str, mrn: str, hospital: str) -> dict:
@@ -267,6 +326,11 @@ def write_seed(data_dir: Path = DATA_DIR) -> None:
         (data_dir / f"{hospital}.json").write_text(json.dumps(bundle, indent=2), encoding="utf-8")
 
 
+def write_sample(path: Path = SAMPLE_PATH) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(build_sample_bundle(), indent=2), encoding="utf-8")
+
+
 def ensure_seed_data(data_dir: Path = DATA_DIR) -> None:
     if not any(data_dir.glob("*.json")):
         write_seed(data_dir)
@@ -274,4 +338,5 @@ def ensure_seed_data(data_dir: Path = DATA_DIR) -> None:
 
 if __name__ == "__main__":
     write_seed()
-    print(f"Wrote {len(HOSPITALS)} hospital bundles to {DATA_DIR}")
+    write_sample()
+    print(f"Wrote {len(HOSPITALS)} hospital bundles to {DATA_DIR}, and the Polaris sample to {SAMPLE_PATH}")

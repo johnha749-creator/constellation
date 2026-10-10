@@ -57,6 +57,26 @@ export async function fetchMedications(id, graph) {
 export const fetchStats = (patients, hospitals) =>
   fetchOrPreview("/api/stats", () => statsFromPatients(patients, hospitals));
 
+/** The backend refused an uploaded bundle; `problems` lists why, one sentence each. */
+export class BundleRejectedError extends Error {
+  constructor(message, problems = []) {
+    super(message);
+    this.problems = problems;
+  }
+}
+
+/** Upload a hospital's FHIR bundle, as the file's text. The backend checks it before using any of it. */
+export async function connectHospital(bundleText) {
+  const res = await fetch("/api/hospitals", { method: "POST", headers: { "Content-Type": "application/json" }, body: bundleText });
+  if (res.status === 401) throw new SignedOutError("Not signed in");
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const detail = body.detail ?? `${res.status} ${res.statusText}`;
+    throw new BundleRejectedError(detail.message ?? String(detail), detail.problems ?? []);
+  }
+  return body;
+}
+
 export const fetchPatientAudit = (id) => request(`/api/patients/${encodeURIComponent(id)}/audit`);
 
 // The reviewer is whoever is signed in; the backend takes it from the session.

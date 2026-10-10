@@ -34,6 +34,7 @@ DRUGS: dict[str, set[str]] = {
     "spironolactone": {"potassium_sparing_diuretic"},
     "amlodipine": {"calcium_channel_blocker"},
     "metoprolol": {"beta_blocker"},
+    "propranolol": {"beta_blocker", "nonselective_beta_blocker"},
     "atorvastatin": {"statin"},
     "simvastatin": {"statin", "cyp3a4_statin"},
     "warfarin": {"anticoagulant"},
@@ -63,6 +64,7 @@ CLASS_LABELS = {
     "ssri": "SSRI",
     "statin": "statin",
     "beta_blocker": "beta blocker",
+    "nonselective_beta_blocker": "non-selective beta blocker",
     "ppi": "proton pump inhibitor",
 }
 
@@ -105,6 +107,8 @@ INTERACTIONS = [
      "NSAIDs blunt blood-pressure control and can injure the kidneys alongside ACE inhibitors."),
     ("ace_inhibitor", "arb", "moderate",
      "Dual RAAS blockade raises the risk of kidney injury and high potassium."),
+    ("nonselective_beta_blocker", "beta_agonist", "moderate",
+     "Propranolol blocks the airway-opening effect of rescue inhalers such as albuterol."),
 ]
 
 # (keyword in the condition, drug class, severity, why it matters)
@@ -112,6 +116,8 @@ CONDITION_RULES = [
     ("kidney disease", "nsaid", "moderate", "NSAIDs can worsen kidney function in chronic kidney disease."),
     ("peptic ulcer", "nsaid", "high", "NSAIDs can make ulcers bleed."),
     ("peptic ulcer", "anticoagulant", "moderate", "Anticoagulants raise the risk of ulcer bleeding."),
+    ("asthma", "nonselective_beta_blocker", "high",
+     "Non-selective beta blockers such as propranolol can trigger a severe asthma attack."),
 ]
 
 

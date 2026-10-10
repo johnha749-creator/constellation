@@ -5,8 +5,11 @@ import re
 from collections import Counter, defaultdict
 from pathlib import Path
 
+from . import pprl
 from .audit import AuditLog
 from .conflicts import Conflict, find_conflicts
+from .connect import read_bundle
+from .knowledge import SEVERITY_RANK
 from .matching import Cluster, candidate_pairs, cluster_records, compare_records, score_pairs
 from .pprl import compare_encoded, link_privately
 from .privacy import masker
@@ -40,6 +43,7 @@ class PatientIndex:
         self.audit = audit or AuditLog()
         self.reviews = self.audit.current_reviews()
         self._conflict_cache: dict[frozenset, list[Conflict]] = {}
+        self.connected: list[str] = []  # hospitals added while running (connect_hospital)
         self._link()
 
     def _link(self) -> None:
@@ -60,6 +64,59 @@ class PatientIndex:
             self.conflicts[cluster.id] = found
             for rid in cluster.record_ids:
                 self._cluster_of[rid] = cluster.id
+
+    def connect_hospital(self, bundle: object, reviewer: str = "Unknown reviewer",
+                         username: str | None = None) -> dict:
+        """Add a new hospital's FHIR bundle while running: match its records against every patient,
+        re-check the patients it touches, and log it. Raises connect.BundleError, changing nothing,
+        if the bundle can't be used. Uploads live in memory only, so a restart drops them."""
+        hospital, records, items = read_bundle(bundle, self.dataset)
+        self.dataset.hospitals[hospital.id] = hospital
+        self.dataset.records.update((r.id, r) for r in records)
+        self.dataset.items.extend(items)
+        for item in items:
+            self.items_by_record[item.record_id].append(item)
+        self.connected.append(hospital.id)
+
+        # Only pairs that include a new record need scoring; every other score is cached.
+        new_ids = {r.id for r in records}
+        if self.matching == "private":
+            self._subjects.update((r.id, pprl.encode(r)) for r in records)
+            pairs = pprl.candidate_pairs(self._subjects.values())
+        else:  # standard matching scores the records themselves (the same dict as dataset.records)
+            pairs = candidate_pairs(self._subjects.values())
+        new_pairs = [pair for pair in pairs if pair[0] in new_ids or pair[1] in new_ids]
+        self.scored.update(score_pairs(self._subjects, new_pairs, self._compare))
+
+        self.audit.record_connect(hospital.id, hospital.name, sorted(new_ids), reviewer=reviewer, username=username)
+        self._link()
+        return self._connect_report(hospital.id, new_ids, {item.id for item in items}, len(new_pairs))
+
+    def _connect_report(self, hospital_id: str, new_ids: set[str], new_items: set[str], compared: int) -> dict:
+        """What connecting a hospital changed: which records joined patients we already knew, and
+        any conflicts that involve the new hospital's data."""
+        joined = review = 0
+        for rid in new_ids:
+            cluster = self.cluster_of(rid)
+            others = [r for r in cluster.record_ids if r not in new_ids]
+            if others:
+                joined += 1
+                review += not any(cluster.confirmed(rid, other) for other in others)
+        touched = {self._cluster_of[rid] for rid in new_ids}
+        new_conflicts = sorted(
+            ({"patient_id": cid, "patient": self._summary(self.clusters[cid])["name"], "severity": c.severity,
+              "title": c.title, "cross_hospital": c.cross_hospital, "unconfirmed": c.unconfirmed}
+             for cid in touched for c in self.conflicts[cid] if new_items & set(c.item_ids)),
+            key=lambda c: (-SEVERITY_RANK[c["severity"]], c["patient"]))
+        return {
+            "hospital": {"id": hospital_id, "name": self.dataset.hospitals[hospital_id].name},
+            "records": len(new_ids),
+            "matched": joined,
+            "needs_review": review,
+            "new_patients": sum(all(r in new_ids for r in self.clusters[cid].record_ids) for cid in touched),
+            "pairs_compared": compared,
+            "new_conflicts": new_conflicts,
+        }
 
     def items_of(self, cluster: Cluster) -> list[ClinicalItem]:
         """Every allergy, medication and condition on any of the patient's records."""
@@ -128,7 +185,7 @@ class PatientIndex:
     def _describe(self, event: dict) -> dict:
         """An audit entry, with readable names for the records it mentions."""
         described = {k: event.get(k) for k in ("seq", "at", "action", "reviewer", "username", "decision",
-                                               "previous", "score", "note", "reason", "hash")}
+                                               "previous", "score", "note", "reason", "hospital", "hash")}
         if event["action"] == "review":
             described["records"] = [self._record_label(event[k]) for k in ("record_a", "record_b")]
         return described

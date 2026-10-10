@@ -32,7 +32,7 @@ still unsolved:
 
 | Part | State |
 |---|---|
-| Backend (Python, FastAPI) | Done, including the partner's `/medications` and `/api/stats` endpoints and two extra demo stories, blocking for scale, the audit trail, clinician sign-in with roles, masked contact details with access logging, encrypted (privacy-preserving) matching, and the points rubric for matches. **78/78 tests pass.** |
+| Backend (Python, FastAPI) | Done, including the partner's `/medications` and `/api/stats` endpoints and two extra demo stories, blocking for scale, the audit trail, clinician sign-in with roles, masked contact details with access logging, encrypted (privacy-preserving) matching, the points rubric for matches, and "Connect hospital" (upload a FHIR bundle live). **95/95 tests pass.** |
 | Synthetic data (3 hospitals, FHIR R4 JSON) | Generated in `backend/data/` |
 | Frontend (React, Vite, D3) | Done and **checked in a browser**: the constellation forms, zooms to fit, conflicts highlight on click, the "Same person / Different people" review works, "Reset demo" works, and the Summary tab compiles each patient's chart. |
 | Git / GitHub | Pushed to a **private** repo: https://github.com/johnha749-creator/constellation. Make it public before submitting to Devpost. |
@@ -97,8 +97,9 @@ main.py (FastAPI)  ──/api──▶  React app: PatientList │ Constellation
 | File | What it does |
 |---|---|
 | `main.py` | API routes (listed below) |
-| `seed.py` | Generates the synthetic hospitals and patients. **Edit demo stories here.** |
-| `records.py` | Loads FHIR bundles into Python dataclasses |
+| `seed.py` | Generates the synthetic hospitals and patients, plus the Polaris sample for "Connect hospital". **Edit demo stories here.** |
+| `records.py` | Loads FHIR bundles into Python dataclasses (`parse_bundle` reads one bundle) |
+| `connect.py` | Checks an uploaded hospital bundle as a whole before any of it is used, and lists the problems if it's unusable |
 | `matching.py` | Record linkage, including blocking (see "Matching" below) |
 | `audit.py` | The hash-chained audit log of match decisions and patient access (see "Audit trail" below) |
 | `auth.py` | Sign-in: demo accounts, PBKDF2 password checks, sessions that end after 15 idle minutes |
@@ -122,6 +123,7 @@ main.py (FastAPI)  ──/api──▶  React app: PatientList │ Constellation
 | `components/PatientList.jsx` | Search and patient list with severity badges |
 | `components/DetailPanel.jsx` | Patient header, selected-star details, and four tabs: Summary, Conflicts, Medications, Record links |
 | `components/PatientSummary.jsx`, `summary.js` | Summary tab: one combined chart (allergies, conditions, medications) with each item's hospitals, tagging items only one hospital knew about and items from an unconfirmed match |
+| `components/ConnectHospital.jsx` | The "Connect hospital" dialog: upload a FHIR bundle (or the Polaris sample) and see what matched and any new conflicts |
 | `components/MedicationList.jsx` | Medications tab: each drug, every hospital that prescribed it, and its issues |
 | `pitch/Pitch.jsx`, `pitch/pitch.css` | The pitch deck at `/pitch.html` (see "The pitch deck" below) |
 | `components/ReviewHistory.jsx` | Record links tab: this patient's access and review history, and the log's integrity check |
@@ -142,6 +144,7 @@ main.py (FastAPI)  ──/api──▶  React app: PatientList │ Constellation
 | GET | `/api/me` | The signed-in user, or 401 |
 | POST | `/api/patients/{id}/reveal` | Body `{reason}`. Unmasks this patient's contact details for this user for 15 minutes; logged |
 | GET | `/api/hospitals` | `[{id, name}]` |
+| POST | `/api/hospitals` | Body: a FHIR R4 Bundle (JSON, up to 5 MB). Connects a new hospital: checks the whole bundle (400 with `detail.problems` if it's unusable), scores only pairs that include a new record, logs it. Returns `{hospital, records, matched, needs_review, new_patients, pairs_compared, new_conflicts}`. Physicians only. In memory until a restart or reset. |
 | GET | `/api/patients?q=` | Patient summaries, most urgent first |
 | GET | `/api/stats` | Totals for the header |
 | GET | `/api/patients/{id}/constellation` | `{patient, hospitals, nodes, links, conflicts}` |
@@ -149,7 +152,7 @@ main.py (FastAPI)  ──/api──▶  React app: PatientList │ Constellation
 | GET | `/api/patients/{id}/audit` | This patient's decisions, newest first, plus `verified` / `first_bad_seq` |
 | GET | `/api/audit?limit=` | The whole audit log, newest first, plus the integrity check |
 | POST | `/api/matches/review` | Body `{record_a, record_b, same_person, note?}`. The signed-in clinician confirms or rejects a possible match; logged under their account. Returns `{patient_id}` |
-| POST | `/api/demo/reset` | Undoes every decision by adding a reset entry to the log. The "Reset demo" button calls this. |
+| POST | `/api/demo/reset` | Undoes every decision by adding a reset entry to the log, and disconnects hospitals uploaded while running. The "Reset demo" button calls this. |
 
 **Every route except `/api/health` and `/api/login` returns 401 unless someone is signed in.**
 Opening a patient (`/constellation`) is logged as a view, and phone, address, ZIP and MRN in it are
@@ -223,7 +226,7 @@ about it.
   (`dr.lee`, `demo`), a nurse (`nurse.ruiz`) and a registration clerk (`reg.kim`). They're
   demo-only; the file says so.
 - **Roles** (`ROLES` in `auth.py`, enforced by the backend):
-  - **Physician:** everything.
+  - **Physician:** everything, including **Connect hospital**.
   - **Nurse:** clinical data and "Show…", but no match decisions and no "Reset demo". Review
     cards say a physician or registration clerk must decide.
   - **Registration clerk:** identity only. The patient list is alphabetical with no severity
@@ -269,6 +272,18 @@ is the same on every machine. The 7 hand-written stories:
 
 The other 18 patients are filler, and a test checks that they produce **zero** conflicts.
 
+**A fourth hospital for the live demo:** `frontend/public/samples/polaris-urgent-care.json`
+(**Polaris Urgent Care**) isn't loaded at startup. "Connect hospital" → "Try the sample" adds it.
+It has three visits:
+- **Kenji Murphy**, who moved and whose phone is written differently, still links automatically.
+  His asthma is known to Lyra and Orion, and Polaris prescribes propranolol for migraines:
+  **1 high** (it can trigger an asthma attack) and **1 moderate** (it blunts his albuterol). Before
+  Polaris connects he has no conflicts.
+- **"Bill" Santos** links to William Santos by nickname. Nothing dangerous.
+- **Priya Raman** is new, so she becomes patient number 26.
+
+"Reset demo" disconnects it again. `python -m app.seed` regenerates the file.
+
 - **Regenerate the data:** run `python -m app.seed` from `backend/`. This overwrites the JSON in
   `backend/data/`.
 - **Hand edits:** you can edit those JSON files directly, then call `POST /api/reload`.
@@ -282,7 +297,6 @@ The other 18 patients are filler, and a test checks that they produce **zero** c
 3. **Rehearse the demo below** on the laptop and screen you'll present on. Use "Reset demo"
    between run-throughs.
 4. **Optional polish:**
-   - uploading a new hospital's FHIR bundle live during the demo
    - item labels can still overlap on busy patients like Maria; drag a star to tidy up live
 5. **Stretch goal** (only if time is left): RxNorm codes instead of matching drug names as text.
 6. **Slides and pitch.** Leave at least an hour.
@@ -307,7 +321,8 @@ The slides are a page in the frontend: with `npm run dev` running, open
 
 ## The 2-minute demo
 
-**Right before you present:** sign in (sessions end after 15 idle minutes) and click "Reset demo".
+**Right before you present:** sign in (sessions end after 15 idle minutes) and click "Reset demo"
+(it also disconnects Polaris from your last run-through).
 
 1. **Problem (20 s):** "Hospitals can share records now, but a clinician gets a pile of
    documents from 3 systems. The same patient is spelled 3 ways, and nobody reads the pile."
@@ -326,12 +341,17 @@ The slides are a page in the frontend: with `npm run dev` running, open
    unconfirmed conflicts. Then open the **Record links** tab (it has an amber dot) and click
    **Same person**: the link turns gold and the conflicts become confirmed. "A human stays in
    control."
-9. **Privacy (optional, 15 s):** point at the masked phone numbers in the match explanation.
+9. **Connect a hospital (20 s):** click **Connect hospital**, then **Try the sample: Polaris
+   Urgent Care**. "A fourth hospital joins. Two of its three records matched patients we already
+   knew, and only 4 pairs had to be compared. And there's a new danger: Kenji's asthma is on file
+   at Lyra and Orion, and Polaris just prescribed propranolol, which can trigger an asthma
+   attack." Click the conflict to open Kenji, now with a third star.
+10. **Privacy (optional, 15 s):** point at the masked phone numbers in the match explanation.
    Click **Show…**, pick a reason, and show the new "Unmasked contact details. Reason: ..." line
    in the history. "HIPAA doesn't even require this for treatment. We hide it anyway, and every
    access is logged." Optionally sign in as the registration clerk to show that their view has no
    allergies, medications or conflicts at all.
-10. **Close:** "Built on FHIR, the real standard hospitals use, so it could sit on top of TEFCA
+11. **Close:** "Built on FHIR, the real standard hospitals use, so it could sit on top of TEFCA
    or Epic's network."
 
 ## Likely judge questions

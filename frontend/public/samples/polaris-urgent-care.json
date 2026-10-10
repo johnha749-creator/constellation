@@ -1,0 +1,279 @@
+{
+  "resourceType": "Bundle",
+  "id": "polaris",
+  "type": "collection",
+  "entry": [
+    {
+      "fullUrl": "Organization/polaris-org",
+      "resource": {
+        "resourceType": "Organization",
+        "id": "polaris-org",
+        "name": "Polaris Urgent Care"
+      }
+    },
+    {
+      "fullUrl": "Patient/polaris-pt-001",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "polaris-pt-001",
+        "identifier": [
+          {
+            "system": "urn:hospital:polaris:mrn",
+            "value": "PL-347514"
+          }
+        ],
+        "name": [
+          {
+            "family": "Murphy",
+            "given": [
+              "Kenji"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1959-11-20",
+        "address": [
+          {
+            "line": [
+              "1450 Noriega St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94122"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "(628) 555-0192"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/polaris-cd-002",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "polaris-cd-002",
+        "subject": {
+          "reference": "Patient/polaris-pt-001"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Migraine"
+        },
+        "onsetDateTime": "2026-10-09"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/polaris-rx-003",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "polaris-rx-003",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/polaris-pt-001"
+        },
+        "medicationCodeableConcept": {
+          "text": "Propranolol"
+        },
+        "dosageInstruction": [
+          {
+            "text": "40 mg twice daily"
+          }
+        ],
+        "authoredOn": "2026-10-09"
+      }
+    },
+    {
+      "fullUrl": "Patient/polaris-pt-004",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "polaris-pt-004",
+        "identifier": [
+          {
+            "system": "urn:hospital:polaris:mrn",
+            "value": "PL-418031"
+          }
+        ],
+        "name": [
+          {
+            "family": "Santos",
+            "given": [
+              "Bill"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1976-08-06",
+        "address": [
+          {
+            "line": [
+              "1344 Polk St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94131"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/polaris-cd-005",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "polaris-cd-005",
+        "subject": {
+          "reference": "Patient/polaris-pt-004"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Acute bronchitis"
+        },
+        "onsetDateTime": "2026-10-08"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/polaris-rx-006",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "polaris-rx-006",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/polaris-pt-004"
+        },
+        "medicationCodeableConcept": {
+          "text": "Azithromycin"
+        },
+        "dosageInstruction": [
+          {
+            "text": "500 mg on day 1, then 250 mg daily for 4 days"
+          }
+        ],
+        "authoredOn": "2026-10-08"
+      }
+    },
+    {
+      "fullUrl": "Patient/polaris-pt-007",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "polaris-pt-007",
+        "identifier": [
+          {
+            "system": "urn:hospital:polaris:mrn",
+            "value": "PL-208177"
+          }
+        ],
+        "name": [
+          {
+            "family": "Raman",
+            "given": [
+              "Priya"
+            ]
+          }
+        ],
+        "gender": "female",
+        "birthDate": "2001-07-23",
+        "address": [
+          {
+            "line": [
+              "88 Taraval St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94116"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "650-555-0142"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "AllergyIntolerance/polaris-al-008",
+      "resource": {
+        "resourceType": "AllergyIntolerance",
+        "id": "polaris-al-008",
+        "patient": {
+          "reference": "Patient/polaris-pt-007"
+        },
+        "code": {
+          "text": "Shellfish"
+        },
+        "criticality": "low",
+        "reaction": [
+          {
+            "manifestation": [
+              {
+                "text": "Hives"
+              }
+            ]
+          }
+        ],
+        "recordedDate": "2026-10-09"
+      }
+    },
+    {
+      "fullUrl": "Condition/polaris-cd-009",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "polaris-cd-009",
+        "subject": {
+          "reference": "Patient/polaris-pt-007"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Sprained wrist"
+        },
+        "onsetDateTime": "2026-10-09"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/polaris-rx-010",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "polaris-rx-010",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/polaris-pt-007"
+        },
+        "medicationCodeableConcept": {
+          "text": "Ibuprofen"
+        },
+        "dosageInstruction": [
+          {
+            "text": "400 mg every 6 hours as needed"
+          }
+        ],
+        "authoredOn": "2026-10-09"
+      }
+    }
+  ]
+}

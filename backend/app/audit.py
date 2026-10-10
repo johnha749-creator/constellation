@@ -52,6 +52,12 @@ class AuditLog:
         return self._append({"action": action, "reviewer": reviewer, "username": username,
                              "records": list(record_ids), "reason": reason})
 
+    def record_connect(self, hospital_id: str, hospital_name: str, record_ids: list[str], *, reviewer: str,
+                       username: str | None = None) -> dict:
+        """Someone connected a new hospital, adding these patient records."""
+        return self._append({"action": "connect", "reviewer": reviewer, "username": username,
+                             "hospital": hospital_name, "hospital_id": hospital_id, "records": list(record_ids)})
+
     def current_reviews(self) -> dict[frozenset[str], bool]:
         """Replay the log: the latest decision for each pair since the last reset (True = same).
 

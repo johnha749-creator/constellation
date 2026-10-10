@@ -52,7 +52,13 @@ two problems remain:
    hospital. Items from a match that still needs review are tagged too.
 7. **Lists what the patient is actually taking:** every drug, every hospital that prescribed it,
    and its problems.
-8. **Shows the whole network in 3D** (three.js). Hospitals are suns, and every patient is a
+8. **Connects a new hospital while running.** Upload its FHIR bundle and Constellation checks
+   the whole file first, rejecting it with a plain-English list of problems if it can't be used.
+   It then scores only the record pairs that include a new record, and reports which records
+   matched patients it already knew and any new conflicts. Try the sample, **Polaris Urgent
+   Care**: Kenji Murphy's asthma is on file at two hospitals, and Polaris prescribes propranolol,
+   which can trigger an asthma attack. Before Polaris connects, he has no conflicts at all.
+9. **Shows the whole network in 3D** (three.js). Hospitals are suns, and every patient is a
    star placed between the hospitals that hold their records, glowing red if something is
    wrong. Click a star to fly into that patient's constellation.
 
@@ -214,7 +220,10 @@ thinners, and so on) and lists the dangerous combinations. Each conflict is rank
 | **Robert "Bob" Chen** (1972) | Same statin, different dose at two hospitals |
 
 18 more random patients make the matching realistic, and a test checks that they produce no false
-alarms.
+alarms. A fourth hospital, **Polaris Urgent Care**
+([`frontend/public/samples/polaris-urgent-care.json`](frontend/public/samples/polaris-urgent-care.json)),
+is connected live in the demo: it links Kenji Murphy despite a move and a reformatted phone number,
+links "Bill" Santos by nickname, and adds one new patient.
 
 ## Run it
 

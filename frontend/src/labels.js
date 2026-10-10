@@ -12,6 +12,7 @@ export const SEVERITY_RANK = { low: 1, moderate: 2, high: 3 };
 export const VIEW_CLINICAL = "view_clinical";
 export const REVIEW_MATCHES = "review_matches";
 export const REVEAL_CONTACTS = "reveal_contacts";
+export const CONNECT_HOSPITALS = "connect_hospitals";
 
 const HOSPITAL_PALETTE = ["#7cc6fe", "#f4a7ff", "#9ef0c4", "#ffd29d", "#a5b4fc"];
 

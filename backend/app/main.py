@@ -4,6 +4,7 @@ Run from the backend folder:  uvicorn app.main:app --port 8000
 
 Every route except /api/health and /api/login needs a signed-in clinician (see auth.py).
 """
+import json
 import os
 from pathlib import Path
 
@@ -13,7 +14,9 @@ from pydantic import BaseModel, Field
 
 from . import rubric
 from .audit import AuditLog
-from .auth import COOKIE, REVEAL_CONTACTS, REVIEW_MATCHES, ROLES, VIEW_CLINICAL, Accounts, User
+from .auth import (COOKIE, CONNECT_HOSPITALS, REVEAL_CONTACTS, REVIEW_MATCHES, ROLES, VIEW_CLINICAL, Accounts,
+                   User)
+from .connect import BundleError
 from .constellation import PatientIndex
 from .privacy import REVEAL_MINUTES, Disclosures
 from .reconcile import medication_list
@@ -29,6 +32,7 @@ USERS_PATH = Path(os.environ.get("CONSTELLATION_USERS", BACKEND_DIR / "demo_user
 SECURE_COOKIES = os.environ.get("CONSTELLATION_HTTPS") == "1"
 # "private" links records on encrypted fingerprints only, never names or birth dates (pprl.py).
 MATCHING = os.environ.get("CONSTELLATION_MATCHING", "standard")
+MAX_UPLOAD_BYTES = 5 * 1024 * 1024
 
 ensure_seed_data(DATA_DIR)
 index = PatientIndex(DATA_DIR, AuditLog(AUDIT_PATH), MATCHING)
@@ -110,6 +114,33 @@ def hospitals() -> list[dict]:
     return [{"id": h.id, "name": h.name} for h in index.dataset.hospitals.values()]
 
 
+@app.post("/api/hospitals")
+async def connect_hospital(request: Request) -> dict:
+    """Connect a new hospital: the body is its FHIR R4 Bundle (JSON). Its records are matched
+    against every patient and checked for conflicts. The whole bundle is checked first, and a
+    bad one is rejected with a list of problems. Logged. Kept in memory until a restart or reset."""
+    user = require(request, CONNECT_HOSPITALS)
+    too_big = HTTPException(status_code=413, detail="The file is too big: the limit is 5 MB.")
+    if int(request.headers.get("content-length") or 0) > MAX_UPLOAD_BYTES:
+        raise too_big
+    body = await request.body()
+    if len(body) > MAX_UPLOAD_BYTES:
+        raise too_big
+    try:
+        bundle = json.loads(body)
+    except ValueError:
+        raise HTTPException(status_code=400, detail={
+            "message": "That file isn't valid JSON.", "problems": []}) from None
+    try:
+        report = index.connect_hospital(bundle, reviewer=user.name, username=user.username)
+    except BundleError as e:
+        raise HTTPException(status_code=400, detail={
+            "message": "That bundle can't be connected.", "problems": e.problems}) from None
+    if not user.can(VIEW_CLINICAL):
+        report["new_conflicts"] = None
+    return report
+
+
 @app.get("/api/stats")
 def stats() -> dict:
     return index.stats()
@@ -179,9 +210,13 @@ def review_match(review: MatchReview, request: Request) -> dict:
 
 @app.post("/api/demo/reset")
 def reset_demo(request: Request) -> dict:
-    """Undo every match decision so the demo can run again. The audit log keeps them."""
+    """Undo every match decision, and disconnect hospitals uploaded while running, so the demo
+    can run again. The audit log keeps everything."""
+    global index
     user = require(request, REVIEW_MATCHES)
     index.reset_reviews(user.name, user.username)
+    if index.connected:
+        index = PatientIndex(DATA_DIR, AuditLog(AUDIT_PATH), MATCHING)
     return {"patients": len(index.clusters)}
 
 

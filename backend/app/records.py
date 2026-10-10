@@ -61,17 +61,27 @@ def load_dataset(data_dir: Path) -> Dataset:
     records: dict[str, PatientRecord] = {}
     items: list[ClinicalItem] = []
     for path in sorted(data_dir.glob("*.json")):
-        bundle = json.loads(path.read_text(encoding="utf-8"))
-        hospital_id = bundle["id"]
-        resources = [entry["resource"] for entry in bundle.get("entry", [])]
-        org = next((r for r in resources if r["resourceType"] == "Organization"), None)
-        hospitals[hospital_id] = Hospital(hospital_id, org["name"] if org else hospital_id)
-        for resource in resources:
-            if resource["resourceType"] == "Patient":
-                records[resource["id"]] = _parse_patient(resource, hospital_id)
-            elif item := _parse_item(resource, hospital_id):
-                items.append(item)
+        hospital, bundle_records, bundle_items = parse_bundle(json.loads(path.read_text(encoding="utf-8")))
+        hospitals[hospital.id] = hospital
+        records.update((r.id, r) for r in bundle_records)
+        items.extend(bundle_items)
     return Dataset(hospitals, records, items)
+
+
+def parse_bundle(bundle: dict) -> tuple[Hospital, list[PatientRecord], list[ClinicalItem]]:
+    """One hospital's FHIR bundle: the hospital, its patient records, and their clinical items.
+    The bundle's id is the hospital's id. Resource types we don't use are skipped."""
+    hospital_id = bundle["id"]
+    resources = [entry["resource"] for entry in bundle.get("entry", [])]
+    org = next((r for r in resources if r["resourceType"] == "Organization"), None)
+    hospital = Hospital(hospital_id, org["name"] if org else hospital_id)
+    records, items = [], []
+    for resource in resources:
+        if resource["resourceType"] == "Patient":
+            records.append(_parse_patient(resource, hospital_id))
+        elif item := _parse_item(resource, hospital_id):
+            items.append(item)
+    return hospital, records, items
 
 
 def _parse_patient(r: dict, hospital_id: str) -> PatientRecord:

@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import {
   fetchConstellation,
   fetchHospitals,
@@ -14,12 +14,13 @@ import {
   reviewMatch,
   SignedOutError,
 } from "./api";
+import ConnectHospital from "./components/ConnectHospital";
 import PatientList from "./components/PatientList";
 import Constellation from "./components/Constellation";
 import DetailPanel from "./components/DetailPanel";
 import Login from "./components/Login";
 import StatsBar from "./components/StatsBar";
-import { REVIEW_MATCHES, VIEW_CLINICAL, withHospitalColors } from "./labels";
+import { CONNECT_HOSPITALS, REVIEW_MATCHES, VIEW_CLINICAL, withHospitalColors } from "./labels";
 // three.js is large, so the 3D view is only downloaded when someone opens it.
 const Galaxy3D = lazy(() => import("./components/Galaxy3D"));
 
@@ -67,6 +68,7 @@ function Workspace({ user, matching, onSignedOut }) {
   const [selectedNodeId, setSelectedNodeId] = useState(null);
   const [error, setError] = useState(null);
   const [version, setVersion] = useState(0); // bumped when a review or reveal changes what we see
+  const [connecting, setConnecting] = useState(false); // the "Connect a hospital" dialog is open
 
   // A 401 anywhere means the session ended (usually the 15-minute idle timeout).
   const fail = (e) => (e instanceof SignedOutError ? onSignedOut(TIMED_OUT) : setError(e.message));
@@ -154,11 +156,25 @@ function Workspace({ user, matching, onSignedOut }) {
     }
   };
 
-  // Undo every match review so the demo can be run again from the start.
+  // A new hospital's records were added: the hospitals, the patient list and maybe this patient changed.
+  const hospitalConnected = async () => {
+    try {
+      const [hospitalList, patientList] = await Promise.all([fetchHospitals(), fetchPatients()]);
+      setHospitals(hospitalList);
+      setPatients(patientList);
+      setVersion((v) => v + 1);
+    } catch (e) {
+      fail(e);
+    }
+  };
+  const closeConnect = useCallback(() => setConnecting(false), []);
+
+  // Undo every match review, and disconnect uploaded hospitals, so the demo can run again.
   const reset = async () => {
     try {
       await resetDemo();
-      const list = await fetchPatients();
+      const [hospitalList, list] = await Promise.all([fetchHospitals(), fetchPatients()]);
+      setHospitals(hospitalList);
       setPatients(list);
       if (!list.some((p) => p.id === selectedId)) setSelectedId(list[0]?.id ?? null);
       setVersion((v) => v + 1);
@@ -210,6 +226,11 @@ function Workspace({ user, matching, onSignedOut }) {
             <span className="session-user" title={`Signed in as ${user.username}`}>
               {user.name} · {user.role}
             </span>
+            {can(CONNECT_HOSPITALS) && (
+              <button className="reset" onClick={() => setConnecting(true)}>
+                Connect hospital
+              </button>
+            )}
             {can(REVIEW_MATCHES) && (
               <button className="reset" onClick={reset}>
                 Reset demo
@@ -277,6 +298,18 @@ function Workspace({ user, matching, onSignedOut }) {
           roleLabel={user.role}
         />
       </main>
+
+      {connecting && (
+        <ConnectHospital
+          onClose={closeConnect}
+          onConnected={hospitalConnected}
+          onOpenPatient={(id) => {
+            setConnecting(false);
+            openPatient(id);
+          }}
+          onSignedOut={() => onSignedOut(TIMED_OUT)}
+        />
+      )}
     </div>
   );
 }

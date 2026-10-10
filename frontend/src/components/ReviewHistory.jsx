@@ -50,6 +50,7 @@ function describe(e) {
   if (e.action === "view") return e.count > 1 ? `Opened this patient's records (${e.count} times).` : "Opened this patient's records.";
   if (e.action === "reveal") return `Unmasked contact details. Reason: ${e.reason}`;
   if (e.action === "reset") return "Reset the demo. Match decisions above no longer apply.";
+  if (e.action === "connect") return `Connected ${e.hospital}, which added a record for this patient.`;
   const [a, b] = e.records.map((r) => r.hospital ?? r.id);
   const verdict = e.decision === "same" ? "the same person" : "different people";
   const changed = e.previous ? ` (changed from ${e.previous === "same" ? "same person" : "different people"})` : "";
