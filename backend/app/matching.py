@@ -21,6 +21,12 @@ MATCH_THRESHOLD = 0.95
 REVIEW_THRESHOLD = 0.50
 # Before looking at any field, two random records are very unlikely to be the same person.
 PRIOR_LOG2_ODDS = math.log2(1 / 1000)
+# A phone number, a ZIP and a surname belong to a whole household, so however well they agree
+# they can't show that two records are the same *person*. When the first name or the birth
+# date flatly disagrees, the pair may be twins, or a parent and child with the same name.
+# Such a pair is never linked automatically: its score is capped here and a clinician decides.
+RELATIVE_CAP = 0.90
+PERSONAL_FIELDS = {"first_name": "first names", "birth_date": "dates of birth"}
 
 # field -> (m, u) = P(agree | same person), P(agree | different people)
 FIELD_PARAMS = {
@@ -71,10 +77,11 @@ class MatchResult:
     tier: str  # "match" | "review" | "non-match"
     fields: list[FieldComparison]
     reviewed: str | None = None  # "same" | "different" once a clinician has decided
+    caution: str | None = None  # why a high score was capped (see RELATIVE_CAP)
 
     @property
     def reasons(self) -> list[str]:
-        return [f.note for f in self.fields if f.note]
+        return [f.note for f in self.fields if f.note] + ([self.caution] if self.caution else [])
 
     @property
     def agrees_on(self) -> list[str]:
@@ -92,13 +99,20 @@ def compare_records(a: PatientRecord, b: PatientRecord) -> MatchResult:
     ]
     log2_odds = PRIOR_LOG2_ODDS + sum(f.weight for f in fields)
     probability = 1 / (1 + 2 ** -log2_odds)
+    caution = None
+    differing = [label for field, label in PERSONAL_FIELDS.items()
+                 if any(f.field == field and f.similarity == 0.0 for f in fields)]
+    if differing and probability > RELATIVE_CAP:
+        probability = RELATIVE_CAP
+        caution = (f"Not linked automatically: the {' and '.join(differing)} differ, "
+                   "so this could be a relative in the same household")
     if probability >= MATCH_THRESHOLD:
         tier = "match"
     elif probability >= REVIEW_THRESHOLD:
         tier = "review"
     else:
         tier = "non-match"
-    return MatchResult(probability, tier, fields)
+    return MatchResult(probability, tier, fields, caution=caution)
 
 
 def _weigh(field: str, similarity: float | None, note: str | None) -> FieldComparison:
