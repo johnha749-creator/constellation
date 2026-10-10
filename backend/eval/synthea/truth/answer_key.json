@@ -1,0 +1,2310 @@
+{
+  "source": "Synthea sample patients, split across three hospitals by app.synthea_import",
+  "seed": 2026,
+  "people": {
+    "p001": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p002": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p003": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p004": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p005": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p006": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p007": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p008": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p009": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p010": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p011": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p012": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p013": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p014": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p015": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p016": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p017": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p018": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p019": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p020": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p021": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p022": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p023": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p024": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p025": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p026": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p027": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p028": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p029": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p030": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p031": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p032": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p033": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p034": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p035": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p036": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p037": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p038": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p039": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p040": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p041": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p042": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p043": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p044": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p045": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p046": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p047": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p048": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p049": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p050": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p051": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p052": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p053": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p054": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p055": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p056": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p057": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p058": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p059": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p060": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p061": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p062": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p063": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p064": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p065": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p066": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p067": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p068": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p069": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p070": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p071": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p072": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p073": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p074": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p075": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p076": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p077": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p078": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p079": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p080": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p081": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p082": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p083": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p084": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p085": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p086": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p087": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p088": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p089": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p090": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p091": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p092": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p093": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p094": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p095": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p096": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p097": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p098": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p099": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p100": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p101": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p102": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p103": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p104": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p105": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p106": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p107": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p108": {
+      "kind": "synthea",
+      "relative_of": null
+    },
+    "p107-namesake": {
+      "kind": "namesake",
+      "relative_of": "p107"
+    },
+    "p087-namesake": {
+      "kind": "namesake",
+      "relative_of": "p087"
+    },
+    "p108-namesake": {
+      "kind": "namesake",
+      "relative_of": "p108"
+    },
+    "p092-namesake": {
+      "kind": "namesake",
+      "relative_of": "p092"
+    },
+    "p074-namesake": {
+      "kind": "namesake",
+      "relative_of": "p074"
+    },
+    "p043-namesake": {
+      "kind": "namesake",
+      "relative_of": "p043"
+    },
+    "p062-namesake": {
+      "kind": "namesake",
+      "relative_of": "p062"
+    },
+    "p066-namesake": {
+      "kind": "namesake",
+      "relative_of": "p066"
+    },
+    "p075-namesake": {
+      "kind": "namesake",
+      "relative_of": "p075"
+    },
+    "p045-namesake": {
+      "kind": "namesake",
+      "relative_of": "p045"
+    },
+    "p029-twin": {
+      "kind": "twin",
+      "relative_of": "p029"
+    },
+    "p006-twin": {
+      "kind": "twin",
+      "relative_of": "p006"
+    },
+    "p022-twin": {
+      "kind": "twin",
+      "relative_of": "p022"
+    },
+    "p080-twin": {
+      "kind": "twin",
+      "relative_of": "p080"
+    },
+    "p020-twin": {
+      "kind": "twin",
+      "relative_of": "p020"
+    },
+    "p034-twin": {
+      "kind": "twin",
+      "relative_of": "p034"
+    },
+    "p049-twin": {
+      "kind": "twin",
+      "relative_of": "p049"
+    },
+    "p003-twin": {
+      "kind": "twin",
+      "relative_of": "p003"
+    },
+    "p005-twin": {
+      "kind": "twin",
+      "relative_of": "p005"
+    },
+    "p075-twin": {
+      "kind": "twin",
+      "relative_of": "p075"
+    },
+    "p044-spouse": {
+      "kind": "spouse",
+      "relative_of": "p044"
+    },
+    "p017-spouse": {
+      "kind": "spouse",
+      "relative_of": "p017"
+    },
+    "p034-spouse": {
+      "kind": "spouse",
+      "relative_of": "p034"
+    },
+    "p092-spouse": {
+      "kind": "spouse",
+      "relative_of": "p092"
+    },
+    "p082-spouse": {
+      "kind": "spouse",
+      "relative_of": "p082"
+    },
+    "p023-spouse": {
+      "kind": "spouse",
+      "relative_of": "p023"
+    },
+    "p022-spouse": {
+      "kind": "spouse",
+      "relative_of": "p022"
+    },
+    "p102-spouse": {
+      "kind": "spouse",
+      "relative_of": "p102"
+    },
+    "p043-spouse": {
+      "kind": "spouse",
+      "relative_of": "p043"
+    },
+    "p041-spouse": {
+      "kind": "spouse",
+      "relative_of": "p041"
+    }
+  },
+  "records": {
+    "orion-pt-0001": {
+      "person": "p018",
+      "home": false,
+      "mistakes": []
+    },
+    "orion-pt-0002": {
+      "person": "p035",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0003": {
+      "person": "p087",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0013": {
+      "person": "p088",
+      "home": false,
+      "mistakes": []
+    },
+    "orion-pt-0015": {
+      "person": "p044-spouse",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0029": {
+      "person": "p033",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0033": {
+      "person": "p050",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0034": {
+      "person": "p097",
+      "home": false,
+      "mistakes": []
+    },
+    "orion-pt-0035": {
+      "person": "p070",
+      "home": false,
+      "mistakes": []
+    },
+    "orion-pt-0036": {
+      "person": "p074-namesake",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0039": {
+      "person": "p103",
+      "home": false,
+      "mistakes": []
+    },
+    "orion-pt-0042": {
+      "person": "p005",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0044": {
+      "person": "p022-spouse",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0046": {
+      "person": "p101",
+      "home": false,
+      "mistakes": []
+    },
+    "orion-pt-0047": {
+      "person": "p010",
+      "home": false,
+      "mistakes": [
+        "maiden_name",
+        "moved",
+        "new_phone"
+      ]
+    },
+    "orion-pt-0049": {
+      "person": "p080-twin",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0051": {
+      "person": "p036",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0052": {
+      "person": "p052",
+      "home": false,
+      "mistakes": [
+        "no_phone"
+      ]
+    },
+    "orion-pt-0054": {
+      "person": "p057",
+      "home": false,
+      "mistakes": []
+    },
+    "orion-pt-0055": {
+      "person": "p016",
+      "home": false,
+      "mistakes": [
+        "moved",
+        "new_phone"
+      ]
+    },
+    "orion-pt-0056": {
+      "person": "p083",
+      "home": false,
+      "mistakes": []
+    },
+    "orion-pt-0057": {
+      "person": "p043",
+      "home": false,
+      "mistakes": []
+    },
+    "orion-pt-0063": {
+      "person": "p041-spouse",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0065": {
+      "person": "p090",
+      "home": false,
+      "mistakes": [
+        "maiden_name"
+      ]
+    },
+    "orion-pt-0066": {
+      "person": "p082",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0068": {
+      "person": "p049",
+      "home": false,
+      "mistakes": [
+        "no_phone"
+      ]
+    },
+    "orion-pt-0070": {
+      "person": "p104",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0071": {
+      "person": "p105",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0073": {
+      "person": "p102-spouse",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0083": {
+      "person": "p091",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0085": {
+      "person": "p013",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0086": {
+      "person": "p059",
+      "home": false,
+      "mistakes": []
+    },
+    "orion-pt-0087": {
+      "person": "p060",
+      "home": false,
+      "mistakes": [
+        "birth_date_one_digit_off"
+      ]
+    },
+    "orion-pt-0097": {
+      "person": "p061",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0098": {
+      "person": "p005-twin",
+      "home": false,
+      "mistakes": [
+        "no_phone"
+      ]
+    },
+    "orion-pt-0099": {
+      "person": "p041",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0103": {
+      "person": "p063",
+      "home": false,
+      "mistakes": [
+        "no_phone"
+      ]
+    },
+    "orion-pt-0105": {
+      "person": "p055",
+      "home": false,
+      "mistakes": []
+    },
+    "orion-pt-0106": {
+      "person": "p022",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0111": {
+      "person": "p003",
+      "home": false,
+      "mistakes": []
+    },
+    "orion-pt-0123": {
+      "person": "p051",
+      "home": false,
+      "mistakes": [
+        "first_initial",
+        "moved",
+        "new_phone"
+      ]
+    },
+    "orion-pt-0126": {
+      "person": "p099",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0128": {
+      "person": "p012",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0131": {
+      "person": "p017",
+      "home": false,
+      "mistakes": []
+    },
+    "orion-pt-0136": {
+      "person": "p082-spouse",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0141": {
+      "person": "p092-spouse",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0142": {
+      "person": "p046",
+      "home": false,
+      "mistakes": [
+        "last_name_typo"
+      ]
+    },
+    "orion-pt-0150": {
+      "person": "p042",
+      "home": false,
+      "mistakes": [
+        "no_phone"
+      ]
+    },
+    "orion-pt-0152": {
+      "person": "p043-namesake",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0161": {
+      "person": "p065",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0165": {
+      "person": "p077",
+      "home": false,
+      "mistakes": [
+        "last_name_typo"
+      ]
+    },
+    "orion-pt-0168": {
+      "person": "p022-twin",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0175": {
+      "person": "p100",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0176": {
+      "person": "p074",
+      "home": false,
+      "mistakes": []
+    },
+    "orion-pt-0181": {
+      "person": "p064",
+      "home": false,
+      "mistakes": [
+        "first_name_typo",
+        "no_phone"
+      ]
+    },
+    "orion-pt-0190": {
+      "person": "p080",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0195": {
+      "person": "p069",
+      "home": false,
+      "mistakes": [
+        "middle_name"
+      ]
+    },
+    "orion-pt-0198": {
+      "person": "p044",
+      "home": false,
+      "mistakes": [
+        "maiden_name",
+        "moved"
+      ]
+    },
+    "orion-pt-0199": {
+      "person": "p029",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0209": {
+      "person": "p037",
+      "home": false,
+      "mistakes": []
+    },
+    "orion-pt-0210": {
+      "person": "p076",
+      "home": false,
+      "mistakes": []
+    },
+    "orion-pt-0212": {
+      "person": "p009",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0216": {
+      "person": "p071",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0221": {
+      "person": "p096",
+      "home": false,
+      "mistakes": [
+        "no_phone"
+      ]
+    },
+    "orion-pt-0222": {
+      "person": "p058",
+      "home": false,
+      "mistakes": [
+        "middle_name"
+      ]
+    },
+    "orion-pt-0227": {
+      "person": "p045",
+      "home": false,
+      "mistakes": [
+        "middle_name"
+      ]
+    },
+    "orion-pt-0228": {
+      "person": "p019",
+      "home": false,
+      "mistakes": [
+        "first_initial"
+      ]
+    },
+    "orion-pt-0229": {
+      "person": "p026",
+      "home": false,
+      "mistakes": []
+    },
+    "orion-pt-0238": {
+      "person": "p102",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0242": {
+      "person": "p066-namesake",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0251": {
+      "person": "p066",
+      "home": false,
+      "mistakes": [
+        "maiden_name"
+      ]
+    },
+    "orion-pt-0254": {
+      "person": "p031",
+      "home": false,
+      "mistakes": []
+    },
+    "orion-pt-0255": {
+      "person": "p053",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0257": {
+      "person": "p078",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0260": {
+      "person": "p004",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0273": {
+      "person": "p048",
+      "home": false,
+      "mistakes": [
+        "moved",
+        "new_phone"
+      ]
+    },
+    "orion-pt-0275": {
+      "person": "p072",
+      "home": false,
+      "mistakes": [
+        "moved",
+        "new_phone"
+      ]
+    },
+    "orion-pt-0278": {
+      "person": "p030",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0279": {
+      "person": "p056",
+      "home": false,
+      "mistakes": []
+    },
+    "orion-pt-0280": {
+      "person": "p092",
+      "home": false,
+      "mistakes": []
+    },
+    "orion-pt-0282": {
+      "person": "p092-namesake",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0293": {
+      "person": "p002",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0295": {
+      "person": "p028",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0298": {
+      "person": "p015",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0301": {
+      "person": "p024",
+      "home": false,
+      "mistakes": []
+    },
+    "orion-pt-0302": {
+      "person": "p086",
+      "home": false,
+      "mistakes": []
+    },
+    "orion-pt-0307": {
+      "person": "p049-twin",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0308": {
+      "person": "p089",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0314": {
+      "person": "p106",
+      "home": false,
+      "mistakes": [
+        "middle_name"
+      ]
+    },
+    "orion-pt-0315": {
+      "person": "p032",
+      "home": false,
+      "mistakes": [
+        "maiden_name"
+      ]
+    },
+    "orion-pt-0317": {
+      "person": "p084",
+      "home": false,
+      "mistakes": [
+        "moved"
+      ]
+    },
+    "orion-pt-0319": {
+      "person": "p003-twin",
+      "home": true,
+      "mistakes": []
+    },
+    "orion-pt-0326": {
+      "person": "p047",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0001": {
+      "person": "p024",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0002": {
+      "person": "p016",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0003": {
+      "person": "p005-twin",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0006": {
+      "person": "p059",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0007": {
+      "person": "p073",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0011": {
+      "person": "p069",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0020": {
+      "person": "p022",
+      "home": false,
+      "mistakes": [
+        "maiden_name",
+        "moved"
+      ]
+    },
+    "lyra-pt-0021": {
+      "person": "p032",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0023": {
+      "person": "p020",
+      "home": false,
+      "mistakes": [
+        "first_initial"
+      ]
+    },
+    "lyra-pt-0026": {
+      "person": "p034-twin",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0042": {
+      "person": "p009",
+      "home": false,
+      "mistakes": [
+        "nickname",
+        "moved",
+        "no_phone"
+      ]
+    },
+    "lyra-pt-0044": {
+      "person": "p057",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0056": {
+      "person": "p084",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0058": {
+      "person": "p033",
+      "home": false,
+      "mistakes": [
+        "hyphenated_name",
+        "moved",
+        "new_phone"
+      ]
+    },
+    "lyra-pt-0059": {
+      "person": "p091",
+      "home": false,
+      "mistakes": [
+        "no_phone"
+      ]
+    },
+    "lyra-pt-0063": {
+      "person": "p039",
+      "home": false,
+      "mistakes": []
+    },
+    "lyra-pt-0073": {
+      "person": "p025",
+      "home": false,
+      "mistakes": [
+        "no_phone"
+      ]
+    },
+    "lyra-pt-0086": {
+      "person": "p087",
+      "home": false,
+      "mistakes": []
+    },
+    "lyra-pt-0089": {
+      "person": "p093",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0090": {
+      "person": "p027",
+      "home": false,
+      "mistakes": []
+    },
+    "lyra-pt-0091": {
+      "person": "p020-twin",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0096": {
+      "person": "p097",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0105": {
+      "person": "p090",
+      "home": false,
+      "mistakes": [
+        "maiden_name"
+      ]
+    },
+    "lyra-pt-0107": {
+      "person": "p043-spouse",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0111": {
+      "person": "p100",
+      "home": false,
+      "mistakes": [
+        "last_name_typo"
+      ]
+    },
+    "lyra-pt-0112": {
+      "person": "p068",
+      "home": false,
+      "mistakes": [
+        "first_initial",
+        "no_phone"
+      ]
+    },
+    "lyra-pt-0114": {
+      "person": "p051",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0117": {
+      "person": "p037",
+      "home": false,
+      "mistakes": [
+        "nickname"
+      ]
+    },
+    "lyra-pt-0118": {
+      "person": "p086",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0120": {
+      "person": "p101",
+      "home": false,
+      "mistakes": [
+        "no_phone"
+      ]
+    },
+    "lyra-pt-0121": {
+      "person": "p075-namesake",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0122": {
+      "person": "p034",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0127": {
+      "person": "p071",
+      "home": false,
+      "mistakes": [
+        "moved",
+        "new_phone"
+      ]
+    },
+    "lyra-pt-0129": {
+      "person": "p072",
+      "home": false,
+      "mistakes": [
+        "first_initial"
+      ]
+    },
+    "lyra-pt-0130": {
+      "person": "p056",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0132": {
+      "person": "p040",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0141": {
+      "person": "p042",
+      "home": false,
+      "mistakes": []
+    },
+    "lyra-pt-0142": {
+      "person": "p043",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0143": {
+      "person": "p026",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0145": {
+      "person": "p054",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0159": {
+      "person": "p061",
+      "home": false,
+      "mistakes": [
+        "middle_name"
+      ]
+    },
+    "lyra-pt-0160": {
+      "person": "p058",
+      "home": false,
+      "mistakes": [
+        "middle_name"
+      ]
+    },
+    "lyra-pt-0162": {
+      "person": "p070",
+      "home": false,
+      "mistakes": []
+    },
+    "lyra-pt-0163": {
+      "person": "p031",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0170": {
+      "person": "p108-namesake",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0172": {
+      "person": "p021",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0176": {
+      "person": "p095",
+      "home": false,
+      "mistakes": [
+        "last_name_typo",
+        "moved"
+      ]
+    },
+    "lyra-pt-0178": {
+      "person": "p078",
+      "home": false,
+      "mistakes": [
+        "middle_name",
+        "moved",
+        "new_phone"
+      ]
+    },
+    "lyra-pt-0179": {
+      "person": "p087-namesake",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0185": {
+      "person": "p049",
+      "home": false,
+      "mistakes": []
+    },
+    "lyra-pt-0186": {
+      "person": "p063",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0187": {
+      "person": "p019",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0189": {
+      "person": "p077",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0192": {
+      "person": "p043-namesake",
+      "home": false,
+      "mistakes": [
+        "moved",
+        "new_phone"
+      ]
+    },
+    "lyra-pt-0193": {
+      "person": "p038",
+      "home": false,
+      "mistakes": []
+    },
+    "lyra-pt-0201": {
+      "person": "p011",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0203": {
+      "person": "p048",
+      "home": false,
+      "mistakes": [
+        "middle_name"
+      ]
+    },
+    "lyra-pt-0204": {
+      "person": "p017-spouse",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0207": {
+      "person": "p064",
+      "home": false,
+      "mistakes": []
+    },
+    "lyra-pt-0208": {
+      "person": "p007",
+      "home": false,
+      "mistakes": []
+    },
+    "lyra-pt-0209": {
+      "person": "p041",
+      "home": false,
+      "mistakes": []
+    },
+    "lyra-pt-0211": {
+      "person": "p083",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0213": {
+      "person": "p102",
+      "home": false,
+      "mistakes": [
+        "middle_name",
+        "no_phone"
+      ]
+    },
+    "lyra-pt-0217": {
+      "person": "p108",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0234": {
+      "person": "p053",
+      "home": false,
+      "mistakes": []
+    },
+    "lyra-pt-0235": {
+      "person": "p010",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0238": {
+      "person": "p006",
+      "home": false,
+      "mistakes": [
+        "middle_name"
+      ]
+    },
+    "lyra-pt-0239": {
+      "person": "p012",
+      "home": false,
+      "mistakes": [
+        "hyphenated_name"
+      ]
+    },
+    "lyra-pt-0240": {
+      "person": "p013",
+      "home": false,
+      "mistakes": [
+        "last_name_typo"
+      ]
+    },
+    "lyra-pt-0242": {
+      "person": "p107-namesake",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0245": {
+      "person": "p001",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0247": {
+      "person": "p067",
+      "home": false,
+      "mistakes": [
+        "middle_name"
+      ]
+    },
+    "lyra-pt-0248": {
+      "person": "p062",
+      "home": false,
+      "mistakes": []
+    },
+    "lyra-pt-0249": {
+      "person": "p017",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0253": {
+      "person": "p103",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0255": {
+      "person": "p029",
+      "home": false,
+      "mistakes": [
+        "first_initial"
+      ]
+    },
+    "lyra-pt-0256": {
+      "person": "p034-spouse",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0257": {
+      "person": "p066",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0258": {
+      "person": "p107",
+      "home": false,
+      "mistakes": [
+        "maiden_name"
+      ]
+    },
+    "lyra-pt-0262": {
+      "person": "p023-spouse",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0263": {
+      "person": "p023",
+      "home": false,
+      "mistakes": []
+    },
+    "lyra-pt-0275": {
+      "person": "p094",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0276": {
+      "person": "p014",
+      "home": false,
+      "mistakes": []
+    },
+    "lyra-pt-0278": {
+      "person": "p089",
+      "home": false,
+      "mistakes": [
+        "no_phone"
+      ]
+    },
+    "lyra-pt-0279": {
+      "person": "p075",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0286": {
+      "person": "p006-twin",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0288": {
+      "person": "p081",
+      "home": false,
+      "mistakes": []
+    },
+    "lyra-pt-0289": {
+      "person": "p046",
+      "home": false,
+      "mistakes": [
+        "no_phone"
+      ]
+    },
+    "lyra-pt-0294": {
+      "person": "p096",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0295": {
+      "person": "p028",
+      "home": false,
+      "mistakes": []
+    },
+    "lyra-pt-0309": {
+      "person": "p047",
+      "home": false,
+      "mistakes": [
+        "middle_name",
+        "moved"
+      ]
+    },
+    "lyra-pt-0313": {
+      "person": "p022-spouse",
+      "home": false,
+      "mistakes": []
+    },
+    "lyra-pt-0314": {
+      "person": "p005",
+      "home": false,
+      "mistakes": []
+    },
+    "lyra-pt-0315": {
+      "person": "p045",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0325": {
+      "person": "p045-namesake",
+      "home": true,
+      "mistakes": []
+    },
+    "lyra-pt-0329": {
+      "person": "p105",
+      "home": false,
+      "mistakes": [
+        "moved",
+        "new_phone"
+      ]
+    },
+    "vega-pt-0001": {
+      "person": "p040",
+      "home": false,
+      "mistakes": [
+        "middle_name"
+      ]
+    },
+    "vega-pt-0008": {
+      "person": "p085",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0009": {
+      "person": "p031",
+      "home": false,
+      "mistakes": []
+    },
+    "vega-pt-0011": {
+      "person": "p084",
+      "home": false,
+      "mistakes": []
+    },
+    "vega-pt-0012": {
+      "person": "p009",
+      "home": false,
+      "mistakes": [
+        "maiden_name",
+        "moved",
+        "new_phone"
+      ]
+    },
+    "vega-pt-0013": {
+      "person": "p047",
+      "home": false,
+      "mistakes": [
+        "moved",
+        "new_phone"
+      ]
+    },
+    "vega-pt-0018": {
+      "person": "p099",
+      "home": false,
+      "mistakes": [
+        "middle_name"
+      ]
+    },
+    "vega-pt-0019": {
+      "person": "p024",
+      "home": false,
+      "mistakes": []
+    },
+    "vega-pt-0020": {
+      "person": "p062-namesake",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0028": {
+      "person": "p019",
+      "home": false,
+      "mistakes": [
+        "first_initial"
+      ]
+    },
+    "vega-pt-0030": {
+      "person": "p014",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0041": {
+      "person": "p057",
+      "home": false,
+      "mistakes": []
+    },
+    "vega-pt-0049": {
+      "person": "p106",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0086": {
+      "person": "p092-spouse",
+      "home": false,
+      "mistakes": [
+        "last_name_typo",
+        "birth_date_digits_transposed"
+      ]
+    },
+    "vega-pt-0087": {
+      "person": "p045",
+      "home": false,
+      "mistakes": []
+    },
+    "vega-pt-0088": {
+      "person": "p037",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0089": {
+      "person": "p105",
+      "home": false,
+      "mistakes": [
+        "moved"
+      ]
+    },
+    "vega-pt-0090": {
+      "person": "p075",
+      "home": false,
+      "mistakes": []
+    },
+    "vega-pt-0091": {
+      "person": "p087",
+      "home": false,
+      "mistakes": []
+    },
+    "vega-pt-0093": {
+      "person": "p092-namesake",
+      "home": false,
+      "mistakes": [
+        "last_name_typo"
+      ]
+    },
+    "vega-pt-0094": {
+      "person": "p028",
+      "home": false,
+      "mistakes": []
+    },
+    "vega-pt-0095": {
+      "person": "p069",
+      "home": false,
+      "mistakes": [
+        "no_phone"
+      ]
+    },
+    "vega-pt-0101": {
+      "person": "p044-spouse",
+      "home": false,
+      "mistakes": []
+    },
+    "vega-pt-0102": {
+      "person": "p074",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0108": {
+      "person": "p082",
+      "home": false,
+      "mistakes": []
+    },
+    "vega-pt-0110": {
+      "person": "p081",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0111": {
+      "person": "p022",
+      "home": false,
+      "mistakes": [
+        "moved",
+        "new_phone"
+      ]
+    },
+    "vega-pt-0113": {
+      "person": "p083",
+      "home": false,
+      "mistakes": []
+    },
+    "vega-pt-0117": {
+      "person": "p077",
+      "home": false,
+      "mistakes": []
+    },
+    "vega-pt-0124": {
+      "person": "p015",
+      "home": false,
+      "mistakes": [
+        "first_name_typo"
+      ]
+    },
+    "vega-pt-0125": {
+      "person": "p103",
+      "home": false,
+      "mistakes": []
+    },
+    "vega-pt-0126": {
+      "person": "p035",
+      "home": false,
+      "mistakes": [
+        "no_phone"
+      ]
+    },
+    "vega-pt-0127": {
+      "person": "p027",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0138": {
+      "person": "p078",
+      "home": false,
+      "mistakes": [
+        "no_phone"
+      ]
+    },
+    "vega-pt-0139": {
+      "person": "p025",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0140": {
+      "person": "p029-twin",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0141": {
+      "person": "p093",
+      "home": false,
+      "mistakes": []
+    },
+    "vega-pt-0144": {
+      "person": "p011",
+      "home": false,
+      "mistakes": [
+        "birth_date_one_digit_off"
+      ]
+    },
+    "vega-pt-0147": {
+      "person": "p104",
+      "home": false,
+      "mistakes": []
+    },
+    "vega-pt-0153": {
+      "person": "p061",
+      "home": false,
+      "mistakes": [
+        "middle_name"
+      ]
+    },
+    "vega-pt-0154": {
+      "person": "p090",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0163": {
+      "person": "p075-twin",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0164": {
+      "person": "p088",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0166": {
+      "person": "p056",
+      "home": false,
+      "mistakes": []
+    },
+    "vega-pt-0169": {
+      "person": "p098",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0179": {
+      "person": "p029",
+      "home": false,
+      "mistakes": [
+        "no_phone"
+      ]
+    },
+    "vega-pt-0180": {
+      "person": "p055",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0181": {
+      "person": "p075-namesake",
+      "home": false,
+      "mistakes": []
+    },
+    "vega-pt-0182": {
+      "person": "p108-namesake",
+      "home": false,
+      "mistakes": []
+    },
+    "vega-pt-0183": {
+      "person": "p046",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0193": {
+      "person": "p042",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0194": {
+      "person": "p018",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0198": {
+      "person": "p062",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0203": {
+      "person": "p049",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0208": {
+      "person": "p003",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0210": {
+      "person": "p060",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0218": {
+      "person": "p068",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0234": {
+      "person": "p023",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0241": {
+      "person": "p004",
+      "home": false,
+      "mistakes": [
+        "moved",
+        "new_phone"
+      ]
+    },
+    "vega-pt-0245": {
+      "person": "p039",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0260": {
+      "person": "p032",
+      "home": false,
+      "mistakes": [
+        "maiden_name",
+        "no_phone"
+      ]
+    },
+    "vega-pt-0261": {
+      "person": "p070",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0262": {
+      "person": "p071",
+      "home": false,
+      "mistakes": [
+        "no_phone"
+      ]
+    },
+    "vega-pt-0269": {
+      "person": "p012",
+      "home": false,
+      "mistakes": []
+    },
+    "vega-pt-0274": {
+      "person": "p044",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0280": {
+      "person": "p038",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0290": {
+      "person": "p108",
+      "home": false,
+      "mistakes": [
+        "no_phone"
+      ]
+    },
+    "vega-pt-0295": {
+      "person": "p002",
+      "home": false,
+      "mistakes": []
+    },
+    "vega-pt-0297": {
+      "person": "p095",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0303": {
+      "person": "p003-twin",
+      "home": false,
+      "mistakes": []
+    },
+    "vega-pt-0304": {
+      "person": "p020",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0306": {
+      "person": "p058",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0309": {
+      "person": "p089",
+      "home": false,
+      "mistakes": [
+        "moved",
+        "new_phone"
+      ]
+    },
+    "vega-pt-0310": {
+      "person": "p048",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0325": {
+      "person": "p079",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0332": {
+      "person": "p006",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0335": {
+      "person": "p008",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0339": {
+      "person": "p059",
+      "home": false,
+      "mistakes": [
+        "first_initial"
+      ]
+    },
+    "vega-pt-0340": {
+      "person": "p006-twin",
+      "home": false,
+      "mistakes": []
+    },
+    "vega-pt-0341": {
+      "person": "p092",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0343": {
+      "person": "p064",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0344": {
+      "person": "p076",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0350": {
+      "person": "p101",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0351": {
+      "person": "p007",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0352": {
+      "person": "p072",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0364": {
+      "person": "p052",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0376": {
+      "person": "p107",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0379": {
+      "person": "p067",
+      "home": true,
+      "mistakes": []
+    },
+    "vega-pt-0390": {
+      "person": "p054",
+      "home": false,
+      "mistakes": []
+    },
+    "vega-pt-0391": {
+      "person": "p082-spouse",
+      "home": false,
+      "mistakes": [
+        "nickname",
+        "moved"
+      ]
+    },
+    "vega-pt-0392": {
+      "person": "p013",
+      "home": false,
+      "mistakes": []
+    }
+  },
+  "planted_conflicts": [
+    {
+      "person": "p004",
+      "what": "penicillin allergy, then amoxicillin",
+      "items": [
+        "orion-al-0272",
+        "vega-rx-0244"
+      ]
+    },
+    {
+      "person": "p052",
+      "what": "sulfa antibiotic allergy, then the same antibiotic",
+      "items": [
+        "orion-rx-0053",
+        "vega-al-0375"
+      ]
+    },
+    {
+      "person": "p012",
+      "what": "aspirin allergy, then ibuprofen",
+      "items": [
+        "orion-al-0130",
+        "vega-rx-0273"
+      ]
+    },
+    {
+      "person": "p019",
+      "what": "warfarin, then naproxen",
+      "items": [
+        "lyra-rx-0188",
+        "vega-rx-0029"
+      ]
+    },
+    {
+      "person": "p084",
+      "what": "warfarin, then clopidogrel",
+      "items": [
+        "orion-rx-0318",
+        "lyra-rx-0057"
+      ]
+    },
+    {
+      "person": "p076",
+      "what": "nitroglycerin, then sildenafil",
+      "items": [
+        "orion-rx-0211",
+        "vega-rx-0349"
+      ]
+    },
+    {
+      "person": "p038",
+      "what": "simvastatin, then clarithromycin",
+      "items": [
+        "lyra-rx-0200",
+        "vega-rx-0289"
+      ]
+    },
+    {
+      "person": "p069",
+      "what": "sertraline, then tramadol",
+      "items": [
+        "orion-rx-0197",
+        "lyra-rx-0019"
+      ]
+    },
+    {
+      "person": "p103",
+      "what": "warfarin under its brand name Coumadin, then naproxen",
+      "items": [
+        "orion-rx-0041",
+        "lyra-rx-0254"
+      ]
+    },
+    {
+      "person": "p023",
+      "what": "aspirin allergy, then ibuprofen under its brand name Advil",
+      "items": [
+        "lyra-rx-0274",
+        "vega-al-0240"
+      ]
+    },
+    {
+      "person": "p102",
+      "what": "penicillin allergy, then amoxicillin",
+      "items": [
+        "orion-al-0241",
+        "lyra-rx-0216"
+      ]
+    },
+    {
+      "person": "p048",
+      "what": "sulfa antibiotic allergy, then the same antibiotic",
+      "items": [
+        "orion-rx-0274",
+        "vega-al-0324"
+      ]
+    },
+    {
+      "person": "p026",
+      "what": "aspirin allergy, then ibuprofen",
+      "items": [
+        "orion-rx-0237",
+        "lyra-al-0144"
+      ]
+    },
+    {
+      "person": "p072",
+      "what": "warfarin, then naproxen",
+      "items": [
+        "orion-rx-0277",
+        "vega-rx-0363"
+      ]
+    },
+    {
+      "person": "p082",
+      "what": "warfarin, then clopidogrel",
+      "items": [
+        "orion-rx-0067",
+        "vega-rx-0109"
+      ]
+    },
+    {
+      "person": "p017",
+      "what": "nitroglycerin, then sildenafil",
+      "items": [
+        "orion-rx-0135",
+        "lyra-rx-0252"
+      ]
+    },
+    {
+      "person": "p020",
+      "what": "simvastatin, then clarithromycin",
+      "items": [
+        "lyra-rx-0025",
+        "vega-rx-0305"
+      ]
+    },
+    {
+      "person": "p002",
+      "what": "sertraline, then tramadol",
+      "items": [
+        "orion-rx-0294",
+        "vega-rx-0296"
+      ]
+    },
+    {
+      "person": "p056",
+      "what": "warfarin under its brand name Coumadin, then naproxen",
+      "items": [
+        "lyra-rx-0131",
+        "vega-rx-0168"
+      ]
+    },
+    {
+      "person": "p014",
+      "what": "aspirin allergy, then ibuprofen under its brand name Advil",
+      "items": [
+        "lyra-rx-0277",
+        "vega-al-0040"
+      ]
+    }
+  ]
+}
