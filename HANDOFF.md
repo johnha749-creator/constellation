@@ -32,11 +32,12 @@ still unsolved:
 
 | Part | State |
 |---|---|
-| Backend (Python, FastAPI) | Done. **16/16 tests pass.** |
+| Backend (Python, FastAPI) | Done, including the partner's `/medications` and `/api/stats` endpoints and two extra demo stories. **25/25 tests pass.** |
 | Synthetic data (3 hospitals, FHIR R4 JSON) | Generated in `backend/data/` |
 | Frontend (React, Vite, D3) | Done and **checked in a browser**: the constellation forms, zooms to fit, conflicts highlight on click, the "Same person / Different people" review works, and "Reset demo" works. |
 | Git / GitHub | Pushed to a **private** repo: https://github.com/johnha749-creator/constellation. Make it public before submitting to Devpost. |
-| README, slides, pitch | Not started (the pitch notes below are a head start) |
+| README | Done, with screenshots in `docs/`. **Add your team's names** (see the comment near the top). |
+| Slides, pitch | Not started (the pitch notes below are a head start) |
 
 ## Run it
 
@@ -166,7 +167,7 @@ Severity is high, moderate or low. Each conflict records which hospital each sid
 
 The hospitals are fictional and named after stars: **Orion General Hospital**, **Lyra Medical
 Center** and **Vega Community Clinic**. The filler patients are random but seeded, so the data
-is the same on every machine. The 5 hand-written stories:
+is the same on every machine. The 7 hand-written stories:
 
 | Patient | What it shows |
 |---|---|
@@ -175,6 +176,8 @@ is the same on every machine. The 5 hand-written stories:
 | **James O'Brien** (1947) | "Jim OBrien" at Lyra, and a day/month-swapped DOB at Vega. Warfarin + apixaban + naproxen: **3 high-severity bleeding risks.** |
 | **Aisha Patel / Patel-Khan** (1990) | Married name, moved, new phone, and a DOB typo, so the match is **"needs review" (about 85%)**. Sulfa allergy vs Bactrim, and sertraline + tramadol (serotonin syndrome). Both conflicts are marked *unconfirmed*. |
 | **Robert "Bob" Chen** (1972) | Atorvastatin 20 mg at one hospital vs 40 mg at the other: **low-severity** dose mismatch |
+| **Anthony "Tony" Russo** (1961) | Nickname, and he moved. Orion's heart clinic prescribed nitroglycerin; Vega's urgent care added sildenafil. **High:** severe blood-pressure drop |
+| **Eleanor Whittaker / Whitaker** (1953) | Dropped letter in the surname and two birth-date digits transposed, still matched. Simvastatin + clarithromycin. **High:** muscle damage |
 
 The other 18 patients are filler, and a test checks that they produce **zero** conflicts.
 
@@ -187,8 +190,7 @@ The other 18 patients are filler, and a test checks that they produce **zero** c
 1. **Share the GitHub repo.** It's already pushed (private). Add your partner as a
    collaborator (repo Settings → Collaborators), and make the repo public before submitting
    to Devpost so the judges can see it.
-2. **Write the README** for judges: the problem, a screenshot or GIF, how to run it, and the
-   architecture.
+2. **Add your names to README.md** (there's a comment near the top for this).
 3. **Rehearse the demo below** on the laptop and screen you'll present on. Use "Reset demo"
    between run-throughs.
 4. **Optional polish:**

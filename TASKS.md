@@ -67,7 +67,7 @@ from it automatically.
    "preview" tag until `/api/stats` exists, then switches automatically. With the real endpoint
    the label becomes "conflicts caught **across hospitals**", using `cross_hospital_conflicts`,
    which only the backend can compute.
-3. **README.md** for the judges: the problem, screenshots, how to run it, and how it works.
+3. ✅ **README.md** (done), with screenshots in `docs/`. Add the team's names before submitting.
 
 ## The API contract (agreed now, so nobody waits)
 
