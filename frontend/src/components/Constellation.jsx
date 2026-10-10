@@ -22,6 +22,7 @@ export default function Constellation({
   selectedNodeId,
   onSelectConflict,
   onSelectNode,
+  legend = true,
 }) {
   const svgRef = useRef(null);
   const tooltipRef = useRef(null);
@@ -62,7 +63,7 @@ export default function Constellation({
       starfield.selectAll("*").remove();
       drawStarfield(starfield, width, height);
     };
-    const { width, height } = svgEl.getBoundingClientRect();
+    const { clientWidth: width, clientHeight: height } = svgEl.parentElement; // layout size
     layout(width, height);
     const colorOf = (hospitalId) => hospitals[hospitalId]?.color ?? "#ffffff";
 
@@ -291,7 +292,7 @@ export default function Constellation({
     <div className="constellation">
       <svg ref={svgRef} className="constellation-svg" />
       <div ref={tooltipRef} className="tooltip" />
-      <Legend />
+      {legend && <Legend />}
     </div>
   );
 }

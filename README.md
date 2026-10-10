@@ -160,7 +160,8 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173. Inside `backend/`, run the tests with `pytest` and the scaling
+Open http://localhost:5173, or http://localhost:5173/pitch.html for our pitch deck (F for full
+screen). Inside `backend/`, run the tests with `pytest` and the scaling
 benchmark with `python -m app.benchmark --records 20000`.
 
 ## Built with

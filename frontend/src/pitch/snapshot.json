@@ -1,0 +1,1065 @@
+{
+ "hospitals": [
+  {
+   "id": "lyra",
+   "name": "Lyra Medical Center"
+  },
+  {
+   "id": "orion",
+   "name": "Orion General Hospital"
+  },
+  {
+   "id": "vega",
+   "name": "Vega Community Clinic"
+  }
+ ],
+ "patients": [
+  {
+   "id": "c-lyra-pt-005",
+   "name": "James O'Brien",
+   "birth_date": "1947-11-02",
+   "gender": "male",
+   "hospitals": [
+    "lyra",
+    "orion",
+    "vega"
+   ],
+   "record_count": 3,
+   "conflicts": {
+    "high": 3,
+    "moderate": 0,
+    "low": 0
+   },
+   "needs_review": false
+  },
+  {
+   "id": "c-lyra-pt-008",
+   "name": "Aisha Patel-Khan",
+   "birth_date": "1990-07-27",
+   "gender": "female",
+   "hospitals": [
+    "lyra",
+    "orion"
+   ],
+   "record_count": 2,
+   "conflicts": {
+    "high": 2,
+    "moderate": 0,
+    "low": 0
+   },
+   "needs_review": true
+  },
+  {
+   "id": "c-lyra-pt-001",
+   "name": "Maria Gonzalez",
+   "birth_date": "1958-03-14",
+   "gender": "female",
+   "hospitals": [
+    "lyra",
+    "orion",
+    "vega"
+   ],
+   "record_count": 3,
+   "conflicts": {
+    "high": 1,
+    "moderate": 4,
+    "low": 0
+   },
+   "needs_review": false
+  },
+  {
+   "id": "c-orion-pt-017",
+   "name": "Anthony Russo",
+   "birth_date": "1961-04-18",
+   "gender": "male",
+   "hospitals": [
+    "orion",
+    "vega"
+   ],
+   "record_count": 2,
+   "conflicts": {
+    "high": 1,
+    "moderate": 0,
+    "low": 0
+   },
+   "needs_review": false
+  },
+  {
+   "id": "c-lyra-pt-017",
+   "name": "Eleanor Whittaker",
+   "birth_date": "1953-10-12",
+   "gender": "female",
+   "hospitals": [
+    "lyra",
+    "vega"
+   ],
+   "record_count": 2,
+   "conflicts": {
+    "high": 1,
+    "moderate": 0,
+    "low": 0
+   },
+   "needs_review": false
+  },
+  {
+   "id": "c-lyra-pt-013",
+   "name": "Robert Chen",
+   "birth_date": "1972-05-05",
+   "gender": "male",
+   "hospitals": [
+    "lyra",
+    "orion"
+   ],
+   "record_count": 2,
+   "conflicts": {
+    "high": 0,
+    "moderate": 0,
+    "low": 1
+   },
+   "needs_review": false
+  },
+  {
+   "id": "c-lyra-pt-036",
+   "name": "Ava Haddad",
+   "birth_date": "2006-04-14",
+   "gender": "female",
+   "hospitals": [
+    "lyra",
+    "vega"
+   ],
+   "record_count": 2,
+   "conflicts": {
+    "high": 0,
+    "moderate": 0,
+    "low": 0
+   },
+   "needs_review": false
+  },
+  {
+   "id": "c-lyra-pt-033",
+   "name": "Daniel Fischer",
+   "birth_date": "1956-10-23",
+   "gender": "male",
+   "hospitals": [
+    "lyra"
+   ],
+   "record_count": 1,
+   "conflicts": {
+    "high": 0,
+    "moderate": 0,
+    "low": 0
+   },
+   "needs_review": false
+  },
+  {
+   "id": "c-orion-pt-047",
+   "name": "Elizabeth Lindqvist",
+   "birth_date": "2006-04-13",
+   "gender": "female",
+   "hospitals": [
+    "orion"
+   ],
+   "record_count": 1,
+   "conflicts": {
+    "high": 0,
+    "moderate": 0,
+    "low": 0
+   },
+   "needs_review": false
+  },
+  {
+   "id": "c-orion-pt-063",
+   "name": "Emma Alvarez",
+   "birth_date": "1982-07-18",
+   "gender": "female",
+   "hospitals": [
+    "orion"
+   ],
+   "record_count": 1,
+   "conflicts": {
+    "high": 0,
+    "moderate": 0,
+    "low": 0
+   },
+   "needs_review": false
+  },
+  {
+   "id": "c-lyra-pt-039",
+   "name": "Fatima Dubois",
+   "birth_date": "1946-08-28",
+   "gender": "female",
+   "hospitals": [
+    "lyra"
+   ],
+   "record_count": 1,
+   "conflicts": {
+    "high": 0,
+    "moderate": 0,
+    "low": 0
+   },
+   "needs_review": false
+  },
+  {
+   "id": "c-lyra-pt-020",
+   "name": "Grace Johnson",
+   "birth_date": "1968-03-27",
+   "gender": "female",
+   "hospitals": [
+    "lyra",
+    "orion"
+   ],
+   "record_count": 2,
+   "conflicts": {
+    "high": 0,
+    "moderate": 0,
+    "low": 0
+   },
+   "needs_review": false
+  },
+  {
+   "id": "c-lyra-pt-028",
+   "name": "Katherine Novak",
+   "birth_date": "1964-12-28",
+   "gender": "female",
+   "hospitals": [
+    "lyra"
+   ],
+   "record_count": 1,
+   "conflicts": {
+    "high": 0,
+    "moderate": 0,
+    "low": 0
+   },
+   "needs_review": false
+  },
+  {
+   "id": "c-lyra-pt-023",
+   "name": "Kenji Murphy",
+   "birth_date": "1959-11-20",
+   "gender": "male",
+   "hospitals": [
+    "lyra",
+    "orion"
+   ],
+   "record_count": 2,
+   "conflicts": {
+    "high": 0,
+    "moderate": 0,
+    "low": 0
+   },
+   "needs_review": false
+  },
+  {
+   "id": "c-lyra-pt-048",
+   "name": "Liam Yamamoto",
+   "birth_date": "1947-06-24",
+   "gender": "male",
+   "hospitals": [
+    "lyra",
+    "vega"
+   ],
+   "record_count": 2,
+   "conflicts": {
+    "high": 0,
+    "moderate": 0,
+    "low": 0
+   },
+   "needs_review": false
+  },
+  {
+   "id": "c-lyra-pt-042",
+   "name": "Lucas Silva",
+   "birth_date": "1963-07-09",
+   "gender": "male",
+   "hospitals": [
+    "lyra",
+    "orion"
+   ],
+   "record_count": 2,
+   "conflicts": {
+    "high": 0,
+    "moderate": 0,
+    "low": 0
+   },
+   "needs_review": false
+  },
+  {
+   "id": "c-vega-pt-004",
+   "name": "Maria Gonzalez",
+   "birth_date": "1985-09-30",
+   "gender": "female",
+   "hospitals": [
+    "vega"
+   ],
+   "record_count": 1,
+   "conflicts": {
+    "high": 0,
+    "moderate": 0,
+    "low": 0
+   },
+   "needs_review": false
+  },
+  {
+   "id": "c-orion-pt-039",
+   "name": "Mateo Park",
+   "birth_date": "1944-05-11",
+   "gender": "male",
+   "hospitals": [
+    "orion",
+    "vega"
+   ],
+   "record_count": 2,
+   "conflicts": {
+    "high": 0,
+    "moderate": 0,
+    "low": 0
+   },
+   "needs_review": false
+  },
+  {
+   "id": "c-orion-pt-052",
+   "name": "Mia Kowalski",
+   "birth_date": "2005-08-11",
+   "gender": "female",
+   "hospitals": [
+    "orion"
+   ],
+   "record_count": 1,
+   "conflicts": {
+    "high": 0,
+    "moderate": 0,
+    "low": 0
+   },
+   "needs_review": false
+  },
+  {
+   "id": "c-lyra-pt-045",
+   "name": "Michael Ibrahim",
+   "birth_date": "1975-09-25",
+   "gender": "male",
+   "hospitals": [
+    "lyra",
+    "vega"
+   ],
+   "record_count": 2,
+   "conflicts": {
+    "high": 0,
+    "moderate": 0,
+    "low": 0
+   },
+   "needs_review": false
+  },
+  {
+   "id": "c-orion-pt-029",
+   "name": "Nadia Okafor",
+   "birth_date": "1972-09-13",
+   "gender": "female",
+   "hospitals": [
+    "orion",
+    "vega"
+   ],
+   "record_count": 2,
+   "conflicts": {
+    "high": 0,
+    "moderate": 0,
+    "low": 0
+   },
+   "needs_review": false
+  },
+  {
+   "id": "c-orion-pt-021",
+   "name": "Noah Walsh",
+   "birth_date": "1991-10-18",
+   "gender": "male",
+   "hospitals": [
+    "orion",
+    "vega"
+   ],
+   "record_count": 2,
+   "conflicts": {
+    "high": 0,
+    "moderate": 0,
+    "low": 0
+   },
+   "needs_review": false
+  },
+  {
+   "id": "c-lyra-pt-051",
+   "name": "Olivia Rossi",
+   "birth_date": "1992-05-14",
+   "gender": "female",
+   "hospitals": [
+    "lyra",
+    "vega"
+   ],
+   "record_count": 2,
+   "conflicts": {
+    "high": 0,
+    "moderate": 0,
+    "low": 0
+   },
+   "needs_review": false
+  },
+  {
+   "id": "c-orion-pt-044",
+   "name": "Thomas Nguyen",
+   "birth_date": "1965-04-04",
+   "gender": "male",
+   "hospitals": [
+    "orion",
+    "vega"
+   ],
+   "record_count": 2,
+   "conflicts": {
+    "high": 0,
+    "moderate": 0,
+    "low": 0
+   },
+   "needs_review": false
+  },
+  {
+   "id": "c-orion-pt-058",
+   "name": "William Santos",
+   "birth_date": "1976-08-06",
+   "gender": "male",
+   "hospitals": [
+    "orion",
+    "vega"
+   ],
+   "record_count": 2,
+   "conflicts": {
+    "high": 0,
+    "moderate": 0,
+    "low": 0
+   },
+   "needs_review": false
+  }
+ ],
+ "stats": {
+  "hospitals": 3,
+  "records": 45,
+  "patients": 25,
+  "needs_review": 1,
+  "conflicts": {
+   "high": 8,
+   "moderate": 4,
+   "low": 1
+  },
+  "cross_hospital_conflicts": 13
+ },
+ "maria": {
+  "patient": {
+   "id": "c-lyra-pt-001",
+   "name": "Maria Gonzalez",
+   "birth_date": "1958-03-14",
+   "gender": "female",
+   "hospitals": [
+    "lyra",
+    "orion",
+    "vega"
+   ],
+   "record_count": 3,
+   "conflicts": {
+    "high": 1,
+    "moderate": 4,
+    "low": 0
+   },
+   "needs_review": false
+  },
+  "hospitals": [
+   {
+    "id": "lyra",
+    "name": "Lyra Medical Center"
+   },
+   {
+    "id": "orion",
+    "name": "Orion General Hospital"
+   },
+   {
+    "id": "vega",
+    "name": "Vega Community Clinic"
+   }
+  ],
+  "nodes": [
+   {
+    "id": "lyra-pt-001",
+    "kind": "record",
+    "hospital": "lyra",
+    "label": "Maria Gonzales",
+    "sublabel": "Lyra Medical Center · MRN LY-917634",
+    "details": [
+     [
+      "Hospital",
+      "Lyra Medical Center"
+     ],
+     [
+      "MRN",
+      "LY-917634"
+     ],
+     [
+      "Date of birth",
+      "1958-03-14"
+     ],
+     [
+      "Sex",
+      "female"
+     ],
+     [
+      "Phone",
+      "(415) 555-0142"
+     ],
+     [
+      "Address",
+      "88 Ocean Avenue, San Francisco"
+     ],
+     [
+      "ZIP",
+      "94112"
+     ]
+    ]
+   },
+   {
+    "id": "lyra-cd-002",
+    "kind": "condition",
+    "hospital": "lyra",
+    "record": "lyra-pt-001",
+    "label": "Community-acquired pneumonia",
+    "sublabel": "Condition",
+    "details": [
+     [
+      "Type",
+      "Condition"
+     ],
+     [
+      "Date",
+      "2026-09-28"
+     ],
+     [
+      "Hospital",
+      "Lyra Medical Center"
+     ]
+    ]
+   },
+   {
+    "id": "lyra-rx-003",
+    "kind": "medication",
+    "hospital": "lyra",
+    "record": "lyra-pt-001",
+    "label": "Amoxicillin",
+    "sublabel": "Medication · 875 mg twice daily",
+    "details": [
+     [
+      "Type",
+      "Medication"
+     ],
+     [
+      "Details",
+      "875 mg twice daily"
+     ],
+     [
+      "Date",
+      "2026-09-28"
+     ],
+     [
+      "Hospital",
+      "Lyra Medical Center"
+     ]
+    ]
+   },
+   {
+    "id": "lyra-rx-004",
+    "kind": "medication",
+    "hospital": "lyra",
+    "record": "lyra-pt-001",
+    "label": "Ibuprofen",
+    "sublabel": "Medication · 600 mg every 6 hours as needed",
+    "details": [
+     [
+      "Type",
+      "Medication"
+     ],
+     [
+      "Details",
+      "600 mg every 6 hours as needed"
+     ],
+     [
+      "Date",
+      "2026-09-28"
+     ],
+     [
+      "Hospital",
+      "Lyra Medical Center"
+     ]
+    ]
+   },
+   {
+    "id": "orion-pt-001",
+    "kind": "record",
+    "hospital": "orion",
+    "label": "Maria Gonzalez",
+    "sublabel": "Orion General Hospital · MRN OR-430274",
+    "details": [
+     [
+      "Hospital",
+      "Orion General Hospital"
+     ],
+     [
+      "MRN",
+      "OR-430274"
+     ],
+     [
+      "Date of birth",
+      "1958-03-14"
+     ],
+     [
+      "Sex",
+      "female"
+     ],
+     [
+      "Phone",
+      "415-555-0142"
+     ],
+     [
+      "Address",
+      "88 Ocean Ave, San Francisco"
+     ],
+     [
+      "ZIP",
+      "94112"
+     ]
+    ]
+   },
+   {
+    "id": "orion-al-002",
+    "kind": "allergy",
+    "hospital": "orion",
+    "record": "orion-pt-001",
+    "label": "Penicillin",
+    "sublabel": "Allergy · Anaphylaxis, high criticality",
+    "details": [
+     [
+      "Type",
+      "Allergy"
+     ],
+     [
+      "Details",
+      "Anaphylaxis, high criticality"
+     ],
+     [
+      "Date",
+      "2019-06-02"
+     ],
+     [
+      "Hospital",
+      "Orion General Hospital"
+     ]
+    ]
+   },
+   {
+    "id": "orion-cd-003",
+    "kind": "condition",
+    "hospital": "orion",
+    "record": "orion-pt-001",
+    "label": "Type 2 diabetes mellitus",
+    "sublabel": "Condition",
+    "details": [
+     [
+      "Type",
+      "Condition"
+     ],
+     [
+      "Date",
+      "2012-04-10"
+     ],
+     [
+      "Hospital",
+      "Orion General Hospital"
+     ]
+    ]
+   },
+   {
+    "id": "orion-cd-004",
+    "kind": "condition",
+    "hospital": "orion",
+    "record": "orion-pt-001",
+    "label": "Chronic kidney disease, stage 3",
+    "sublabel": "Condition",
+    "details": [
+     [
+      "Type",
+      "Condition"
+     ],
+     [
+      "Date",
+      "2021-11-03"
+     ],
+     [
+      "Hospital",
+      "Orion General Hospital"
+     ]
+    ]
+   },
+   {
+    "id": "orion-rx-005",
+    "kind": "medication",
+    "hospital": "orion",
+    "record": "orion-pt-001",
+    "label": "Metformin",
+    "sublabel": "Medication · 500 mg twice daily",
+    "details": [
+     [
+      "Type",
+      "Medication"
+     ],
+     [
+      "Details",
+      "500 mg twice daily"
+     ],
+     [
+      "Date",
+      "2012-04-10"
+     ],
+     [
+      "Hospital",
+      "Orion General Hospital"
+     ]
+    ]
+   },
+   {
+    "id": "orion-rx-006",
+    "kind": "medication",
+    "hospital": "orion",
+    "record": "orion-pt-001",
+    "label": "Lisinopril",
+    "sublabel": "Medication · 10 mg once daily",
+    "details": [
+     [
+      "Type",
+      "Medication"
+     ],
+     [
+      "Details",
+      "10 mg once daily"
+     ],
+     [
+      "Date",
+      "2018-01-22"
+     ],
+     [
+      "Hospital",
+      "Orion General Hospital"
+     ]
+    ]
+   },
+   {
+    "id": "vega-pt-001",
+    "kind": "record",
+    "hospital": "vega",
+    "label": "M. Gonzalez",
+    "sublabel": "Vega Community Clinic · MRN VG-578197",
+    "details": [
+     [
+      "Hospital",
+      "Vega Community Clinic"
+     ],
+     [
+      "MRN",
+      "VG-578197"
+     ],
+     [
+      "Date of birth",
+      "1958-03-14"
+     ],
+     [
+      "Sex",
+      "female"
+     ],
+     [
+      "Address",
+      "1450 Noriega St, San Francisco"
+     ],
+     [
+      "ZIP",
+      "94122"
+     ]
+    ]
+   },
+   {
+    "id": "vega-cd-002",
+    "kind": "condition",
+    "hospital": "vega",
+    "record": "vega-pt-001",
+    "label": "Essential hypertension",
+    "sublabel": "Condition",
+    "details": [
+     [
+      "Type",
+      "Condition"
+     ],
+     [
+      "Date",
+      "2024-02-15"
+     ],
+     [
+      "Hospital",
+      "Vega Community Clinic"
+     ]
+    ]
+   },
+   {
+    "id": "vega-rx-003",
+    "kind": "medication",
+    "hospital": "vega",
+    "record": "vega-pt-001",
+    "label": "Enalapril",
+    "sublabel": "Medication · 5 mg once daily",
+    "details": [
+     [
+      "Type",
+      "Medication"
+     ],
+     [
+      "Details",
+      "5 mg once daily"
+     ],
+     [
+      "Date",
+      "2024-02-15"
+     ],
+     [
+      "Hospital",
+      "Vega Community Clinic"
+     ]
+    ]
+   }
+  ],
+  "links": [
+   {
+    "source": "lyra-pt-001",
+    "target": "lyra-cd-002",
+    "kind": "has"
+   },
+   {
+    "source": "lyra-pt-001",
+    "target": "lyra-rx-003",
+    "kind": "has"
+   },
+   {
+    "source": "lyra-pt-001",
+    "target": "lyra-rx-004",
+    "kind": "has"
+   },
+   {
+    "source": "orion-pt-001",
+    "target": "orion-al-002",
+    "kind": "has"
+   },
+   {
+    "source": "orion-pt-001",
+    "target": "orion-cd-003",
+    "kind": "has"
+   },
+   {
+    "source": "orion-pt-001",
+    "target": "orion-cd-004",
+    "kind": "has"
+   },
+   {
+    "source": "orion-pt-001",
+    "target": "orion-rx-005",
+    "kind": "has"
+   },
+   {
+    "source": "orion-pt-001",
+    "target": "orion-rx-006",
+    "kind": "has"
+   },
+   {
+    "source": "vega-pt-001",
+    "target": "vega-cd-002",
+    "kind": "has"
+   },
+   {
+    "source": "vega-pt-001",
+    "target": "vega-rx-003",
+    "kind": "has"
+   },
+   {
+    "source": "lyra-pt-001",
+    "target": "orion-pt-001",
+    "kind": "match",
+    "probability": 1.0,
+    "tier": "match",
+    "reviewed": null,
+    "agrees_on": [
+     "first name",
+     "date of birth",
+     "sex",
+     "phone",
+     "ZIP"
+    ],
+    "reasons": [
+     "Last names spelled differently ('Gonzales' vs 'Gonzalez')"
+    ]
+   },
+   {
+    "source": "lyra-pt-001",
+    "target": "vega-pt-001",
+    "kind": "match",
+    "probability": 0.9616,
+    "tier": "match",
+    "reviewed": null,
+    "agrees_on": [
+     "date of birth",
+     "sex"
+    ],
+    "reasons": [
+     "First name is only an initial ('Maria' vs 'M.')",
+     "Last names spelled differently ('Gonzales' vs 'Gonzalez')",
+     "Phone missing in one record",
+     "ZIP differs (94112 vs 94122)"
+    ]
+   },
+   {
+    "source": "orion-pt-001",
+    "target": "vega-pt-001",
+    "kind": "match",
+    "probability": 0.9888,
+    "tier": "match",
+    "reviewed": null,
+    "agrees_on": [
+     "last name",
+     "date of birth",
+     "sex"
+    ],
+    "reasons": [
+     "First name is only an initial ('Maria' vs 'M.')",
+     "Phone missing in one record",
+     "ZIP differs (94112 vs 94122)"
+    ]
+   },
+   {
+    "source": "orion-al-002",
+    "target": "lyra-rx-003",
+    "kind": "conflict",
+    "severity": "high",
+    "conflict_id": "k1"
+   },
+   {
+    "source": "orion-cd-004",
+    "target": "lyra-rx-004",
+    "kind": "conflict",
+    "severity": "moderate",
+    "conflict_id": "k2"
+   },
+   {
+    "source": "orion-rx-006",
+    "target": "vega-rx-003",
+    "kind": "conflict",
+    "severity": "moderate",
+    "conflict_id": "k3"
+   },
+   {
+    "source": "lyra-rx-004",
+    "target": "orion-rx-006",
+    "kind": "conflict",
+    "severity": "moderate",
+    "conflict_id": "k4"
+   },
+   {
+    "source": "lyra-rx-004",
+    "target": "vega-rx-003",
+    "kind": "conflict",
+    "severity": "moderate",
+    "conflict_id": "k5"
+   }
+  ],
+  "conflicts": [
+   {
+    "id": "k1",
+    "type": "allergy",
+    "severity": "high",
+    "title": "Penicillin allergy vs Amoxicillin",
+    "explanation": "Orion General Hospital records a Penicillin allergy (Anaphylaxis, high criticality). Lyra Medical Center ordered Amoxicillin 875 mg twice daily on 2026-09-28, which is a penicillin-class antibiotic.",
+    "item_ids": [
+     "orion-al-002",
+     "lyra-rx-003"
+    ],
+    "hospitals": [
+     "Orion General Hospital",
+     "Lyra Medical Center"
+    ],
+    "cross_hospital": true,
+    "unconfirmed": false
+   },
+   {
+    "id": "k2",
+    "type": "condition",
+    "severity": "moderate",
+    "title": "Ibuprofen with Chronic kidney disease, stage 3",
+    "explanation": "NSAIDs can worsen kidney function in chronic kidney disease. Orion General Hospital records Chronic kidney disease, stage 3; Lyra Medical Center ordered Ibuprofen on 2026-09-28.",
+    "item_ids": [
+     "orion-cd-004",
+     "lyra-rx-004"
+    ],
+    "hospitals": [
+     "Orion General Hospital",
+     "Lyra Medical Center"
+    ],
+    "cross_hospital": true,
+    "unconfirmed": false
+   },
+   {
+    "id": "k3",
+    "type": "duplicate_therapy",
+    "severity": "moderate",
+    "title": "Two ACE inhibitors: Lisinopril + Enalapril",
+    "explanation": "Lisinopril (Orion General Hospital) and Enalapril (Vega Community Clinic) are both ACE inhibitors. The patient may be taking both.",
+    "item_ids": [
+     "orion-rx-006",
+     "vega-rx-003"
+    ],
+    "hospitals": [
+     "Orion General Hospital",
+     "Vega Community Clinic"
+    ],
+    "cross_hospital": true,
+    "unconfirmed": false
+   },
+   {
+    "id": "k4",
+    "type": "interaction",
+    "severity": "moderate",
+    "title": "Ibuprofen + Lisinopril",
+    "explanation": "NSAIDs blunt blood-pressure control and can injure the kidneys alongside ACE inhibitors. Ibuprofen is from Lyra Medical Center; Lisinopril is from Orion General Hospital.",
+    "item_ids": [
+     "lyra-rx-004",
+     "orion-rx-006"
+    ],
+    "hospitals": [
+     "Lyra Medical Center",
+     "Orion General Hospital"
+    ],
+    "cross_hospital": true,
+    "unconfirmed": false
+   },
+   {
+    "id": "k5",
+    "type": "interaction",
+    "severity": "moderate",
+    "title": "Ibuprofen + Enalapril",
+    "explanation": "NSAIDs blunt blood-pressure control and can injure the kidneys alongside ACE inhibitors. Ibuprofen is from Lyra Medical Center; Enalapril is from Vega Community Clinic.",
+    "item_ids": [
+     "lyra-rx-004",
+     "vega-rx-003"
+    ],
+    "hospitals": [
+     "Lyra Medical Center",
+     "Vega Community Clinic"
+    ],
+    "cross_hospital": true,
+    "unconfirmed": false
+   }
+  ]
+ }
+}

@@ -1,0 +1,578 @@
+/* The pitch deck. Every size is relative to the 16:9 frame (cqw/cqh), so slides look the same
+   on a laptop and on a projector. */
+
+.deck {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #010309;
+  overflow: hidden;
+}
+
+.frame {
+  position: relative;
+  width: min(100vw, calc(100vh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  container-type: size;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 40%, #0d1433 0%, var(--bg) 70%);
+  color: var(--text);
+}
+
+.deck-stars {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  padding: 7cqh 7cqw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2.4cqh;
+  font-size: 1.9cqw;
+  line-height: 1.4;
+  animation: slide-in 0.45s ease both;
+}
+
+.slide.full-bleed {
+  padding: 0;
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(1.5cqh);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* --- type */
+.slide p {
+  margin: 0;
+}
+
+.kicker {
+  font-size: 1.25cqw;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.slide h1 {
+  margin: 0;
+  font-size: 6.4cqw;
+  letter-spacing: 0.01em;
+}
+
+.slide h2 {
+  margin: 0;
+  max-width: 82cqw;
+  font-size: 3.4cqw;
+  line-height: 1.15;
+}
+
+.slide h2.huge {
+  font-size: 5.5cqw;
+}
+
+.lede {
+  font-size: 2.6cqw;
+  line-height: 1.3;
+}
+
+.slide .small {
+  font-size: 1.35cqw;
+}
+
+.slide .muted {
+  color: var(--muted);
+}
+
+.danger {
+  color: var(--high);
+  text-shadow: 0 0 1cqw rgba(255, 77, 109, 0.45);
+}
+
+.center {
+  text-align: center;
+}
+
+/* --- shared blocks */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3cqw;
+  align-items: start;
+}
+
+.two-col.wide-left {
+  grid-template-columns: 1.35fr 1fr;
+  align-items: center;
+}
+
+.panel-card {
+  display: grid;
+  align-content: start;
+  gap: 1.4cqh;
+  padding: 2.6cqh 2cqw;
+  border: 1px solid var(--border);
+  border-radius: 1cqw;
+  background: rgba(17, 24, 51, 0.78);
+}
+
+.panel-label {
+  font-size: 1.2cqw;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.panel-label.ok {
+  color: var(--ok);
+}
+
+.panel-label.danger {
+  color: var(--high);
+}
+
+.big-list {
+  display: grid;
+  gap: 1.6cqh;
+  margin: 0;
+  padding-left: 2.4cqw;
+}
+
+/* --- title and closing slides (live 3D galaxy behind the text) */
+.slide-galaxy {
+  position: absolute;
+  inset: 0;
+}
+
+.title-slide .slide-galaxy {
+  left: 30cqw;
+}
+
+.slide-galaxy.dim {
+  opacity: 0.4;
+}
+
+.slide-galaxy.dim .galaxy-labels {
+  display: none; /* names behind the closing text would just be noise */
+}
+
+.slide .galaxy-hospital {
+  font-size: 1.05cqw;
+}
+
+.slide .galaxy-patient {
+  font-size: 0.85cqw;
+}
+
+.title-text {
+  position: absolute;
+  left: 7cqw;
+  top: 16cqh;
+  display: grid;
+  gap: 2.4cqh;
+  max-width: 50cqw;
+  pointer-events: none;
+}
+
+.team {
+  font-size: 1.7cqw;
+  color: var(--muted);
+}
+
+.title-stats {
+  position: absolute;
+  left: 7cqw;
+  bottom: 8cqh;
+  font-size: 1.5cqw;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.close-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.2cqh;
+  text-align: center;
+  pointer-events: none;
+}
+
+.repo {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 1.8cqw;
+  color: var(--match);
+}
+
+.thanks {
+  font-size: 2.6cqw;
+  font-weight: 700;
+}
+
+/* --- problem */
+.record-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5cqw;
+  margin-top: 1.5cqh;
+}
+
+.record-card {
+  padding: 2.4cqh 1.6cqw;
+  border: 0.15cqw solid;
+  border-radius: 1cqw;
+  background: rgba(17, 24, 51, 0.85);
+}
+
+.record-hospital {
+  font-size: 1.15cqw;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.record-name {
+  margin-top: 0.8cqh;
+  font-size: 2.4cqw;
+  font-weight: 700;
+}
+
+.record-dob,
+.record-detail {
+  font-size: 1.3cqw;
+  color: var(--muted);
+}
+
+.record-fact {
+  margin-top: 2cqh;
+  font-size: 1.7cqw;
+  font-weight: 600;
+}
+
+.record-fact.allergy {
+  color: #ffb454;
+}
+
+.record-fact.med {
+  color: #6cc7ff;
+}
+
+.punchline {
+  margin-top: 2cqh;
+  font-size: 2.3cqw;
+}
+
+/* --- solution */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5cqw;
+  margin: 1.5cqh 0;
+}
+
+.step {
+  padding: 2.6cqh 1.8cqw;
+  border: 1px solid var(--border);
+  border-radius: 1cqw;
+  background: rgba(17, 24, 51, 0.78);
+}
+
+.step-number {
+  display: grid;
+  place-items: center;
+  width: 4.5cqw;
+  height: 4.5cqw;
+  border-radius: 50%;
+  font-size: 2.2cqw;
+  font-weight: 800;
+  color: var(--bg);
+  background: var(--accent);
+  box-shadow: 0 0 2cqw rgba(255, 209, 102, 0.5);
+}
+
+.step-name {
+  margin: 1.5cqh 0 0.8cqh;
+  font-size: 2.6cqw;
+  font-weight: 700;
+}
+
+/* --- Maria's constellation */
+.split {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+}
+
+.split-visual {
+  position: relative;
+}
+
+.split-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2.6cqh;
+  padding: 8cqh 5cqw 8cqh 1cqw;
+}
+
+.legend-list {
+  display: grid;
+  gap: 2.2cqh;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.legend-list li {
+  display: grid;
+  grid-template-columns: 3.2cqw 1fr;
+  align-items: baseline;
+}
+
+.sym.star {
+  font-size: 2cqw;
+  color: #fff;
+  text-shadow: 0 0 1cqw #fff;
+}
+
+.sym.gold,
+.sym.red {
+  display: inline-block;
+  width: 2.2cqw;
+  transform: translateY(-0.4cqw);
+}
+
+.sym.gold {
+  border-top: 0.3cqw dotted var(--match);
+}
+
+.sym.red {
+  border-top: 0.3cqw solid var(--high);
+  box-shadow: 0 0 0.8cqw var(--high);
+}
+
+/* --- demo */
+.demo-steps {
+  display: grid;
+  gap: 1.6cqh;
+  margin: 1cqh 0 0;
+  padding-left: 3cqw;
+  font-size: 2.3cqw;
+}
+
+/* --- matching */
+.match-table {
+  border-collapse: collapse;
+  font-size: 1.9cqw;
+}
+
+.match-table td {
+  padding: 1.1cqh 1cqw;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap; /* "1947-11-02" and "Patel-Khan" read better unbroken */
+}
+
+.match-table td.muted {
+  white-space: normal;
+  font-size: 1.5cqw;
+}
+
+.match-table .eq {
+  color: var(--match);
+}
+
+.threshold {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr 1fr;
+  margin: 2.5cqh 0;
+  border-radius: 0.8cqw;
+  overflow: hidden;
+  font-size: 1.7cqw;
+  font-weight: 700;
+  text-align: center;
+}
+
+.threshold > div {
+  display: grid;
+  gap: 0.4cqh;
+  padding: 1.4cqh 0.6cqw;
+}
+
+.threshold span {
+  font-size: 1.1cqw;
+  font-weight: 500;
+}
+
+.t-different {
+  background: rgba(139, 147, 184, 0.18);
+}
+
+.t-review {
+  color: var(--review);
+  background: rgba(247, 178, 103, 0.22);
+}
+
+.t-same {
+  color: var(--match);
+  background: rgba(255, 224, 138, 0.2);
+}
+
+/* --- trust */
+.review-mock ul {
+  margin: 0;
+  padding-left: 2cqw;
+}
+
+.mock-buttons {
+  display: flex;
+  gap: 1cqw;
+}
+
+.mock-buttons span {
+  flex: 1;
+  padding: 1cqh;
+  border: 1px solid var(--border);
+  border-radius: 0.6cqw;
+  font-size: 1.4cqw;
+  font-weight: 600;
+  text-align: center;
+}
+
+.mock-buttons .mock-confirm {
+  border-color: var(--match);
+  color: var(--match);
+}
+
+.chain {
+  display: grid;
+  gap: 0.6cqh;
+  margin-bottom: 2cqh;
+}
+
+.chain-box {
+  display: flex;
+  justify-content: space-between;
+  gap: 1cqw;
+  padding: 1.2cqh 1.2cqw;
+  border: 1px solid var(--border);
+  border-left: 0.3cqw solid var(--ok);
+  border-radius: 0.6cqw;
+  font-size: 1.5cqw;
+  background: rgba(17, 24, 51, 0.85);
+}
+
+.hash {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 1.2cqw;
+  color: var(--muted);
+}
+
+.chain-link {
+  padding-left: 1.2cqw;
+  font-size: 1.1cqw;
+  color: var(--muted);
+}
+
+/* --- scale */
+.big-numbers {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2cqw;
+  margin: 2.5cqh 0;
+}
+
+.big-numbers div {
+  display: grid;
+  gap: 0.6cqh;
+  text-align: center;
+}
+
+.big-numbers strong {
+  font-size: 4.6cqw;
+  color: var(--accent);
+  text-shadow: 0 0 2cqw rgba(255, 209, 102, 0.35);
+}
+
+.big-numbers span {
+  font-size: 1.5cqw;
+  color: var(--muted);
+}
+
+/* --- what's next */
+.next-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2cqw;
+}
+
+.next-title {
+  font-size: 2cqw;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* --- controls and speaker notes (outside the slide) */
+.deck-nav {
+  position: fixed;
+  right: 12px;
+  bottom: 10px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+  opacity: 0.35;
+  transition: opacity 0.2s;
+}
+
+.deck-nav:hover,
+.deck-nav:focus-within {
+  opacity: 1;
+}
+
+.deck-nav button {
+  padding: 3px 9px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: rgba(17, 24, 51, 0.9);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.deck-nav button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.deck-notes {
+  position: fixed;
+  left: 50%;
+  bottom: 44px;
+  z-index: 6;
+  width: min(900px, 92vw);
+  transform: translateX(-50%);
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(5, 8, 22, 0.95);
+  font-size: 15px;
+  line-height: 1.5;
+}

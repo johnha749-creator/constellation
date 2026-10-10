@@ -13,7 +13,7 @@ const VIEW_DIRECTION = new THREE.Vector3(0, 36, 56).normalize(); // looking down
  * hospitals that hold its records, joined to them by faint beams. Color shows the patient's most
  * serious conflict. Click a star to open that patient's constellation.
  */
-export default function Galaxy3D({ patients, hospitals, selectedId, onSelect }) {
+export default function Galaxy3D({ patients, hospitals, selectedId, onSelect, legend = true }) {
   const wrapRef = useRef(null);
   const tooltipRef = useRef(null);
   const sceneRef = useRef(null); // { stars: Map(id -> sprite), selectRing }
@@ -171,7 +171,7 @@ export default function Galaxy3D({ patients, hospitals, selectedId, onSelect }) 
 
     // Follow the container's size (it can be 0 while the page is hidden).
     const resize = () => {
-      const { width, height } = wrap.getBoundingClientRect();
+      const { clientWidth: width, clientHeight: height } = wrap; // layout size
       if (!width || !height) return;
       renderer.setSize(width, height);
       labelRenderer.setSize(width, height);
@@ -230,14 +230,16 @@ export default function Galaxy3D({ patients, hospitals, selectedId, onSelect }) 
   return (
     <div className="galaxy" ref={wrapRef}>
       <div ref={tooltipRef} className="tooltip" />
-      <div className="legend galaxy-legend">
-        <div><span className="legend-dot" style={{ background: SEVERITY_COLOR.high }} /> High-severity conflict</div>
-        <div><span className="legend-dot" style={{ background: SEVERITY_COLOR.moderate }} /> Moderate</div>
-        <div><span className="legend-dot" style={{ background: SEVERITY_COLOR.low }} /> Low</div>
-        <div><span className="legend-dot" style={{ background: SEVERITY_COLOR.none }} /> No conflicts</div>
-        <div><span className="legend-ring" /> Match needs review</div>
-        <div className="legend-note">Each star is a patient, placed between the hospitals that hold their records. Click one to open it.</div>
-      </div>
+      {legend && (
+        <div className="legend galaxy-legend">
+          <div><span className="legend-dot" style={{ background: SEVERITY_COLOR.high }} /> High-severity conflict</div>
+          <div><span className="legend-dot" style={{ background: SEVERITY_COLOR.moderate }} /> Moderate</div>
+          <div><span className="legend-dot" style={{ background: SEVERITY_COLOR.low }} /> Low</div>
+          <div><span className="legend-dot" style={{ background: SEVERITY_COLOR.none }} /> No conflicts</div>
+          <div><span className="legend-ring" /> Match needs review</div>
+          <div className="legend-note">Each star is a patient, placed between the hospitals that hold their records. Click one to open it.</div>
+        </div>
+      )}
     </div>
   );
 }

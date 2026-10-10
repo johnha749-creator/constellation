@@ -14,6 +14,7 @@ If you need something changed in the other person's folder, ask them in chat ins
 > scalability (blocking) and the audit trail: `app/matching.py`, `app/constellation.py`,
 > `app/main.py`, new `app/audit.py` and `app/benchmark.py`, plus `tests/conftest.py`,
 > `tests/test_audit.py`, `tests/test_matching.py` and `tests/test_constellation.py`.
+> Later, `app/snapshot.py` was added for the pitch deck.
 > **Run `git pull` before your next backend change.** The details are in HANDOFF.md under
 > "Matching" and "Audit trail".
 

@@ -15,8 +15,8 @@ import DetailPanel from "./components/DetailPanel";
 // three.js is large, so the 3D view is only downloaded when someone opens it.
 const Galaxy3D = lazy(() => import("./components/Galaxy3D"));
 import StatsBar from "./components/StatsBar";
+import { withHospitalColors } from "./labels";
 
-const HOSPITAL_PALETTE = ["#7cc6fe", "#f4a7ff", "#9ef0c4", "#ffd29d", "#a5b4fc"];
 const REVIEWER_KEY = "constellation.reviewer";
 
 // Remembering the reviewer's name is a convenience only; storage can be blocked or empty.
@@ -142,13 +142,7 @@ export default function App() {
     }
   };
 
-  const hospitalInfo = useMemo(
-    () =>
-      Object.fromEntries(
-        hospitals.map((h, i) => [h.id, { ...h, color: HOSPITAL_PALETTE[i % HOSPITAL_PALETTE.length] }]),
-      ),
-    [hospitals],
-  );
+  const hospitalInfo = useMemo(() => withHospitalColors(hospitals), [hospitals]);
 
   // Clicking a star in the 3D view zooms into that patient's constellation.
   const openPatient = (id) => {

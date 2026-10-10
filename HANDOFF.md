@@ -37,7 +37,7 @@ still unsolved:
 | Frontend (React, Vite, D3) | Done and **checked in a browser**: the constellation forms, zooms to fit, conflicts highlight on click, the "Same person / Different people" review works, and "Reset demo" works. |
 | Git / GitHub | Pushed to a **private** repo: https://github.com/johnha749-creator/constellation. Make it public before submitting to Devpost. |
 | README | Done, with screenshots in `docs/`. **Add your team's names** (see the comment near the top). |
-| Slides, pitch | Not started (the pitch notes below are a head start) |
+| Slides, pitch | Done: 11 slides with speaker notes at `/pitch.html`. Add your names (see "The pitch deck"). |
 
 ## Run it
 
@@ -102,6 +102,7 @@ main.py (FastAPI)  ──/api──▶  React app: PatientList │ Constellation
 | `audit.py` | The hash-chained audit log of match decisions (see "Audit trail" below) |
 | `reconcile.py` | One row per drug across hospitals, for the Medications tab |
 | `benchmark.py` | `python -m app.benchmark`: speed and accuracy of matching on synthetic patients |
+| `snapshot.py` | `python -m app.snapshot`: saves the demo data the pitch deck draws from |
 | `knowledge.py` | Small hand-made drug list: drug classes, allergy groups, interactions, duplicate therapy, condition rules. **Add rules here.** |
 | `conflicts.py` | Applies the rules to one patient and writes the explanations |
 | `constellation.py` | `PatientIndex`: loads everything once, then serves patient summaries and graphs |
@@ -116,6 +117,7 @@ main.py (FastAPI)  ──/api──▶  React app: PatientList │ Constellation
 | `components/PatientList.jsx` | Search and patient list with severity badges |
 | `components/DetailPanel.jsx` | Patient header, selected-star details, and three tabs: Conflicts, Medications, Record links |
 | `components/MedicationList.jsx` | Medications tab: each drug, every hospital that prescribed it, and its issues |
+| `pitch/Pitch.jsx`, `pitch/pitch.css` | The pitch deck at `/pitch.html` (see "The pitch deck" below) |
 | `components/ReviewHistory.jsx` | Record links tab: this patient's audit history and the log's integrity check |
 | `components/StatsBar.jsx` | Header totals: patients, records, conflicts caught, matches to review |
 | `medications.js`, `stats.js` | Build the medication list and the header totals in the browser until the backend's `/medications` and `/api/stats` endpoints exist |
@@ -232,6 +234,22 @@ The other 18 patients are filler, and a test checks that they produce **zero** c
    - RxNorm codes instead of matching drug names as text
    - blocking, so matching scales to large datasets
 6. **Slides and pitch.** Leave at least an hour.
+
+## The pitch deck
+
+The slides are a page in the frontend: with `npm run dev` running, open
+**http://localhost:5173/pitch.html**.
+
+- **Keys:** → or Space for next, ← for back, **F** for full screen, **N** for speaker notes (a
+  short script for every slide). The controls in the bottom-right corner do the same.
+- **Doesn't need the backend:** the title and closing slides show the live 3D network, and slide
+  5 shows Maria's real constellation, all drawn from `frontend/src/pitch/snapshot.json`.
+  Regenerate that file after changing the demo data, from `backend/`: `python -m app.snapshot`.
+- **Add your names:** set `TEAM` at the top of `frontend/src/pitch/Pitch.jsx`. It appears on the
+  title slide.
+- **The demo:** slide 6 is where you switch to the app (http://localhost:5173) and run the demo
+  below. Click "Reset demo" in the app before you present.
+- **A link stays on its slide:** `pitch.html#5` opens slide 5, and reloading keeps your place.
 
 ## The 2-minute demo
 
