@@ -1,0 +1,38 @@
+from app.matching import compare_records, jaro_winkler
+from app.records import PatientRecord
+
+
+def record(given, family, birth_date, gender="female", phone=None, postal_code=None, rid="x"):
+    return PatientRecord(rid, "h", None, given, family, birth_date, gender, phone, postal_code, None)
+
+
+def test_jaro_winkler_known_value():
+    assert round(jaro_winkler("martha", "marhta"), 3) == 0.961
+
+
+def test_nickname_and_punctuation_still_match():
+    a = record("James", "O'Brien", "1947-11-02", "male", "415-555-0117", "94116")
+    b = record("Jim", "OBrien", "1947-11-02", "male", None, "94116")
+    result = compare_records(a, b)
+    assert result.tier == "match"
+    assert any("nickname" in r for r in result.reasons)
+
+
+def test_same_name_different_person_is_not_merged():
+    a = record("Maria", "Gonzalez", "1958-03-14", phone="415-555-0142", postal_code="94112")
+    b = record("Maria", "Gonzalez", "1985-09-30", phone="415-555-0198", postal_code="94103")
+    assert compare_records(a, b).tier == "non-match"
+
+
+def test_swapped_day_and_month_is_explained():
+    a = record("James", "O'Brien", "1947-11-02", "male", "415-555-0117", "94116")
+    b = record("James", "O Brien", "1947-02-11", "male", "415-555-0163", "94116")
+    result = compare_records(a, b)
+    assert result.tier == "match"
+    assert any("swapped" in r for r in result.reasons)
+
+
+def test_married_name_with_typo_needs_review():
+    a = record("Aisha", "Patel", "1990-07-22", phone="415-555-0175", postal_code="94118")
+    b = record("Aisha", "Patel-Khan", "1990-07-27", phone="510-555-0129", postal_code="94704")
+    assert compare_records(a, b).tier == "review"

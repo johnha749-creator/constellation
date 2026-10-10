@@ -1,0 +1,1220 @@
+{
+  "resourceType": "Bundle",
+  "id": "vega",
+  "type": "collection",
+  "entry": [
+    {
+      "fullUrl": "Organization/vega-org",
+      "resource": {
+        "resourceType": "Organization",
+        "id": "vega-org",
+        "name": "Vega Community Clinic"
+      }
+    },
+    {
+      "fullUrl": "Patient/vega-pt-001",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "vega-pt-001",
+        "identifier": [
+          {
+            "system": "urn:hospital:vega:mrn",
+            "value": "VG-578197"
+          }
+        ],
+        "name": [
+          {
+            "family": "Gonzalez",
+            "given": [
+              "M."
+            ]
+          }
+        ],
+        "gender": "female",
+        "birthDate": "1958-03-14",
+        "address": [
+          {
+            "line": [
+              "1450 Noriega St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94122"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/vega-cd-002",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "vega-cd-002",
+        "subject": {
+          "reference": "Patient/vega-pt-001"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Essential hypertension"
+        },
+        "onsetDateTime": "2024-02-15"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/vega-rx-003",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "vega-rx-003",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/vega-pt-001"
+        },
+        "medicationCodeableConcept": {
+          "text": "Enalapril"
+        },
+        "dosageInstruction": [
+          {
+            "text": "5 mg once daily"
+          }
+        ],
+        "authoredOn": "2024-02-15"
+      }
+    },
+    {
+      "fullUrl": "Patient/vega-pt-004",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "vega-pt-004",
+        "identifier": [
+          {
+            "system": "urn:hospital:vega:mrn",
+            "value": "VG-736753"
+          }
+        ],
+        "name": [
+          {
+            "family": "Gonzalez",
+            "given": [
+              "Maria"
+            ]
+          }
+        ],
+        "gender": "female",
+        "birthDate": "1985-09-30",
+        "address": [
+          {
+            "line": [
+              "302 Valencia St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94103"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "415-555-0198"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/vega-cd-005",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "vega-cd-005",
+        "subject": {
+          "reference": "Patient/vega-pt-004"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Hypothyroidism"
+        },
+        "onsetDateTime": "2020-05-11"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/vega-rx-006",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "vega-rx-006",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/vega-pt-004"
+        },
+        "medicationCodeableConcept": {
+          "text": "Levothyroxine"
+        },
+        "dosageInstruction": [
+          {
+            "text": "75 mcg once daily"
+          }
+        ],
+        "authoredOn": "2020-05-11"
+      }
+    },
+    {
+      "fullUrl": "Patient/vega-pt-007",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "vega-pt-007",
+        "identifier": [
+          {
+            "system": "urn:hospital:vega:mrn",
+            "value": "VG-848910"
+          }
+        ],
+        "name": [
+          {
+            "family": "O Brien",
+            "given": [
+              "James"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1947-02-11",
+        "address": [
+          {
+            "line": [
+              "19 Taraval St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94116"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "415-555-0163"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/vega-cd-008",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "vega-cd-008",
+        "subject": {
+          "reference": "Patient/vega-pt-007"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Atrial fibrillation"
+        },
+        "onsetDateTime": "2025-12-04"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/vega-rx-009",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "vega-rx-009",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/vega-pt-007"
+        },
+        "medicationCodeableConcept": {
+          "text": "Apixaban"
+        },
+        "dosageInstruction": [
+          {
+            "text": "5 mg twice daily"
+          }
+        ],
+        "authoredOn": "2025-12-04"
+      }
+    },
+    {
+      "fullUrl": "Patient/vega-pt-010",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "vega-pt-010",
+        "identifier": [
+          {
+            "system": "urn:hospital:vega:mrn",
+            "value": "VG-326110"
+          }
+        ],
+        "name": [
+          {
+            "family": "Walsh",
+            "given": [
+              "Noah"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1991-10-18",
+        "address": [
+          {
+            "line": [
+              "2051 Mission St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94127"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/vega-cd-011",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "vega-cd-011",
+        "subject": {
+          "reference": "Patient/vega-pt-010"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Hyperlipidemia"
+        },
+        "onsetDateTime": "2026-06-12"
+      }
+    },
+    {
+      "fullUrl": "Condition/vega-cd-012",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "vega-cd-012",
+        "subject": {
+          "reference": "Patient/vega-pt-010"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Asthma"
+        },
+        "onsetDateTime": "2026-06-12"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/vega-rx-013",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "vega-rx-013",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/vega-pt-010"
+        },
+        "medicationCodeableConcept": {
+          "text": "Atorvastatin"
+        },
+        "dosageInstruction": [
+          {
+            "text": "10 mg once daily"
+          }
+        ],
+        "authoredOn": "2026-06-12"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/vega-rx-014",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "vega-rx-014",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/vega-pt-010"
+        },
+        "medicationCodeableConcept": {
+          "text": "Albuterol"
+        },
+        "dosageInstruction": [
+          {
+            "text": "90 mcg inhaler, 2 puffs as needed"
+          }
+        ],
+        "authoredOn": "2026-06-12"
+      }
+    },
+    {
+      "fullUrl": "Patient/vega-pt-015",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "vega-pt-015",
+        "identifier": [
+          {
+            "system": "urn:hospital:vega:mrn",
+            "value": "VG-546823"
+          }
+        ],
+        "name": [
+          {
+            "family": "Okafor",
+            "given": [
+              "Nadia"
+            ]
+          }
+        ],
+        "gender": "female",
+        "birthDate": "1972-09-13",
+        "address": [
+          {
+            "line": [
+              "2753 Clement St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94133"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "628-555-0109"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/vega-cd-016",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "vega-cd-016",
+        "subject": {
+          "reference": "Patient/vega-pt-015"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Osteoarthritis of knee"
+        },
+        "onsetDateTime": "2018-02-21"
+      }
+    },
+    {
+      "fullUrl": "Condition/vega-cd-017",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "vega-cd-017",
+        "subject": {
+          "reference": "Patient/vega-pt-015"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Hyperlipidemia"
+        },
+        "onsetDateTime": "2018-02-21"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/vega-rx-018",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "vega-rx-018",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/vega-pt-015"
+        },
+        "medicationCodeableConcept": {
+          "text": "Acetaminophen"
+        },
+        "dosageInstruction": [
+          {
+            "text": "500 mg as needed"
+          }
+        ],
+        "authoredOn": "2018-02-21"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/vega-rx-019",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "vega-rx-019",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/vega-pt-015"
+        },
+        "medicationCodeableConcept": {
+          "text": "Atorvastatin"
+        },
+        "dosageInstruction": [
+          {
+            "text": "10 mg once daily"
+          }
+        ],
+        "authoredOn": "2018-02-21"
+      }
+    },
+    {
+      "fullUrl": "Patient/vega-pt-020",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "vega-pt-020",
+        "identifier": [
+          {
+            "system": "urn:hospital:vega:mrn",
+            "value": "VG-625611"
+          }
+        ],
+        "name": [
+          {
+            "family": "Park",
+            "given": [
+              "Mateo"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1944-05-11",
+        "address": [
+          {
+            "line": [
+              "3971 Church St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94133"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "628-555-0143"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/vega-cd-021",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "vega-cd-021",
+        "subject": {
+          "reference": "Patient/vega-pt-020"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Seasonal allergic rhinitis"
+        },
+        "onsetDateTime": "2022-09-25"
+      }
+    },
+    {
+      "fullUrl": "Condition/vega-cd-022",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "vega-cd-022",
+        "subject": {
+          "reference": "Patient/vega-pt-020"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Hyperlipidemia"
+        },
+        "onsetDateTime": "2022-09-25"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/vega-rx-023",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "vega-rx-023",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/vega-pt-020"
+        },
+        "medicationCodeableConcept": {
+          "text": "Loratadine"
+        },
+        "dosageInstruction": [
+          {
+            "text": "10 mg once daily"
+          }
+        ],
+        "authoredOn": "2022-09-25"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/vega-rx-024",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "vega-rx-024",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/vega-pt-020"
+        },
+        "medicationCodeableConcept": {
+          "text": "Atorvastatin"
+        },
+        "dosageInstruction": [
+          {
+            "text": "10 mg once daily"
+          }
+        ],
+        "authoredOn": "2022-09-25"
+      }
+    },
+    {
+      "fullUrl": "Patient/vega-pt-025",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "vega-pt-025",
+        "identifier": [
+          {
+            "system": "urn:hospital:vega:mrn",
+            "value": "VG-363798"
+          }
+        ],
+        "name": [
+          {
+            "family": "Nguyen",
+            "given": [
+              "Thomas"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1965-04-04",
+        "address": [
+          {
+            "line": [
+              "2553 Geary Blvd"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94133"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "628-555-0171"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/vega-cd-026",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "vega-cd-026",
+        "subject": {
+          "reference": "Patient/vega-pt-025"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Hypothyroidism"
+        },
+        "onsetDateTime": "2022-10-18"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/vega-rx-027",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "vega-rx-027",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/vega-pt-025"
+        },
+        "medicationCodeableConcept": {
+          "text": "Levothyroxine"
+        },
+        "dosageInstruction": [
+          {
+            "text": "50 mcg once daily"
+          }
+        ],
+        "authoredOn": "2022-10-18"
+      }
+    },
+    {
+      "fullUrl": "Patient/vega-pt-028",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "vega-pt-028",
+        "identifier": [
+          {
+            "system": "urn:hospital:vega:mrn",
+            "value": "VG-160430"
+          }
+        ],
+        "name": [
+          {
+            "family": "Haddad",
+            "given": [
+              "Ava"
+            ]
+          }
+        ],
+        "gender": "female",
+        "birthDate": "2006-04-14",
+        "address": [
+          {
+            "line": [
+              "2563 Fillmore St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94131"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "628-555-0158"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/vega-cd-029",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "vega-cd-029",
+        "subject": {
+          "reference": "Patient/vega-pt-028"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Essential hypertension"
+        },
+        "onsetDateTime": "2022-10-20"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/vega-rx-030",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "vega-rx-030",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/vega-pt-028"
+        },
+        "medicationCodeableConcept": {
+          "text": "Amlodipine"
+        },
+        "dosageInstruction": [
+          {
+            "text": "5 mg once daily"
+          }
+        ],
+        "authoredOn": "2022-10-20"
+      }
+    },
+    {
+      "fullUrl": "Patient/vega-pt-031",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "vega-pt-031",
+        "identifier": [
+          {
+            "system": "urn:hospital:vega:mrn",
+            "value": "VG-395101"
+          }
+        ],
+        "name": [
+          {
+            "family": "Santos",
+            "given": [
+              "William"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1976-08-06",
+        "address": [
+          {
+            "line": [
+              "1344 Polk St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94131"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "628-555-0190"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/vega-cd-032",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "vega-cd-032",
+        "subject": {
+          "reference": "Patient/vega-pt-031"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Seasonal allergic rhinitis"
+        },
+        "onsetDateTime": "2017-05-15"
+      }
+    },
+    {
+      "fullUrl": "Condition/vega-cd-033",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "vega-cd-033",
+        "subject": {
+          "reference": "Patient/vega-pt-031"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Hyperlipidemia"
+        },
+        "onsetDateTime": "2017-05-15"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/vega-rx-034",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "vega-rx-034",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/vega-pt-031"
+        },
+        "medicationCodeableConcept": {
+          "text": "Loratadine"
+        },
+        "dosageInstruction": [
+          {
+            "text": "10 mg once daily"
+          }
+        ],
+        "authoredOn": "2017-05-15"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/vega-rx-035",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "vega-rx-035",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/vega-pt-031"
+        },
+        "medicationCodeableConcept": {
+          "text": "Atorvastatin"
+        },
+        "dosageInstruction": [
+          {
+            "text": "10 mg once daily"
+          }
+        ],
+        "authoredOn": "2017-05-15"
+      }
+    },
+    {
+      "fullUrl": "Patient/vega-pt-036",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "vega-pt-036",
+        "identifier": [
+          {
+            "system": "urn:hospital:vega:mrn",
+            "value": "VG-403621"
+          }
+        ],
+        "name": [
+          {
+            "family": "Ibrahim",
+            "given": [
+              "Michael"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1975-09-25",
+        "address": [
+          {
+            "line": [
+              "2336 Divisadero St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94121"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "628-555-0173"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/vega-cd-037",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "vega-cd-037",
+        "subject": {
+          "reference": "Patient/vega-pt-036"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Asthma"
+        },
+        "onsetDateTime": "2023-11-19"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/vega-rx-038",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "vega-rx-038",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/vega-pt-036"
+        },
+        "medicationCodeableConcept": {
+          "text": "Albuterol"
+        },
+        "dosageInstruction": [
+          {
+            "text": "90 mcg inhaler, 2 puffs as needed"
+          }
+        ],
+        "authoredOn": "2023-11-19"
+      }
+    },
+    {
+      "fullUrl": "Patient/vega-pt-039",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "vega-pt-039",
+        "identifier": [
+          {
+            "system": "urn:hospital:vega:mrn",
+            "value": "VG-906512"
+          }
+        ],
+        "name": [
+          {
+            "family": "Yamamoto",
+            "given": [
+              "Liam"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1947-06-24",
+        "address": [
+          {
+            "line": [
+              "3296 Judah St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94114"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "628-555-0139"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/vega-cd-040",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "vega-cd-040",
+        "subject": {
+          "reference": "Patient/vega-pt-039"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Asthma"
+        },
+        "onsetDateTime": "2019-02-14"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/vega-rx-041",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "vega-rx-041",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/vega-pt-039"
+        },
+        "medicationCodeableConcept": {
+          "text": "Albuterol"
+        },
+        "dosageInstruction": [
+          {
+            "text": "90 mcg inhaler, 2 puffs as needed"
+          }
+        ],
+        "authoredOn": "2019-02-14"
+      }
+    },
+    {
+      "fullUrl": "Patient/vega-pt-042",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "vega-pt-042",
+        "identifier": [
+          {
+            "system": "urn:hospital:vega:mrn",
+            "value": "VG-411366"
+          }
+        ],
+        "name": [
+          {
+            "family": "Rossi",
+            "given": [
+              "Olivia"
+            ]
+          }
+        ],
+        "gender": "female",
+        "birthDate": "1992-05-14",
+        "address": [
+          {
+            "line": [
+              "3964 Geary Blvd"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94110"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "AllergyIntolerance/vega-al-043",
+      "resource": {
+        "resourceType": "AllergyIntolerance",
+        "id": "vega-al-043",
+        "patient": {
+          "reference": "Patient/vega-pt-042"
+        },
+        "code": {
+          "text": "Latex"
+        },
+        "criticality": "low",
+        "reaction": [
+          {
+            "manifestation": [
+              {
+                "text": "Rash"
+              }
+            ]
+          }
+        ],
+        "recordedDate": "2020-03-09"
+      }
+    },
+    {
+      "fullUrl": "Condition/vega-cd-044",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "vega-cd-044",
+        "subject": {
+          "reference": "Patient/vega-pt-042"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Asthma"
+        },
+        "onsetDateTime": "2020-03-09"
+      }
+    },
+    {
+      "fullUrl": "Condition/vega-cd-045",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "vega-cd-045",
+        "subject": {
+          "reference": "Patient/vega-pt-042"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Seasonal allergic rhinitis"
+        },
+        "onsetDateTime": "2020-03-09"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/vega-rx-046",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "vega-rx-046",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/vega-pt-042"
+        },
+        "medicationCodeableConcept": {
+          "text": "Albuterol"
+        },
+        "dosageInstruction": [
+          {
+            "text": "90 mcg inhaler, 2 puffs as needed"
+          }
+        ],
+        "authoredOn": "2020-03-09"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/vega-rx-047",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "vega-rx-047",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/vega-pt-042"
+        },
+        "medicationCodeableConcept": {
+          "text": "Loratadine"
+        },
+        "dosageInstruction": [
+          {
+            "text": "10 mg once daily"
+          }
+        ],
+        "authoredOn": "2020-03-09"
+      }
+    }
+  ]
+}

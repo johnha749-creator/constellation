@@ -1,0 +1,1594 @@
+{
+  "resourceType": "Bundle",
+  "id": "orion",
+  "type": "collection",
+  "entry": [
+    {
+      "fullUrl": "Organization/orion-org",
+      "resource": {
+        "resourceType": "Organization",
+        "id": "orion-org",
+        "name": "Orion General Hospital"
+      }
+    },
+    {
+      "fullUrl": "Patient/orion-pt-001",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "orion-pt-001",
+        "identifier": [
+          {
+            "system": "urn:hospital:orion:mrn",
+            "value": "OR-430274"
+          }
+        ],
+        "name": [
+          {
+            "family": "Gonzalez",
+            "given": [
+              "Maria"
+            ]
+          }
+        ],
+        "gender": "female",
+        "birthDate": "1958-03-14",
+        "address": [
+          {
+            "line": [
+              "88 Ocean Ave"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94112"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "415-555-0142"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "AllergyIntolerance/orion-al-002",
+      "resource": {
+        "resourceType": "AllergyIntolerance",
+        "id": "orion-al-002",
+        "patient": {
+          "reference": "Patient/orion-pt-001"
+        },
+        "code": {
+          "text": "Penicillin"
+        },
+        "criticality": "high",
+        "reaction": [
+          {
+            "manifestation": [
+              {
+                "text": "Anaphylaxis"
+              }
+            ]
+          }
+        ],
+        "recordedDate": "2019-06-02"
+      }
+    },
+    {
+      "fullUrl": "Condition/orion-cd-003",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "orion-cd-003",
+        "subject": {
+          "reference": "Patient/orion-pt-001"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Type 2 diabetes mellitus"
+        },
+        "onsetDateTime": "2012-04-10"
+      }
+    },
+    {
+      "fullUrl": "Condition/orion-cd-004",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "orion-cd-004",
+        "subject": {
+          "reference": "Patient/orion-pt-001"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Chronic kidney disease, stage 3"
+        },
+        "onsetDateTime": "2021-11-03"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/orion-rx-005",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "orion-rx-005",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/orion-pt-001"
+        },
+        "medicationCodeableConcept": {
+          "text": "Metformin"
+        },
+        "dosageInstruction": [
+          {
+            "text": "500 mg twice daily"
+          }
+        ],
+        "authoredOn": "2012-04-10"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/orion-rx-006",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "orion-rx-006",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/orion-pt-001"
+        },
+        "medicationCodeableConcept": {
+          "text": "Lisinopril"
+        },
+        "dosageInstruction": [
+          {
+            "text": "10 mg once daily"
+          }
+        ],
+        "authoredOn": "2018-01-22"
+      }
+    },
+    {
+      "fullUrl": "Patient/orion-pt-007",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "orion-pt-007",
+        "identifier": [
+          {
+            "system": "urn:hospital:orion:mrn",
+            "value": "OR-756123"
+          }
+        ],
+        "name": [
+          {
+            "family": "O'Brien",
+            "given": [
+              "James"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1947-11-02",
+        "address": [
+          {
+            "line": [
+              "19 Taraval St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94116"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "415-555-0117"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/orion-cd-008",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "orion-cd-008",
+        "subject": {
+          "reference": "Patient/orion-pt-007"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Atrial fibrillation"
+        },
+        "onsetDateTime": "2020-08-19"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/orion-rx-009",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "orion-rx-009",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/orion-pt-007"
+        },
+        "medicationCodeableConcept": {
+          "text": "Warfarin"
+        },
+        "dosageInstruction": [
+          {
+            "text": "5 mg once daily"
+          }
+        ],
+        "authoredOn": "2020-08-19"
+      }
+    },
+    {
+      "fullUrl": "Patient/orion-pt-010",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "orion-pt-010",
+        "identifier": [
+          {
+            "system": "urn:hospital:orion:mrn",
+            "value": "OR-745026"
+          }
+        ],
+        "name": [
+          {
+            "family": "Patel",
+            "given": [
+              "Aisha"
+            ]
+          }
+        ],
+        "gender": "female",
+        "birthDate": "1990-07-22",
+        "address": [
+          {
+            "line": [
+              "640 Clement St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94118"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "415-555-0175"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "AllergyIntolerance/orion-al-011",
+      "resource": {
+        "resourceType": "AllergyIntolerance",
+        "id": "orion-al-011",
+        "patient": {
+          "reference": "Patient/orion-pt-010"
+        },
+        "code": {
+          "text": "Sulfa drugs"
+        },
+        "criticality": "high",
+        "reaction": [
+          {
+            "manifestation": [
+              {
+                "text": "Hives, facial swelling"
+              }
+            ]
+          }
+        ],
+        "recordedDate": "2016-03-09"
+      }
+    },
+    {
+      "fullUrl": "Condition/orion-cd-012",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "orion-cd-012",
+        "subject": {
+          "reference": "Patient/orion-pt-010"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Major depressive disorder"
+        },
+        "onsetDateTime": "2023-01-17"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/orion-rx-013",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "orion-rx-013",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/orion-pt-010"
+        },
+        "medicationCodeableConcept": {
+          "text": "Sertraline"
+        },
+        "dosageInstruction": [
+          {
+            "text": "100 mg once daily"
+          }
+        ],
+        "authoredOn": "2023-01-17"
+      }
+    },
+    {
+      "fullUrl": "Patient/orion-pt-014",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "orion-pt-014",
+        "identifier": [
+          {
+            "system": "urn:hospital:orion:mrn",
+            "value": "OR-523824"
+          }
+        ],
+        "name": [
+          {
+            "family": "Chen",
+            "given": [
+              "Robert"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1972-05-05",
+        "address": [
+          {
+            "line": [
+              "77 Irving St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94122"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "415-555-0151"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/orion-cd-015",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "orion-cd-015",
+        "subject": {
+          "reference": "Patient/orion-pt-014"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Hyperlipidemia"
+        },
+        "onsetDateTime": "2019-09-12"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/orion-rx-016",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "orion-rx-016",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/orion-pt-014"
+        },
+        "medicationCodeableConcept": {
+          "text": "Atorvastatin"
+        },
+        "dosageInstruction": [
+          {
+            "text": "20 mg once daily"
+          }
+        ],
+        "authoredOn": "2019-09-12"
+      }
+    },
+    {
+      "fullUrl": "Patient/orion-pt-017",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "orion-pt-017",
+        "identifier": [
+          {
+            "system": "urn:hospital:orion:mrn",
+            "value": "OR-737309"
+          }
+        ],
+        "name": [
+          {
+            "family": "Walsh",
+            "given": [
+              "Noah"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1991-10-18",
+        "address": [
+          {
+            "line": [
+              "2051 Mission St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94127"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "628-555-0165"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/orion-cd-018",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "orion-cd-018",
+        "subject": {
+          "reference": "Patient/orion-pt-017"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Hyperlipidemia"
+        },
+        "onsetDateTime": "2026-06-12"
+      }
+    },
+    {
+      "fullUrl": "Condition/orion-cd-019",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "orion-cd-019",
+        "subject": {
+          "reference": "Patient/orion-pt-017"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Asthma"
+        },
+        "onsetDateTime": "2026-06-12"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/orion-rx-020",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "orion-rx-020",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/orion-pt-017"
+        },
+        "medicationCodeableConcept": {
+          "text": "Atorvastatin"
+        },
+        "dosageInstruction": [
+          {
+            "text": "10 mg once daily"
+          }
+        ],
+        "authoredOn": "2026-06-12"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/orion-rx-021",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "orion-rx-021",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/orion-pt-017"
+        },
+        "medicationCodeableConcept": {
+          "text": "Albuterol"
+        },
+        "dosageInstruction": [
+          {
+            "text": "90 mcg inhaler, 2 puffs as needed"
+          }
+        ],
+        "authoredOn": "2026-06-12"
+      }
+    },
+    {
+      "fullUrl": "Patient/orion-pt-022",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "orion-pt-022",
+        "identifier": [
+          {
+            "system": "urn:hospital:orion:mrn",
+            "value": "OR-722914"
+          }
+        ],
+        "name": [
+          {
+            "family": "Johnson",
+            "given": [
+              "Grace"
+            ]
+          }
+        ],
+        "gender": "female",
+        "birthDate": "1968-03-27",
+        "address": [
+          {
+            "line": [
+              "210 Polk St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94114"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "628-555-0181"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/orion-cd-023",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "orion-cd-023",
+        "subject": {
+          "reference": "Patient/orion-pt-022"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Hypothyroidism"
+        },
+        "onsetDateTime": "2021-10-16"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/orion-rx-024",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "orion-rx-024",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/orion-pt-022"
+        },
+        "medicationCodeableConcept": {
+          "text": "Levothyroxine"
+        },
+        "dosageInstruction": [
+          {
+            "text": "50 mcg once daily"
+          }
+        ],
+        "authoredOn": "2021-10-16"
+      }
+    },
+    {
+      "fullUrl": "Patient/orion-pt-025",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "orion-pt-025",
+        "identifier": [
+          {
+            "system": "urn:hospital:orion:mrn",
+            "value": "OR-808752"
+          }
+        ],
+        "name": [
+          {
+            "family": "Okafor",
+            "given": [
+              "Nadia"
+            ]
+          }
+        ],
+        "gender": "female",
+        "birthDate": "1972-09-13",
+        "address": [
+          {
+            "line": [
+              "2753 Clement St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94133"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "628-555-0109"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/orion-cd-026",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "orion-cd-026",
+        "subject": {
+          "reference": "Patient/orion-pt-025"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Osteoarthritis of knee"
+        },
+        "onsetDateTime": "2018-02-21"
+      }
+    },
+    {
+      "fullUrl": "Condition/orion-cd-027",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "orion-cd-027",
+        "subject": {
+          "reference": "Patient/orion-pt-025"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Hyperlipidemia"
+        },
+        "onsetDateTime": "2018-02-21"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/orion-rx-028",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "orion-rx-028",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/orion-pt-025"
+        },
+        "medicationCodeableConcept": {
+          "text": "Acetaminophen"
+        },
+        "dosageInstruction": [
+          {
+            "text": "500 mg as needed"
+          }
+        ],
+        "authoredOn": "2018-02-21"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/orion-rx-029",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "orion-rx-029",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/orion-pt-025"
+        },
+        "medicationCodeableConcept": {
+          "text": "Atorvastatin"
+        },
+        "dosageInstruction": [
+          {
+            "text": "10 mg once daily"
+          }
+        ],
+        "authoredOn": "2018-02-21"
+      }
+    },
+    {
+      "fullUrl": "Patient/orion-pt-030",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "orion-pt-030",
+        "identifier": [
+          {
+            "system": "urn:hospital:orion:mrn",
+            "value": "OR-819809"
+          }
+        ],
+        "name": [
+          {
+            "family": "Murphy",
+            "given": [
+              "Kenji"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1959-11-20",
+        "address": [
+          {
+            "line": [
+              "3944 Haight St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94133"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "628-555-0192"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/orion-cd-031",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "orion-cd-031",
+        "subject": {
+          "reference": "Patient/orion-pt-030"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Asthma"
+        },
+        "onsetDateTime": "2021-04-10"
+      }
+    },
+    {
+      "fullUrl": "Condition/orion-cd-032",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "orion-cd-032",
+        "subject": {
+          "reference": "Patient/orion-pt-030"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Seasonal allergic rhinitis"
+        },
+        "onsetDateTime": "2021-04-10"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/orion-rx-033",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "orion-rx-033",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/orion-pt-030"
+        },
+        "medicationCodeableConcept": {
+          "text": "Albuterol"
+        },
+        "dosageInstruction": [
+          {
+            "text": "90 mcg inhaler, 2 puffs as needed"
+          }
+        ],
+        "authoredOn": "2021-04-10"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/orion-rx-034",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "orion-rx-034",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/orion-pt-030"
+        },
+        "medicationCodeableConcept": {
+          "text": "Loratadine"
+        },
+        "dosageInstruction": [
+          {
+            "text": "10 mg once daily"
+          }
+        ],
+        "authoredOn": "2021-04-10"
+      }
+    },
+    {
+      "fullUrl": "Patient/orion-pt-035",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "orion-pt-035",
+        "identifier": [
+          {
+            "system": "urn:hospital:orion:mrn",
+            "value": "OR-492321"
+          }
+        ],
+        "name": [
+          {
+            "family": "Park",
+            "given": [
+              "Mateo"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1944-05-11",
+        "address": [
+          {
+            "line": [
+              "1884 Mission St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94131"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "628-555-0143"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/orion-cd-036",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "orion-cd-036",
+        "subject": {
+          "reference": "Patient/orion-pt-035"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Seasonal allergic rhinitis"
+        },
+        "onsetDateTime": "2022-09-25"
+      }
+    },
+    {
+      "fullUrl": "Condition/orion-cd-037",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "orion-cd-037",
+        "subject": {
+          "reference": "Patient/orion-pt-035"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Hyperlipidemia"
+        },
+        "onsetDateTime": "2022-09-25"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/orion-rx-038",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "orion-rx-038",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/orion-pt-035"
+        },
+        "medicationCodeableConcept": {
+          "text": "Loratadine"
+        },
+        "dosageInstruction": [
+          {
+            "text": "10 mg once daily"
+          }
+        ],
+        "authoredOn": "2022-09-25"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/orion-rx-039",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "orion-rx-039",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/orion-pt-035"
+        },
+        "medicationCodeableConcept": {
+          "text": "Atorvastatin"
+        },
+        "dosageInstruction": [
+          {
+            "text": "10 mg once daily"
+          }
+        ],
+        "authoredOn": "2022-09-25"
+      }
+    },
+    {
+      "fullUrl": "Patient/orion-pt-040",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "orion-pt-040",
+        "identifier": [
+          {
+            "system": "urn:hospital:orion:mrn",
+            "value": "OR-507945"
+          }
+        ],
+        "name": [
+          {
+            "family": "Nguyen",
+            "given": [
+              "Thomas"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1965-04-04",
+        "address": [
+          {
+            "line": [
+              "31 Fillmore St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94131"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "628-555-0171"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/orion-cd-041",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "orion-cd-041",
+        "subject": {
+          "reference": "Patient/orion-pt-040"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Hypothyroidism"
+        },
+        "onsetDateTime": "2022-10-18"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/orion-rx-042",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "orion-rx-042",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/orion-pt-040"
+        },
+        "medicationCodeableConcept": {
+          "text": "Levothyroxine"
+        },
+        "dosageInstruction": [
+          {
+            "text": "50 mcg once daily"
+          }
+        ],
+        "authoredOn": "2022-10-18"
+      }
+    },
+    {
+      "fullUrl": "Patient/orion-pt-043",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "orion-pt-043",
+        "identifier": [
+          {
+            "system": "urn:hospital:orion:mrn",
+            "value": "OR-956493"
+          }
+        ],
+        "name": [
+          {
+            "family": "Lindqvist",
+            "given": [
+              "Elizabeth"
+            ]
+          }
+        ],
+        "gender": "female",
+        "birthDate": "2006-04-13",
+        "address": [
+          {
+            "line": [
+              "67 Mission St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94127"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "628-555-0137"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/orion-cd-044",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "orion-cd-044",
+        "subject": {
+          "reference": "Patient/orion-pt-043"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Hyperlipidemia"
+        },
+        "onsetDateTime": "2024-05-17"
+      }
+    },
+    {
+      "fullUrl": "Condition/orion-cd-045",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "orion-cd-045",
+        "subject": {
+          "reference": "Patient/orion-pt-043"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Essential hypertension"
+        },
+        "onsetDateTime": "2024-05-17"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/orion-rx-046",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "orion-rx-046",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/orion-pt-043"
+        },
+        "medicationCodeableConcept": {
+          "text": "Atorvastatin"
+        },
+        "dosageInstruction": [
+          {
+            "text": "10 mg once daily"
+          }
+        ],
+        "authoredOn": "2024-05-17"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/orion-rx-047",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "orion-rx-047",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/orion-pt-043"
+        },
+        "medicationCodeableConcept": {
+          "text": "Amlodipine"
+        },
+        "dosageInstruction": [
+          {
+            "text": "5 mg once daily"
+          }
+        ],
+        "authoredOn": "2024-05-17"
+      }
+    },
+    {
+      "fullUrl": "Patient/orion-pt-048",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "orion-pt-048",
+        "identifier": [
+          {
+            "system": "urn:hospital:orion:mrn",
+            "value": "OR-473626"
+          }
+        ],
+        "name": [
+          {
+            "family": "Kowalski",
+            "given": [
+              "Mia"
+            ]
+          }
+        ],
+        "gender": "female",
+        "birthDate": "2005-08-11",
+        "address": [
+          {
+            "line": [
+              "2806 Clement St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94131"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "628-555-0136"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/orion-cd-049",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "orion-cd-049",
+        "subject": {
+          "reference": "Patient/orion-pt-048"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Asthma"
+        },
+        "onsetDateTime": "2025-06-25"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/orion-rx-050",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "orion-rx-050",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/orion-pt-048"
+        },
+        "medicationCodeableConcept": {
+          "text": "Albuterol"
+        },
+        "dosageInstruction": [
+          {
+            "text": "90 mcg inhaler, 2 puffs as needed"
+          }
+        ],
+        "authoredOn": "2025-06-25"
+      }
+    },
+    {
+      "fullUrl": "Patient/orion-pt-051",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "orion-pt-051",
+        "identifier": [
+          {
+            "system": "urn:hospital:orion:mrn",
+            "value": "OR-557956"
+          }
+        ],
+        "name": [
+          {
+            "family": "Silva",
+            "given": [
+              "Lucas"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1963-07-09",
+        "address": [
+          {
+            "line": [
+              "1752 Polk St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94127"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "628-555-0182"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/orion-cd-052",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "orion-cd-052",
+        "subject": {
+          "reference": "Patient/orion-pt-051"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Essential hypertension"
+        },
+        "onsetDateTime": "2025-09-07"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/orion-rx-053",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "orion-rx-053",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/orion-pt-051"
+        },
+        "medicationCodeableConcept": {
+          "text": "Amlodipine"
+        },
+        "dosageInstruction": [
+          {
+            "text": "5 mg once daily"
+          }
+        ],
+        "authoredOn": "2025-09-07"
+      }
+    },
+    {
+      "fullUrl": "Patient/orion-pt-054",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "orion-pt-054",
+        "identifier": [
+          {
+            "system": "urn:hospital:orion:mrn",
+            "value": "OR-829075"
+          }
+        ],
+        "name": [
+          {
+            "family": "Santos",
+            "given": [
+              "Bill"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1976-08-06",
+        "address": [
+          {
+            "line": [
+              "1344 Polk St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94131"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "628-555-0190"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/orion-cd-055",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "orion-cd-055",
+        "subject": {
+          "reference": "Patient/orion-pt-054"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Seasonal allergic rhinitis"
+        },
+        "onsetDateTime": "2017-05-15"
+      }
+    },
+    {
+      "fullUrl": "Condition/orion-cd-056",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "orion-cd-056",
+        "subject": {
+          "reference": "Patient/orion-pt-054"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Hyperlipidemia"
+        },
+        "onsetDateTime": "2017-05-15"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/orion-rx-057",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "orion-rx-057",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/orion-pt-054"
+        },
+        "medicationCodeableConcept": {
+          "text": "Loratadine"
+        },
+        "dosageInstruction": [
+          {
+            "text": "10 mg once daily"
+          }
+        ],
+        "authoredOn": "2017-05-15"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/orion-rx-058",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "orion-rx-058",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/orion-pt-054"
+        },
+        "medicationCodeableConcept": {
+          "text": "Atorvastatin"
+        },
+        "dosageInstruction": [
+          {
+            "text": "10 mg once daily"
+          }
+        ],
+        "authoredOn": "2017-05-15"
+      }
+    },
+    {
+      "fullUrl": "Patient/orion-pt-059",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "orion-pt-059",
+        "identifier": [
+          {
+            "system": "urn:hospital:orion:mrn",
+            "value": "OR-446604"
+          }
+        ],
+        "name": [
+          {
+            "family": "Alvarez",
+            "given": [
+              "Emma"
+            ]
+          }
+        ],
+        "gender": "female",
+        "birthDate": "1982-07-18",
+        "address": [
+          {
+            "line": [
+              "3218 Judah St"
+            ],
+            "city": "San Francisco",
+            "state": "CA",
+            "postalCode": "94110"
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "628-555-0191"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "Condition/orion-cd-060",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "orion-cd-060",
+        "subject": {
+          "reference": "Patient/orion-pt-059"
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "code": {
+          "text": "Hyperlipidemia"
+        },
+        "onsetDateTime": "2018-04-01"
+      }
+    },
+    {
+      "fullUrl": "MedicationRequest/orion-rx-061",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "orion-rx-061",
+        "status": "active",
+        "intent": "order",
+        "subject": {
+          "reference": "Patient/orion-pt-059"
+        },
+        "medicationCodeableConcept": {
+          "text": "Atorvastatin"
+        },
+        "dosageInstruction": [
+          {
+            "text": "10 mg once daily"
+          }
+        ],
+        "authoredOn": "2018-04-01"
+      }
+    }
+  ]
+}
