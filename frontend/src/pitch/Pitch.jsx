@@ -117,33 +117,36 @@ function Title() {
   );
 }
 
+// [number, short label, source]. "At worst" marks upper bounds, so nobody reads them as averages.
 const PROBLEM_STATS = [
-  ["31%", <>of adults used <strong>2+ hospitals</strong>, and they made <strong>56.5%</strong> of all acute-care visits</>,
-    "Bourgeois et al., Arch Intern Med 2010 (3.7M Massachusetts adults)"],
-  ["50%", <>worst-case <strong>match rate</strong> when patient records are shared between organizations</>,
-    "Pew Charitable Trusts 2018, citing ONC-funded research"],
-  ["8–12%", <>of a hospital's patient records are <strong>duplicates</strong> of the same person</>,
-    "AHIMA Journal"],
-  ["27–54%", <>of patients admitted to hospital have <strong>an error in their medication history</strong></>,
-    "Tam et al., CMAJ 2005, systematic review"],
-  ["1 in 167", <>Americans goes to the ER for <strong>medication harm</strong> every year; 38.6% are admitted</>,
-    "Budnitz et al., JAMA 2021"],
-  ["7,613", <><strong>wrong-patient</strong> events reported by 181 organizations; 9% caused harm or death</>,
-    "ECRI Institute, 2016"],
+  ["31%", "of adults use 2+ hospitals", "Bourgeois et al., Arch Intern Med 2010"],
+  ["50%", "match rate between organizations, at worst", "Pew Charitable Trusts, 2018"],
+  ["8–12%", "of hospital records are duplicates", "AHIMA Journal"],
+  ["26.9%", "hospital data error rate, at worst", "HealthLeaders, 2025"],
+  ["27–54%", "of patients: medication-history errors at admission", "Tam et al., CMAJ 2005"],
+  ["1 in 167", "Americans in the ER each year from medication harm", "Budnitz et al., JAMA 2021"],
+  ["7,613", "wrong-patient events; 9% caused harm", "ECRI Institute, 2016"],
+  ["$20M", "a year lost to bad data per provider, at worst", "HealthLeaders, 2025"],
 ];
+
+function Fact({ number, text, source, className = "" }) {
+  return (
+    <div className={`fact ${className}`}>
+      <div className="fact-number">{number}</div>
+      <div className="fact-text">{text}</div>
+      <div className="fact-source">{source}</div>
+    </div>
+  );
+}
 
 function Problem() {
   return (
     <>
       <div className="kicker">The problem, in numbers</div>
-      <h2>Patients are scattered across hospitals. Their records don't add up.</h2>
+      <h2>Patients are scattered. Their records don't add up.</h2>
       <div className="fact-grid">
         {PROBLEM_STATS.map(([number, text, source]) => (
-          <div key={source} className="fact">
-            <div className="fact-number">{number}</div>
-            <div className="fact-text">{text}</div>
-            <div className="fact-source">{source}</div>
-          </div>
+          <Fact key={text} number={number} text={text} source={source} />
         ))}
       </div>
     </>
@@ -152,9 +155,9 @@ function Problem() {
 
 function WhyItHappens() {
   const records = [
-    { hospital: "orion", name: "Maria Gonzalez", fact: "Allergy: Penicillin", detail: "anaphylaxis", tone: "allergy" },
-    { hospital: "lyra", name: "Maria Gonzales", fact: "Ordered: Amoxicillin", detail: "ER visit, last month", tone: "med" },
-    { hospital: "vega", name: "M. Gonzalez", fact: "Ordered: Enalapril", detail: "a 2nd drug of the same kind", tone: "med" },
+    { hospital: "orion", name: "Maria Gonzalez", fact: "Allergy: Penicillin", tone: "allergy" },
+    { hospital: "lyra", name: "Maria Gonzales", fact: "Ordered: Amoxicillin", tone: "med" },
+    { hospital: "vega", name: "M. Gonzalez", fact: "Ordered: Enalapril", tone: "med" },
   ];
   return (
     <>
@@ -166,21 +169,15 @@ function WhyItHappens() {
             <div className="record-hospital" style={{ color: color(r.hospital) }}>{hospitals[r.hospital].name}</div>
             <div className="record-name">{r.name}</div>
             <div className={`record-fact ${r.tone}`}>{r.fact}</div>
-            <div className="record-detail">{r.detail}</div>
           </div>
         ))}
       </div>
-      <div className="two-col why-row">
-        <p className="punchline">
-          Three spellings, one woman. Amoxicillin <em>is</em> a penicillin. Every record is correct on its own;{" "}
-          <span className="danger">together they're dangerous.</span>
-        </p>
-        <div className="fact inline">
-          <div className="fact-number">43%</div>
-          <div className="fact-text">of U.S. hospitals <strong>routinely</strong> send, receive, find <em>and</em> integrate
-            outside records. The networks exist (TEFCA, Epic, CommonWell); making sense of what arrives doesn't.</div>
-          <div className="fact-source">ONC Data Brief 71: non-federal acute care hospitals, 2023</div>
-        </div>
+      <p className="punchline center">
+        Amoxicillin <em>is</em> a penicillin. Each record is right; <span className="danger">together they're dangerous.</span>
+      </p>
+      <div className="fact-pair">
+        <Fact className="inline" number="35%" text="of doctors share records only by fax or mail" source="ONC, 2019" />
+        <Fact className="inline" number="43%" text="of hospitals routinely integrate outside records" source="ONC, 2023" />
       </div>
     </>
   );
@@ -188,9 +185,9 @@ function WhyItHappens() {
 
 function Fix() {
   const steps = [
-    ["Read", "Every hospital's records in FHIR R4, the format they already exchange. A new hospital can connect live."],
-    ["Match", "One fixed points rubric over 6 fields. Nickname +5.6, swapped day and month +6.9, typo in a surname +4.9."],
-    ["Catch", "5 kinds of conflict across the combined chart: allergy, interaction, duplicate drug, drug vs diagnosis, dose."],
+    ["Read", "Every hospital's records, in FHIR."],
+    ["Match", "Fixed points per field. Same evidence, same score."],
+    ["Catch", "5 kinds of conflict, with the hospital behind each."],
   ];
   return (
     <>
@@ -210,10 +207,7 @@ function Fix() {
         <div className="t-review">0 to +4.2<span>a clinician decides</span></div>
         <div className="t-same">+4.2 or more<span>same person</span></div>
       </div>
-      <p className="muted center small">
-        Every pair starts at −10 points. The two different Maria Gonzalezes score −6.9 and stay apart. Every link
-        shows its breakdown, and every decision goes into a tamper-evident log.
-      </p>
+      <p className="muted center small">Start at −10. The two different Maria Gonzalezes score −6.9: kept apart.</p>
     </>
   );
 }
@@ -242,17 +236,17 @@ function Demo() {
       </div>
       <div className="split-text">
         <div className="kicker">Live demo</div>
-        <h2>Every patient becomes a constellation.</h2>
+        <h2>Every patient is a constellation.</h2>
         <ul className="legend-list">
-          <li><span className="sym gold" /><span>Gold: the <strong>same person</strong>, 96–100% sure</span></li>
-          <li><span className="sym red" /><span>Red: a <strong>conflict</strong> between hospitals</span></li>
+          <li><span className="sym gold" /><span>Gold: <strong>same person</strong></span></li>
+          <li><span className="sym red" /><span>Red: <strong>conflict</strong></span></li>
         </ul>
         <ol className="demo-steps">
-          <li>All patients in 3D: red stars are in danger</li>
-          <li>Maria: 10 of her 10 facts were known to only one hospital</li>
-          <li>The <em>other</em> Maria Gonzalez stays separate</li>
-          <li>Aisha: unsure, so a clinician decides</li>
-          <li>A 4th hospital connects live: a new danger</li>
+          <li>3D: red stars are in danger</li>
+          <li>Maria: an allergy only Orion knew</li>
+          <li>The other Maria: kept apart</li>
+          <li>Aisha: a clinician decides</li>
+          <li>New hospital, new danger</li>
         </ol>
       </div>
     </div>
@@ -265,30 +259,27 @@ function Results() {
       <div className="kicker">The fix, in numbers</div>
       <h2>Measured, not promised.</h2>
       <div className="big-numbers">
-        <div><strong>99.98%</strong><span>of automatic links are correct (20,000 records)</span></div>
-        <div><strong>99.53%</strong><span>of true matches found (20,000 records)</span></div>
-        <div><strong>7,283×</strong><span>fewer comparisons: 5 billion → 686,541 (100,000 records)</span></div>
-        <div><strong>86 s</strong><span>to link 100,000 records, instead of 100+ hours</span></div>
+        <div><strong>99.98%</strong><span>auto-links correct</span></div>
+        <div><strong>99.53%</strong><span>true matches found</span></div>
+        <div><strong>7,283×</strong><span>fewer comparisons at 100,000</span></div>
+        <div><strong>86 s</strong><span>for 100,000 records</span></div>
       </div>
       <div className="result-row">
-        <div><strong>100%</strong> the same decisions when hospitals share only <em>encrypted</em> fingerprints</div>
-        <div><strong>{stats.cross_hospital_conflicts}</strong> conflicts caught across hospitals in our demo, {stats.conflicts.high} high risk</div>
-        <div><strong>7</strong> HIPAA Security Rule safeguards built in: sign-in, roles, logoff, audit log…</div>
+        <div><strong>100%</strong> same results, encrypted</div>
+        <div><strong>{stats.cross_hospital_conflicts}</strong> conflicts caught in our demo</div>
+        <div><strong>7</strong> HIPAA safeguards built in</div>
         <div><strong>95</strong> automated tests</div>
       </div>
-      <p className="muted center small">
-        Benchmarked on synthetic patients with realistic mistakes: typos, nicknames, swapped dates, moves
-        (python -m app.benchmark).
-      </p>
+      <p className="muted center small">Synthetic patients with realistic mistakes; 20,000 records unless noted.</p>
     </>
   );
 }
 
 function Close() {
   const next = [
-    ["Real drug data", "RxNorm codes and a licensed interaction database"],
-    ["Plug into the networks", "read live from TEFCA and Epic over FHIR APIs"],
-    ["Hospital-grade", "single sign-on, an off-site audit copy, millions of records"],
+    ["Real drug data", "RxNorm + an interaction database"],
+    ["Live networks", "TEFCA and Epic over FHIR"],
+    ["Hospital-grade", "single sign-on, millions of records"],
   ];
   return (
     <>
@@ -320,27 +311,26 @@ const SLIDES = [
   },
   {
     id: "problem", Body: Problem,
-    notes: "The numbers. About a third of adults use more than one hospital, and they make over half of all visits. When records cross organizations, matching can be as bad as 50%. Up to 12% of a hospital's records are duplicates. At admission, a quarter to a half of patients have an error in their medication history. 1 in 167 Americans ends up in the ER from medication harm every year. And ECRI collected over 7,600 wrong-patient events, 9% of them harmful.",
+    notes: "A third of adults use more than one hospital. When records cross organizations, matching can be as bad as 50%. Up to 12% of a hospital's records are duplicates, and some studies find data errors in over a quarter of hospital records. A quarter to a half of patients arrive with medication-history errors, 1 in 167 Americans ends up in the ER from medication harm each year, and bad data can cost a provider up to 20 million dollars a year.",
   },
   {
     id: "why", Body: WhyItHappens,
-    notes: "Here's how it happens. Maria's penicillin allergy is at Orion. Lyra's ER spells her name differently and orders amoxicillin, which is a penicillin. Every record is correct; together they're dangerous. The networks to move records exist, but only 43% of hospitals routinely integrate what they receive. Moving records is solved. Making sense of them isn't.",
+    notes: "Here's how it happens. Maria's penicillin allergy is at Orion. Lyra's ER spells her name differently and orders amoxicillin, a penicillin. Each record is right; together they're dangerous. A third of doctors still share records only by fax or mail, and fewer than half of hospitals routinely integrate what they receive.",
   },
   {
     id: "fix", Body: Fix,
-    notes: "Constellation does three things. It reads FHIR, the format hospitals already use. It matches records with one fixed rubric: every field earns set points, start at minus 10, plus 4.2 links, and anything in between goes to a clinician. Same evidence, same score, every time. Then it catches five kinds of conflict across the combined chart, naming the hospital behind each side.",
+    notes: "Constellation reads FHIR, the format hospitals already use. It matches records with fixed points per field: start at minus 10, plus 4.2 links, and anything in between goes to a clinician. Same evidence, same score, every time. Then it catches five kinds of conflict, naming the hospital behind each side.",
   },
   {
     id: "demo", Body: Demo, className: "full-bleed",
-    notes: "This is Maria as a constellation: each star is one hospital's record, gold lines are the same person, the red line is the penicillin conflict. Now switch to the app (localhost:5173, Reset demo beforehand): 3D view, Maria's red star, the Summary tab ('Penicillin, only at Orion'), the red line, the other Maria Gonzalez, Aisha's review, then Connect hospital → Try the sample → Kenji.",
+    notes: "This is Maria: each star is one hospital's record, gold is the same person, red is the penicillin conflict. Now switch to the app (localhost:5173, Reset demo beforehand): 3D view, Maria's red star, the Summary tab, the red line, the other Maria Gonzalez, Aisha's review, then Connect hospital → Try the sample → Kenji.",
   },
   {
     id: "results", Body: Results,
-    notes: "Does it work? On 20,000 synthetic records with realistic mistakes, 99.98% of automatic links are correct and 99.5% of true matches are found; the rest go to a human. Blocking cuts 5 billion comparisons to under 700,000, so 100,000 records link in under 90 seconds. Hospitals can share encrypted fingerprints instead of names and get exactly the same decisions. We built in seven HIPAA Security Rule safeguards, and 95 automated tests back all of this.",
+    notes: "On 20,000 synthetic records with realistic mistakes, 99.98% of automatic links are correct and 99.5% of true matches are found; the rest go to a human. Blocking cuts 5 billion comparisons to under 700,000, so 100,000 records link in 86 seconds. Encrypted fingerprints give exactly the same decisions, and 95 tests back it up.",
   },
   {
     id: "close", Body: Close, className: "full-bleed",
-    notes: "Next: real drug data with RxNorm, reading live from TEFCA and Epic, and hospital-grade sign-on and scale. Constellation: connect the dots before they cause harm. Thank you, and we'd love your questions.",
+    notes: "Next: real drug data, live feeds from TEFCA and Epic, and hospital-grade sign-on and scale. Constellation: connect the dots before they cause harm. Thank you!",
   },
 ];
-

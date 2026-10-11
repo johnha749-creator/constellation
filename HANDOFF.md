@@ -311,8 +311,8 @@ The slides are a page in the frontend: with `npm run dev` running, open
 | # | Slide | What's on it |
 |---|---|---|
 | 1 | Title | The live 3D network |
-| 2 | The problem, in numbers | Six cited statistics (sources on the slide): 31% of adults use 2+ hospitals; match rates as low as 50% between organizations; 8–12% duplicate records; 27–54% of patients with medication-history errors at admission; 1 in 167 Americans in the ER for medication harm each year; 7,613 wrong-patient events |
-| 3 | Why it still happens | Maria's three records, and ONC's figure that only 43% of hospitals routinely integrate outside records |
+| 2 | The problem, in numbers | Eight cited statistics (sources on the slide): 31% of adults use 2+ hospitals; match rates as low as 50% between organizations; 8–12% duplicate records; hospital data error rates up to 26.9%; 27–54% of patients with medication-history errors at admission; 1 in 167 Americans in the ER for medication harm each year; 7,613 wrong-patient events; up to $20M a year lost to bad data per provider |
+| 3 | Why it still happens | Maria's three records; 35% of doctors share records only by fax or mail (ONC, 2019); 43% of hospitals routinely integrate outside records (ONC, 2023) |
 | 4 | How we fix it | Read, Match, Catch, and the rubric thresholds |
 | 5 | Live demo | Maria's constellation and the demo steps. **Switch to the app here.** |
 | 6 | The fix, in numbers | 99.98% precision, 99.53% recall, 7,283× fewer comparisons, 86 s for 100,000 records, identical encrypted matching, 7 HIPAA safeguards, 95 tests |
@@ -320,7 +320,10 @@ The slides are a page in the frontend: with `npm run dev` running, open
 
 Every outside number has its source on the slide; if a judge asks, the sources are Bourgeois et
 al. (Arch Intern Med 2010), Pew Charitable Trusts (2018), the AHIMA Journal, Tam et al. (CMAJ
-2005), Budnitz et al. (JAMA 2021), ECRI Institute (2016) and ONC Data Brief 71 (2023 data).
+2005), Budnitz et al. (JAMA 2021), ECRI Institute (2016), ONC's 2019 physician interoperability
+brief, and ONC Data Brief 71 (2023 data). The 26.9% and $20M figures come from a HealthLeaders
+article (January 2025) that reports them as upper bounds across studies without naming the
+studies, so the slide says "at worst"; don't present them as averages.
 
 - **Keys:** → or Space for next, ← for back, **F** for full screen, **N** for speaker notes (a
   short script for every slide). The controls in the bottom-right corner do the same.
