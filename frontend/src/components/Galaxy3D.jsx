@@ -203,7 +203,10 @@ export default function Galaxy3D({ patients, hospitals, selectedId, onSelect, le
 
     return () => {
       cancelAnimationFrame(frame);
-      cameraState.current = { position: camera.position.clone(), target: controls.target.clone(), autoRotate: controls.autoRotate };
+      // Only keep a viewpoint that was actually fitted; an unfitted camera sits at the origin.
+      if (!needsFit) {
+        cameraState.current = { position: camera.position.clone(), target: controls.target.clone(), autoRotate: controls.autoRotate };
+      }
       observer.disconnect();
       canvas.removeEventListener("pointermove", onMove);
       canvas.removeEventListener("pointerdown", onDown);
