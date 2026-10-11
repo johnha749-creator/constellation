@@ -115,43 +115,6 @@
   align-items: start;
 }
 
-.two-col.wide-left {
-  grid-template-columns: 1.35fr 1fr;
-  align-items: center;
-}
-
-.panel-card {
-  display: grid;
-  align-content: start;
-  gap: 1.4cqh;
-  padding: 2.6cqh 2cqw;
-  border: 1px solid var(--border);
-  border-radius: 1cqw;
-  background: rgba(17, 24, 51, 0.78);
-}
-
-.panel-label {
-  font-size: 1.2cqw;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.panel-label.ok {
-  color: var(--ok);
-}
-
-.panel-label.danger {
-  color: var(--high);
-}
-
-.big-list {
-  display: grid;
-  gap: 1.6cqh;
-  margin: 0;
-  padding-left: 2.4cqw;
-}
-
 /* --- title and closing slides (live 3D galaxy behind the text) */
 .slide-galaxy {
   position: absolute;
@@ -225,7 +188,47 @@
   font-weight: 700;
 }
 
-/* --- problem */
+/* --- the problem, in numbers (red) and the fix, in numbers (gold) */
+.fact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.2cqh 1.8cqw;
+  margin-top: 1cqh;
+}
+
+.fact {
+  display: grid;
+  align-content: start;
+  gap: 0.8cqh;
+  padding: 2.2cqh 1.5cqw;
+  border: 1px solid var(--border);
+  border-radius: 1cqw;
+  background: rgba(17, 24, 51, 0.8);
+}
+
+.fact-number {
+  font-size: 3.6cqw;
+  font-weight: 800;
+  line-height: 1.05;
+  color: var(--high);
+  text-shadow: 0 0 1.6cqw rgba(255, 77, 109, 0.4);
+}
+
+.fact-text {
+  font-size: 1.45cqw;
+  line-height: 1.35;
+}
+
+.fact-source {
+  font-size: 1cqw;
+  color: var(--muted);
+}
+
+.fact.inline {
+  border-left: 0.3cqw solid var(--high);
+}
+
+/* --- why it still happens */
 .record-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -253,7 +256,6 @@
   font-weight: 700;
 }
 
-.record-dob,
 .record-detail {
   font-size: 1.3cqw;
   color: var(--muted);
@@ -278,7 +280,28 @@
   font-size: 2.3cqw;
 }
 
-/* --- solution */
+.record-row.compact .record-card {
+  padding: 1.8cqh 1.4cqw;
+}
+
+.record-row.compact .record-name {
+  font-size: 2cqw;
+}
+
+.record-row.compact .record-fact {
+  margin-top: 1.2cqh;
+}
+
+.why-row {
+  align-items: center;
+  margin-top: 1cqh;
+}
+
+.why-row .punchline {
+  margin: 0;
+}
+
+/* --- how we fix it */
 .steps {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -312,7 +335,11 @@
   font-weight: 700;
 }
 
-/* --- Maria's constellation */
+.step p {
+  font-size: 1.55cqw;
+}
+
+/* --- live demo: Maria's constellation */
 .split {
   position: absolute;
   inset: 0;
@@ -346,12 +373,6 @@
   align-items: baseline;
 }
 
-.sym.star {
-  font-size: 2cqw;
-  color: #fff;
-  text-shadow: 0 0 1cqw #fff;
-}
-
 .sym.gold,
 .sym.red {
   display: inline-block;
@@ -368,42 +389,15 @@
   box-shadow: 0 0 0.8cqw var(--high);
 }
 
-/* --- demo */
 .demo-steps {
   display: grid;
-  gap: 1.6cqh;
-  margin: 1cqh 0 0;
-  padding-left: 3cqw;
-  font-size: 2.3cqw;
+  gap: 1.2cqh;
+  margin: 0;
+  padding-left: 2.4cqw;
+  font-size: 1.6cqw;
 }
 
-/* --- matching */
-.match-table {
-  border-collapse: collapse;
-  font-size: 1.9cqw;
-}
-
-.match-table td {
-  padding: 1.1cqh 1cqw;
-  border-bottom: 1px solid var(--border);
-  white-space: nowrap; /* "1947-11-02" and "Patel-Khan" read better unbroken */
-}
-
-.match-table td.muted {
-  white-space: normal;
-  font-size: 1.5cqw;
-}
-
-.match-table .eq {
-  color: var(--match);
-}
-
-.match-table .pts {
-  color: var(--ok);
-  font-weight: 700;
-  text-align: right;
-}
-
+/* --- the match thresholds */
 .threshold {
   display: grid;
   grid-template-columns: 1fr 1.25fr 1fr;
@@ -440,63 +434,7 @@
   background: rgba(255, 224, 138, 0.2);
 }
 
-/* --- trust */
-.review-mock ul {
-  margin: 0;
-  padding-left: 2cqw;
-}
-
-.mock-buttons {
-  display: flex;
-  gap: 1cqw;
-}
-
-.mock-buttons span {
-  flex: 1;
-  padding: 1cqh;
-  border: 1px solid var(--border);
-  border-radius: 0.6cqw;
-  font-size: 1.4cqw;
-  font-weight: 600;
-  text-align: center;
-}
-
-.mock-buttons .mock-confirm {
-  border-color: var(--match);
-  color: var(--match);
-}
-
-.chain {
-  display: grid;
-  gap: 0.6cqh;
-  margin-bottom: 2cqh;
-}
-
-.chain-box {
-  display: flex;
-  justify-content: space-between;
-  gap: 1cqw;
-  padding: 1.2cqh 1.2cqw;
-  border: 1px solid var(--border);
-  border-left: 0.3cqw solid var(--ok);
-  border-radius: 0.6cqw;
-  font-size: 1.5cqw;
-  background: rgba(17, 24, 51, 0.85);
-}
-
-.hash {
-  font-family: ui-monospace, Consolas, monospace;
-  font-size: 1.2cqw;
-  color: var(--muted);
-}
-
-.chain-link {
-  padding-left: 1.2cqw;
-  font-size: 1.1cqw;
-  color: var(--muted);
-}
-
-/* --- scale */
+/* --- the fix, in numbers */
 .big-numbers {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -521,21 +459,49 @@
   color: var(--muted);
 }
 
-.big-numbers.single {
-  grid-template-columns: 1fr;
+.result-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.6cqw;
+}
+
+.result-row div {
+  padding: 1.8cqh 1.2cqw;
+  border: 1px solid var(--border);
+  border-radius: 0.8cqw;
+  background: rgba(17, 24, 51, 0.8);
+  font-size: 1.4cqw;
+  line-height: 1.35;
+}
+
+.result-row strong {
+  display: block;
+  font-size: 2.6cqw;
+  color: var(--ok);
+}
+
+/* --- closing slide: what's next */
+.close-next {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2cqw;
+  width: 78cqw;
   margin: 1cqh 0;
 }
 
-/* --- what's next */
-.next-grid {
+.close-next div {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2cqw;
+  gap: 0.6cqh;
+  padding: 1.6cqh 1.2cqw;
+  border: 1px solid var(--border);
+  border-radius: 0.8cqw;
+  background: rgba(5, 8, 22, 0.75);
+  font-size: 1.35cqw;
+  color: var(--muted);
 }
 
-.next-title {
-  font-size: 2cqw;
-  font-weight: 700;
+.close-next strong {
+  font-size: 1.7cqw;
   color: var(--accent);
 }
 

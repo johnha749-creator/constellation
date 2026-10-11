@@ -37,7 +37,7 @@ still unsolved:
 | Frontend (React, Vite, D3) | Done and **checked in a browser**: the constellation forms, zooms to fit, conflicts highlight on click, the "Same person / Different people" review works, "Reset demo" works, and the Summary tab compiles each patient's chart. |
 | Git / GitHub | Pushed to a **private** repo: https://github.com/johnha749-creator/constellation. Make it public before submitting to Devpost. |
 | README | Done, with screenshots in `docs/`. **Add your team's names** (see the comment near the top). |
-| Slides, pitch | Done: 12 slides with speaker notes at `/pitch.html`. Add your names (see "The pitch deck"). |
+| Slides, pitch | Done: 7 slides with speaker notes at `/pitch.html`, with cited statistics on the problem and measured results for the fix. Add your names (see "The pitch deck"). |
 
 ## Run it
 
@@ -306,7 +306,21 @@ It has three visits:
 ## The pitch deck
 
 The slides are a page in the frontend: with `npm run dev` running, open
-**http://localhost:5173/pitch.html**.
+**http://localhost:5173/pitch.html**. Seven slides, about 3 minutes plus the demo:
+
+| # | Slide | What's on it |
+|---|---|---|
+| 1 | Title | The live 3D network |
+| 2 | The problem, in numbers | Six cited statistics (sources on the slide): 31% of adults use 2+ hospitals; match rates as low as 50% between organizations; 8–12% duplicate records; 27–54% of patients with medication-history errors at admission; 1 in 167 Americans in the ER for medication harm each year; 7,613 wrong-patient events |
+| 3 | Why it still happens | Maria's three records, and ONC's figure that only 43% of hospitals routinely integrate outside records |
+| 4 | How we fix it | Read, Match, Catch, and the rubric thresholds |
+| 5 | Live demo | Maria's constellation and the demo steps. **Switch to the app here.** |
+| 6 | The fix, in numbers | 99.98% precision, 99.53% recall, 7,283× fewer comparisons, 86 s for 100,000 records, identical encrypted matching, 7 HIPAA safeguards, 95 tests |
+| 7 | Close | What's next, the repo link, questions |
+
+Every outside number has its source on the slide; if a judge asks, the sources are Bourgeois et
+al. (Arch Intern Med 2010), Pew Charitable Trusts (2018), the AHIMA Journal, Tam et al. (CMAJ
+2005), Budnitz et al. (JAMA 2021), ECRI Institute (2016) and ONC Data Brief 71 (2023 data).
 
 - **Keys:** → or Space for next, ← for back, **F** for full screen, **N** for speaker notes (a
   short script for every slide). The controls in the bottom-right corner do the same.
@@ -315,8 +329,8 @@ The slides are a page in the frontend: with `npm run dev` running, open
   Regenerate that file after changing the demo data, from `backend/`: `python -m app.snapshot`.
 - **Add your names:** set `TEAM` at the top of `frontend/src/pitch/Pitch.jsx`. It appears on the
   title slide.
-- **The demo:** slide 6 is where you switch to the app (http://localhost:5173) and run the demo
-  below. Click "Reset demo" in the app before you present.
+- **The demo:** slide 5 is where you switch to the app (http://localhost:5173) and run the demo
+  below, then come back for slide 6. Click "Reset demo" in the app before you present.
 - **A link stays on its slide:** `pitch.html#5` opens slide 5, and reloading keeps your place.
 
 ## The 2-minute demo
