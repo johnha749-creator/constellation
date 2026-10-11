@@ -5,6 +5,8 @@ Constellation gathers one patient's scattered records from different hospitals i
 constellation, and flags the dangerous contradictions between them before they cause harm.
 
 *Built at Hyphen-Hacks 2026 for the theme "Crafting Constellations".*
+
+**Try it:** [live demo](https://johnha749-creator.github.io/constellation/) (read-only, no sign-in) · [pitch deck](https://johnha749-creator.github.io/constellation/pitch.html)
 <!-- Team: add your names here before submitting. -->
 
 ![Maria Gonzalez's records from three hospitals. The red line links a penicillin allergy at one hospital to amoxicillin ordered at another.](docs/conflict.jpg)

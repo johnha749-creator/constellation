@@ -4,3 +4,5 @@ __pycache__/
 frontend/node_modules/
 frontend/dist/
 backend/audit/
+# Hosted demo data, generated on deploy by backend/app/static_export.py
+frontend/public/demo/

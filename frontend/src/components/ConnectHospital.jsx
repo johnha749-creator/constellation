@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { BundleRejectedError, connectHospital, SignedOutError } from "../api";
 
-const SAMPLE_URL = "/samples/polaris-urgent-care.json";
+const SAMPLE_URL = `${import.meta.env.BASE_URL}samples/polaris-urgent-care.json`;
 const MAX_BYTES = 5 * 1024 * 1024;
 
 /** Upload a new hospital's FHIR bundle. Constellation matches its records against every patient

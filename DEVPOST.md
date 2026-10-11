@@ -20,7 +20,9 @@ python, fastapi, react, vite, d3.js, three.js, fhir, pytest, javascript, css
 
 ## Try it out (links)
 
-- GitHub: https://github.com/johnha749-creator/constellation (make the repo **public** first)
+- Live demo (read-only): https://johnha749-creator.github.io/constellation/
+- Pitch deck: https://johnha749-creator.github.io/constellation/pitch.html
+- GitHub: https://github.com/johnha749-creator/constellation
 
 ## Image gallery (upload these from `docs/`)
 

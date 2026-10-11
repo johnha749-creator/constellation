@@ -13,6 +13,7 @@ import {
   revealContactDetails,
   reviewMatch,
   SignedOutError,
+  STATIC_DEMO,
 } from "./api";
 import ConnectHospital from "./components/ConnectHospital";
 import PatientList from "./components/PatientList";
@@ -216,7 +217,11 @@ function Workspace({ user, matching, onSignedOut }) {
         </div>
         <StatsBar stats={stats} />
         <div className="topbar-side">
-          <div className="disclaimer">Synthetic data only. Not for clinical use.</div>
+          <div className="disclaimer">
+            {STATIC_DEMO
+              ? "Read-only hosted demo with synthetic data. Run it locally for sign-in and reviews."
+              : "Synthetic data only. Not for clinical use."}
+          </div>
           <div className="session">
             {matching === "private" && (
               <span className="badge private" title="Patients are linked on encrypted fingerprints, never names or birth dates">
@@ -231,14 +236,16 @@ function Workspace({ user, matching, onSignedOut }) {
                 Connect hospital
               </button>
             )}
-            {can(REVIEW_MATCHES) && (
+            {(can(REVIEW_MATCHES) || STATIC_DEMO) && (
               <button className="reset" onClick={reset}>
                 Reset demo
               </button>
             )}
-            <button className="reset" onClick={signOut}>
-              Sign out
-            </button>
+            {!STATIC_DEMO && (
+              <button className="reset" onClick={signOut}>
+                Sign out
+              </button>
+            )}
           </div>
         </div>
       </header>

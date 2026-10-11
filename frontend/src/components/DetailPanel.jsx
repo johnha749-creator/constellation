@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { STATIC_DEMO } from "../api";
 import { CONFLICT_TYPE_LABELS, REVEAL_CONTACTS, REVIEW_MATCHES } from "../labels";
 import MedicationList from "./MedicationList";
 import PatientSummary from "./PatientSummary";
@@ -252,7 +253,11 @@ export default function DetailPanel({
                 </div>
               )}
               {m.tier === "review" && !can(REVIEW_MATCHES) && (
-                <p className="muted small">A physician or registration clerk needs to decide this match.</p>
+                <p className="muted small">
+                  {STATIC_DEMO
+                    ? "In the hosted demo, reviews are off. Run Constellation locally to decide this match."
+                    : "A physician or registration clerk needs to decide this match."}
+                </p>
               )}
             </div>
           ))}

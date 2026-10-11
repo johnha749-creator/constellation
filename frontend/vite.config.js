@@ -4,6 +4,8 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
+  // GitHub Pages serves the hosted demo from /constellation/ (see .github/workflows/pages.yml).
+  base: process.env.VITE_BASE || "/",
   server: {
     port: 5173,
     // Forward API calls to the FastAPI backend so the browser sees one origin.

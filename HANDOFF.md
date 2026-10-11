@@ -41,6 +41,15 @@ still unsolved:
 
 ## Run it
 
+**Hosted demo:** https://johnha749-creator.github.io/constellation/ (and the deck at `pitch.html`). GitHub Pages can't run the Python
+backend, so `.github/workflows/pages.yml` runs the tests, exports every API response as JSON
+(`backend/app/static_export.py`), and builds the frontend in read-only mode (`VITE_STATIC=1`) on
+every push to `main`. It has no sign-in, reviews or "Show…", and "Connect hospital" only accepts
+the Polaris sample (its result is pre-computed). Everything else below is the full local version.
+To check the hosted build locally, run the workflow's export and build steps, then start
+`pages-preview` from `.claude/launch.json` and open http://localhost:4173/constellation/ (in Git
+Bash, set `MSYS_NO_PATHCONV=1` or the base path gets mangled).
+
 You need Python 3.11+ and Node 20+. The project was built with Python 3.14 and Node 26.
 
 **Backend** (terminal 1):
